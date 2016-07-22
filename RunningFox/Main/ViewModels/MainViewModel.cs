@@ -51,17 +51,17 @@ namespace Main.ViewModels
 
 
 
-        private RelayCommand<MessageSetTable> _createNewProgramCommand;
+        private RelayCommand _createNewProgramCommand;
         /// <summary>
         /// Create new run program
         /// </summary>
-        public RelayCommand<MessageSetTable> CreateNewProgramCommand => _createNewProgramCommand ?? (_createNewProgramCommand = new RelayCommand<MessageSetTable>(createNewProgram));
-
-        private void createNewProgram(MessageSetTable messageTable)
+        public RelayCommand CreateNewProgramCommand => _createNewProgramCommand ?? (_createNewProgramCommand = new RelayCommand(
+            ()=>
         {
+            _navigationService.NavigateTo("EditPage");
+        }));
 
-        }
-
+  
 
 
         private RelayCommand<MessageSetTable> _editProgramCommand;
@@ -86,9 +86,9 @@ namespace Main.ViewModels
 
 
             ProgramCollection = new ObservableCollection<MessageSetTable>();
-            ProgramCollection.Add(new MessageSetTable { Name = "Run1", Description = "very hard programm 1", SetID = new Guid() });
-            ProgramCollection.Add(new MessageSetTable { Name = "Run2", Description = "very hard programm 2", SetID = new Guid() });
-            ProgramCollection.Add(new MessageSetTable { Name = "Run3", Description = "very hard programm 3", SetID = new Guid() });
+            ProgramCollection.Add(new MessageSetTable { Name = "Run1", Description = "very hard program 1", SetID = new Guid() });
+            ProgramCollection.Add(new MessageSetTable { Name = "Run2", Description = "very hard program 2", SetID = new Guid() });
+            ProgramCollection.Add(new MessageSetTable { Name = "Run3", Description = "very hard program 3", SetID = new Guid() });
         }
     }
 }

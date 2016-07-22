@@ -28,6 +28,7 @@ namespace Main.ViewModels
 
             navigationService.Configure("MainPage", new Uri("../Views/MainPage.xaml", UriKind.Relative));
             navigationService.Configure("EditPage", new Uri("../Views/EditPage.xaml", UriKind.Relative));
+            navigationService.Configure("RunPage", new Uri("../Views/RunPage.xaml", UriKind.Relative));
 
             SimpleIoc.Default.Unregister<IFrameNavigationService>();
             SimpleIoc.Default.Register<IFrameNavigationService>(() => navigationService);
