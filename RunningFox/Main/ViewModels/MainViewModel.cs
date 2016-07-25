@@ -58,7 +58,7 @@ namespace Main.ViewModels
         public RelayCommand CreateNewProgramCommand => _createNewProgramCommand ?? (_createNewProgramCommand = new RelayCommand(
             ()=>
         {
-            _navigationService.NavigateTo("EditPage");
+            _navigationService.NavigateTo("EditMessageSet");
         }));
 
   
@@ -86,9 +86,9 @@ namespace Main.ViewModels
 
 
             ProgramCollection = new ObservableCollection<MessageSetTable>();
-            ProgramCollection.Add(new MessageSetTable { Name = "Run1", Description = "very hard program 1", SetID = new Guid() });
-            ProgramCollection.Add(new MessageSetTable { Name = "Run2", Description = "very hard program 2", SetID = new Guid() });
-            ProgramCollection.Add(new MessageSetTable { Name = "Run3", Description = "very hard program 3", SetID = new Guid() });
+            ProgramCollection.Add(new MessageSetTable { Description = "very hard program 1", SetID = new Guid() });
+            ProgramCollection.Add(new MessageSetTable { Description = "very hard program 2", SetID = new Guid() });
+            ProgramCollection.Add(new MessageSetTable { Description = "very hard program 3", SetID = new Guid() });
         }
     }
 }

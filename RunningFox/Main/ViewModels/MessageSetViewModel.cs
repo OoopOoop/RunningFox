@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Main.ViewModels
 {
-   public class EditViewModel:NotifyService
+   public class MessageSetViewModel:NotifyService
     {
         private ObservableCollection<MessageTable> _messageCollection;
 
@@ -29,11 +29,8 @@ namespace Main.ViewModels
             }
             ));
     
-
-
-
         private IFrameNavigationService _navigationService;
-        public EditViewModel(IFrameNavigationService navigationService)
+        public MessageSetViewModel(IFrameNavigationService navigationService)
         {
             _navigationService = navigationService;
         }

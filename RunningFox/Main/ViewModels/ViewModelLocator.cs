@@ -19,7 +19,7 @@ namespace Main.ViewModels
             SetupNavigation();
 
             SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<EditViewModel>();
+            SimpleIoc.Default.Register<MessageSetViewModel>();
         }
 
         private static void SetupNavigation()
@@ -27,8 +27,10 @@ namespace Main.ViewModels
             var navigationService = new FrameNavigationService();
 
             navigationService.Configure("MainPage", new Uri("../Views/MainPage.xaml", UriKind.Relative));
-            navigationService.Configure("EditPage", new Uri("../Views/EditPage.xaml", UriKind.Relative));
+            navigationService.Configure("EditMessageSet", new Uri("../Views/EditMessageSet.xaml", UriKind.Relative));
             navigationService.Configure("RunPage", new Uri("../Views/RunPage.xaml", UriKind.Relative));
+            navigationService.Configure("NewMessageEdit", new Uri("../Views/NewMessageEdit.xaml", UriKind.Relative));
+
 
             SimpleIoc.Default.Unregister<IFrameNavigationService>();
             SimpleIoc.Default.Register<IFrameNavigationService>(() => navigationService);
@@ -43,13 +45,23 @@ namespace Main.ViewModels
         }
         
 
-        public EditViewModel EditViewModel
+        public MessageSetViewModel MessageSetViewModel
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<EditViewModel>(Guid.NewGuid().ToString());
+                return ServiceLocator.Current.GetInstance<MessageSetViewModel>(Guid.NewGuid().ToString());
             }
         }
 
+
+
+        public MessageEditViewModel MessageEditViewModel
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<MessageEditViewModel>(Guid.NewGuid().ToString());
+            }
+        }
+       
     }
 }

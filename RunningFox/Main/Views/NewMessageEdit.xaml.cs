@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Main.Views
 {
     /// <summary>
-    /// Interaction logic for EditWindow.xaml
+    /// Interaction logic for NewMessageEdit.xaml
     /// </summary>
-    public partial class EditPage : Page
+    public partial class NewMessageEdit : Page
     {
-        public EditPage()
+        public NewMessageEdit()
         {
             InitializeComponent();
         }

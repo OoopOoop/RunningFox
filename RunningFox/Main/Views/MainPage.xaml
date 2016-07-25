@@ -22,12 +22,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Name}" />
-                        <TextBlock Grid.Column="1" Text="{Binding Description}" />
+                        <TextBlock Text="{Binding Description}" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

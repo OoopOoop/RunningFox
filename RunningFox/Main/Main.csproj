@@ -105,6 +105,13 @@
     <Compile Include="Shared\FrameNavigationService.cs" />
     <Compile Include="Shared\IFrameNavigationService.cs" />
     <Compile Include="Shared\NotifyService.cs" />
+    <Compile Include="ViewModels\MessageEditViewModel.cs" />
+    <Compile Include="Views\EditMessageSet.xaml.cs">
+      <DependentUpon>EditMessageSet.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NewMessageEdit.xaml.cs">
+      <DependentUpon>NewMessageEdit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RunPage.xaml.cs">
       <DependentUpon>RunPage.xaml</DependentUpon>
     </Compile>
@@ -112,7 +119,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\EditPage.xaml">
+    <Page Include="Views\EditMessageSet.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -124,16 +131,17 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ViewModels\EditViewModel.cs" />
+    <Compile Include="ViewModels\MessageSetViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
-    <Compile Include="Views\EditPage.xaml.cs">
-      <DependentUpon>EditPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\NewMessageEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\RunPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
