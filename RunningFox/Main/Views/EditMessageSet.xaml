@@ -29,18 +29,20 @@
         <StackPanel Grid.Row="0" Orientation="Vertical">
             <TextBlock Margin="5" Text="Description:" />
             <TextBox x:Name="DescriptionTxtBlock"
-                     Margin="5" 
+                     Margin="5"
                      Text="{Binding Description}" />
         </StackPanel>
 
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
+        <StackPanel Grid.Row="1"
+                    Margin="5"
+                    Orientation="Horizontal">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type Button}">
-                    <Setter Property="Margin" Value="5" />
+                    <Setter Property="Margin" Value="0,0,5,0" />
                 </Style>
             </StackPanel.Resources>
-            <Button FontFamily="Segoe UI Symbol">
+            <Button Command="{Binding AddMessageCommand}" FontFamily="Segoe UI Symbol">
                 <Button.Content>
                     <TextBlock HorizontalAlignment="Center"
                                VerticalAlignment="Center"
@@ -49,7 +51,7 @@
                 </Button.Content>
             </Button>
 
-            <Button FontFamily="Segoe UI Symbol">
+            <Button Command="{Binding RemoveMessageCommand}" FontFamily="Segoe UI Symbol">
                 <Button.Content>
                     <TextBlock HorizontalAlignment="Center"
                                VerticalAlignment="Center"
@@ -103,7 +105,7 @@
                 </Style>
             </StackPanel.Resources>
             <Button Content="Save" />
-            <Button Content="Cancel" />
+            <Button Command="{Binding CancelCommand}" Content="Cancel" />
         </StackPanel>
 
 

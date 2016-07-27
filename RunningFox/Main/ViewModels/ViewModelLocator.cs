@@ -14,12 +14,12 @@ namespace Main.ViewModels
         public ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-
-
+            
             SetupNavigation();
 
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<MessageSetViewModel>();
+            SimpleIoc.Default.Register<MessageEditViewModel>();
         }
 
         private static void SetupNavigation()

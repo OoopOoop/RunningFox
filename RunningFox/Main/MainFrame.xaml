@@ -13,4 +13,6 @@
            NavigationUIVisibility="Hidden"
            Source="Views/MainPage.xaml" />
 
+    <!--  Source="Views/NewMessageEdit.xaml" />  -->
+
 </Window>

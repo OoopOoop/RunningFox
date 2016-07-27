@@ -4,9 +4,12 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:Main.Views"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:wpfTool="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
       Title="NewMessageEdit"
       d:DesignHeight="300"
       d:DesignWidth="300"
+      DataContext="{Binding MessageEditViewModel,
+                            Source={StaticResource Locator}}"
       mc:Ignorable="d">
 
     <Grid>
@@ -28,10 +31,61 @@
         </StackPanel>
 
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <TextBlock Text="TimeSpan" />
-            <TextBox Text="{Binding Time}" />
-        </StackPanel>
+        <Grid Grid.Row="1" Margin="5">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="6*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Text="TimeSpan:" />
+
+            <wpfTool:IntegerUpDown Grid.Row="0"
+                                   Grid.Column="1"
+                                   VerticalAlignment="Center"
+                                   Maximum="60"
+                                   Minimum="1"
+                                   Watermark="Minutes" />
+
+            <TextBlock Grid.Row="1"
+                       Grid.Column="0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Text="Foreground:" />
+
+
+            <wpfTool:ColorPicker Grid.Row="1"
+                                 Grid.Column="1"
+                                 VerticalAlignment="Center"
+                                 ColorMode="ColorCanvas"
+                                 SelectedColor="{Binding ForegroundColor}"
+                                 ShowAdvancedButton="False"
+                                 ShowStandardColors="False" />
+
+            <TextBlock Grid.Row="2"
+                       Grid.Column="0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Text="Backround:" />
+
+            <wpfTool:ColorPicker Grid.Row="2"
+                                 Grid.Column="1"
+                                 VerticalAlignment="Center"
+                                 ColorMode="ColorCanvas"
+                                 SelectedColor="{Binding BackgroundColor}"
+                                 ShowAdvancedButton="False"
+                                 ShowStandardColors="False" />
+        </Grid>
 
 
         <StackPanel Grid.Row="2"
@@ -43,8 +97,8 @@
                     <Setter Property="Margin" Value="5" />
                 </Style>
             </StackPanel.Resources>
-            <Button Content="Save" />
-            <Button Content="Cancel" />
+            <Button Content="Add" />
+            <Button Command="{Binding CancelCommand}" Content="Cancel" />
         </StackPanel>
 
     </Grid>
