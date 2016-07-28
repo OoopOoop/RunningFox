@@ -15,8 +15,6 @@ namespace Main.Models
         private SolidColorBrush _colorBackground;
 
 
-
-
         public Guid SetID
         {
             get { return _setID; }

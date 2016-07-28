@@ -11,7 +11,11 @@
 
     <Frame x:Name="MainContent"
            NavigationUIVisibility="Hidden"
-           Source="Views/MainPage.xaml" />
+           Source="Views/NewMessageEdit.xaml" />
+
+
+
+    <!--  Source="Views/MainPage.xaml" />  -->
 
     <!--  Source="Views/NewMessageEdit.xaml" />  -->
 

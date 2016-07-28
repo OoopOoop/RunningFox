@@ -25,11 +25,10 @@
             <TextBox x:Name="DescriptionTxtBlock"
                      Height="80"
                      Margin="5"
-                     Background="{Binding ColorBackground}"
-                     Foreground="{Binding ColorForeground}"
+                     Background="{Binding BackgroundColor}"
+                     Foreground="{Binding ForegroundColor}"
                      Text="{Binding Message}" />
         </StackPanel>
-
 
         <Grid Grid.Row="1" Margin="5">
 
@@ -55,7 +54,9 @@
                                    VerticalAlignment="Center"
                                    Maximum="60"
                                    Minimum="1"
-                                   Watermark="Minutes" />
+                                   Watermark="Minutes"
+                                   Value="{Binding SelectedMin,
+                                                   Mode=TwoWay}" />
 
             <TextBlock Grid.Row="1"
                        Grid.Column="0"
@@ -68,9 +69,12 @@
                                  Grid.Column="1"
                                  VerticalAlignment="Center"
                                  ColorMode="ColorCanvas"
-                                 SelectedColor="{Binding ForegroundColor}"
+                                 SelectedColor="{Binding ForegroundColor,
+                                                         Mode=TwoWay,
+                                                         UpdateSourceTrigger=PropertyChanged}"
                                  ShowAdvancedButton="False"
                                  ShowStandardColors="False" />
+
 
             <TextBlock Grid.Row="2"
                        Grid.Column="0"
@@ -78,7 +82,9 @@
                        VerticalAlignment="Center"
                        Text="Backround:" />
 
-            <wpfTool:ColorPicker Grid.Row="2"
+
+            <wpfTool:ColorPicker x:Name="BackgroundCP"
+                                 Grid.Row="2"
                                  Grid.Column="1"
                                  VerticalAlignment="Center"
                                  ColorMode="ColorCanvas"
@@ -97,9 +103,8 @@
                     <Setter Property="Margin" Value="5" />
                 </Style>
             </StackPanel.Resources>
-            <Button Content="Add" />
+            <Button Command="{Binding AddNewMessageCommand}" Content="Add" />
             <Button Command="{Binding CancelCommand}" Content="Cancel" />
         </StackPanel>
-
     </Grid>
 </Page>
