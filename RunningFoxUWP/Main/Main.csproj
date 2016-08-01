@@ -95,7 +95,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\EdditMessageViewModel.cs" />
+    <Compile Include="ViewModels\EditMessageViewModel.cs" />
     <Compile Include="ViewModels\EditSetMessageViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />

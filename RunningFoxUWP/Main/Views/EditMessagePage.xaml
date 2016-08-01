@@ -4,17 +4,85 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:Main.Views"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      DataContext="{Binding EdditMessageViewModel,
+      DataContext="{Binding EditMessageViewModel,
                             Source={StaticResource Locator}}"
+      IsTabStop="True"
       mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="6*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="1"
+                   Grid.Column="1"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Text="Message:" />
+        <TextBox Grid.Row="1"
+                 Grid.Column="2"
+                 Background="{Binding BackgroundColor}"
+                 Foreground="{Binding ForegroundColor}" />
+
+
+        <TextBlock Grid.Row="3"
+                   Grid.Column="1"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Text="Time:" />
+
+
+        <ListView x:Name="ListView1"
+                  Grid.Row="3"
+                  Grid.RowSpan="2"
+                  Grid.Column="2" />
+
+        <!--
+            ScrollViewer.VerticalScrollBarVisibility="Hidden"
+            ScrollViewer.VerticalScrollMode="Disabled" />
+        -->
+
+
+        <TextBlock Grid.Row="4"
+                   Grid.Column="1"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Text="Foreground:" />
+        <TextBlock Grid.Row="5"
+                   Grid.Column="1"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Text="Background:" />
+
+
+
+
+        <Button x:Name="testBtn"
+                Grid.Row="5"
+                Grid.Column="2"
+                Click="testBtn_Click"
+                Content="Click" />
+
+    </Grid>
 
 
 
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton Command="{Binding}"
+            <AppBarButton Command="{Binding SaveCommand}"
                           Icon="Save"
                           IsEnabled="True"
                           Label="Save" />

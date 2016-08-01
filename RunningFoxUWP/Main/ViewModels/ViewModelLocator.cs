@@ -18,13 +18,13 @@ namespace Main.ViewModels
 
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<EditSetMessageViewModel>();
-            SimpleIoc.Default.Register<EdditMessageViewModel>();
+            SimpleIoc.Default.Register<EditMessageViewModel>();
 
         }
         
         public MainViewModel MainViewModel => SimpleIoc.Default.GetInstance<MainViewModel>();
         public EditSetMessageViewModel EditSetMessageViewModel => SimpleIoc.Default.GetInstance<EditSetMessageViewModel>();
-        public EdditMessageViewModel EdditMessageViewModel => SimpleIoc.Default.GetInstance<EdditMessageViewModel>();
+        public EditMessageViewModel EditMessageViewModel => SimpleIoc.Default.GetInstance<EditMessageViewModel>();
 
 
         private INavigationService createNavigationService()
