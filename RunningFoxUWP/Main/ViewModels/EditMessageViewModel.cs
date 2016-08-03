@@ -29,9 +29,7 @@ namespace Main.ViewModels
 
         }
 
-
-     
-
+        
 
         public EditMessageViewModel(INavigationService navigationService)
         {
