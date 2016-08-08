@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:controls="using:WinRTXamlToolkit.Controls"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="using:Main.Views"
+      xmlns:ext="using:Synergist"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       DataContext="{Binding EditMessageViewModel,
                             Source={StaticResource Locator}}"
@@ -46,43 +46,23 @@
                    Text="Time:" />
 
 
-        <!--<ListView x:Name="ListView1"
-                  Grid.Row="3"
-                  Grid.RowSpan="2"
-                  Grid.Column="2" />-->
-
-        <!--
-            ScrollViewer.VerticalScrollBarVisibility="Hidden"
-            ScrollViewer.VerticalScrollMode="Disabled" />
-        -->
-
+        <TimePicker Grid.Row="3"
+                    Grid.Column="2"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" />
 
         <TextBlock Grid.Row="4"
                    Grid.Column="1"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Text="Foreground:" />
+
+
         <TextBlock Grid.Row="5"
                    Grid.Column="1"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Text="Background:" />
-
-
-
-        <!--<Button x:Name="testBtn"
-                Grid.Row="5"
-                Grid.Column="2"
-                Click="testBtn_Click"
-                Content="Click" />-->
-
-
-        <controls:ColorPicker Grid.Row="5"    ManipulationMode="Rotate" 
-                              Grid.Column="2"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center" />
-
-
     </Grid>
 
 
