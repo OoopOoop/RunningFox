@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -29,12 +31,19 @@ namespace Main.Views
     /// 
     public sealed partial class EditMessagePage : Page
     {
-
+     
         public EditMessagePage()
         {
             this.InitializeComponent();
 
-        }
 
+
+          
+
+
+        }
+        
     }
+
+
 }
