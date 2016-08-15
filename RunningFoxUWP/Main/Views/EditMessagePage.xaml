@@ -1,7 +1,9 @@
 ﻿<Page x:Class="Main.Views.EditMessagePage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:core="using:Microsoft.Xaml.Interactions.Core"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       DataContext="{Binding EditMessageViewModel,
                             Source={StaticResource Locator}}"
@@ -44,7 +46,8 @@
                    Text="Time:" />
 
 
-        <TimePicker Grid.Row="3"
+        <TimePicker x:Name="timePicker"
+                    Grid.Row="3"
                     Grid.Column="2"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -59,7 +62,7 @@
 
 
 
-        <ComboBox Grid.Row="4"
+        <!--<ComboBox Grid.Row="4"
                   Grid.Column="2"
                   HorizontalAlignment="Center"
                   VerticalAlignment="Center"
@@ -83,13 +86,44 @@
                             </Rectangle.Fill>
                         </Rectangle>
                         <TextBlock Grid.Column="1"
-                                   VerticalAlignment="Center"
+                                   VerticalAlignment="Center" HorizontalAlignment="Center"
                                    Text="{Binding Name}" />
+                    </Grid>
+
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>-->
+
+
+        <ComboBox x:Name="comboBox"
+                  Grid.Row="4"
+                  Grid.Column="2"
+                  Width="240"
+                  Height="30"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  ItemsSource="{Binding Colors}">
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="SelectionChanged">
+                    <core:InvokeCommandAction Command="{Binding SelectedForegroundColorCommand}" CommandParameter="{Binding ElementName=comboBox, Path=SelectedItem}" />
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Rectangle Width="240"
+                                   Height="30"
+                                   Margin="2"
+                                   Stroke="{ThemeResource SystemControlForegroundBaseHighBrush}"
+                                   StrokeThickness="1">
+                            <Rectangle.Fill>
+                                <SolidColorBrush Color="{Binding Color}" />
+                            </Rectangle.Fill>
+                        </Rectangle>
                     </Grid>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-
 
 
 
@@ -98,6 +132,38 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Text="Background:" />
+
+
+
+        <ComboBox x:Name="comboBox2"
+                  Grid.Row="5"
+                  Grid.Column="2"
+                  Width="240"
+                  Height="30"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  ItemsSource="{Binding Colors}">
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="SelectionChanged">
+                    <core:InvokeCommandAction Command="{Binding SelectedBackgroundColorCommand}" CommandParameter="{Binding ElementName=comboBox2, Path=SelectedItem}" />
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Rectangle Width="240"
+                                   Height="30"
+                                   Margin="2"
+                                   Stroke="{ThemeResource SystemControlForegroundBaseHighBrush}"
+                                   StrokeThickness="1">
+                            <Rectangle.Fill>
+                                <SolidColorBrush Color="{Binding Color}" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Grid>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
     </Grid>
 
 

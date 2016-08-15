@@ -11,7 +11,6 @@ using Windows.UI;
 
 namespace Main.ViewModels
 {
-
     public class NamedColor
     {
         public string Name { get; set; }
@@ -24,10 +23,26 @@ namespace Main.ViewModels
         private RelayCommand _saveCommand;
         public RelayCommand SaveCommand => _saveCommand ?? (_saveCommand = new RelayCommand(saveNewMessage));
 
+        private RelayCommand<NamedColor> _selectedForegroundColorCommand;
+        public RelayCommand<NamedColor> SelectedForegroundColorCommand => _selectedForegroundColorCommand ?? (_selectedForegroundColorCommand = new RelayCommand<NamedColor>(saveForegroundColor));
 
+        private void saveForegroundColor(NamedColor obj)
+        {
+            throw new NotImplementedException();
+        }
+
+    
+
+        private RelayCommand<NamedColor> _selectedBackgroundColorCommand;
+        public RelayCommand<NamedColor> SelectedBackgroundColorCommand => _selectedBackgroundColorCommand ?? (_selectedBackgroundColorCommand = new RelayCommand<NamedColor>(saveBackgroundColor));
+
+        private void saveBackgroundColor(NamedColor obj)
+        {
+            throw new NotImplementedException();
+        }
+
+      
         public ObservableCollection<NamedColor> Colors { get; set; }
-
-
 
         private TimeSpan _time;
         public TimeSpan Time
@@ -35,9 +50,6 @@ namespace Main.ViewModels
             get { return _time; }
             set { _time = value;OnPropertyChanged(); }
         }
-
-
-
 
         private void getColors()
         {
@@ -47,14 +59,12 @@ namespace Main.ViewModels
             }
         }
     
-
-
-
         private void saveNewMessage()
         {
            
         }
         
+
 
         public EditMessageViewModel(INavigationService navigationService)
         {
