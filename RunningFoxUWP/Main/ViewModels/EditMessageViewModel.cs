@@ -1,5 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Views;
+using Main.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,6 +10,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI;
+using Windows.UI.Xaml.Media;
 
 namespace Main.ViewModels
 {
@@ -28,21 +31,54 @@ namespace Main.ViewModels
 
         private void saveForegroundColor(NamedColor obj)
         {
-            throw new NotImplementedException();
+            var passedColor = obj as NamedColor;
+            if (obj != null)
+            {
+                ForegroundColor = new SolidColorBrush(obj.Color);
+            }
+
         }
 
-    
+
+        private SolidColorBrush _foregroundColor;
+        public SolidColorBrush ForegroundColor
+        {
+            get { return _foregroundColor; }
+            set { _foregroundColor = value; OnPropertyChanged(); }
+        }
+
+
+
+        private SolidColorBrush _backgroundColor;
+        public SolidColorBrush BackgroundColor
+        {
+            get { return _backgroundColor; }
+            set { _backgroundColor = value; OnPropertyChanged(); }
+        }
+
+        private string _message;
+        public string Message
+        {
+            get { return _message; }
+            set { _message = value; OnPropertyChanged(); }
+        }
+
 
         private RelayCommand<NamedColor> _selectedBackgroundColorCommand;
         public RelayCommand<NamedColor> SelectedBackgroundColorCommand => _selectedBackgroundColorCommand ?? (_selectedBackgroundColorCommand = new RelayCommand<NamedColor>(saveBackgroundColor));
 
+
         private void saveBackgroundColor(NamedColor obj)
         {
-            throw new NotImplementedException();
+            var passedColor = obj as NamedColor;
+            if (obj != null)
+            {
+                BackgroundColor = new SolidColorBrush(obj.Color);
+            }
         }
 
-      
-        public ObservableCollection<NamedColor> Colors { get; set; }
+
+        public ObservableCollection<NamedColor> ColorsCollection { get; set; }
 
         private TimeSpan _time;
         public TimeSpan Time
@@ -55,23 +91,31 @@ namespace Main.ViewModels
         {
             foreach (var color in typeof(Colors).GetRuntimeProperties())
             {
-                Colors.Add(new NamedColor() { Name = color.Name, Color = (Color)color.GetValue(null) });
+                ColorsCollection.Add(new NamedColor() { Name = color.Name, Color = (Color)color.GetValue(null) });
             }
         }
     
+
         private void saveNewMessage()
         {
-           
+            var message = new MessageTable()
+            { DisplayTime = Time,
+                ColorForeground = this.ForegroundColor ?? new SolidColorBrush(Colors.Black),
+                ColorBackground = this.BackgroundColor??new SolidColorBrush(Colors.White),
+                MessageText = this.Message??"Run, Forrest, Run!",
+                MessageID =Guid.NewGuid(),
+                SetID =Guid.NewGuid()};
+            Messenger.Default.Send(message);
+            _navigationService.NavigateTo("EditSet");
         }
         
 
 
         public EditMessageViewModel(INavigationService navigationService)
         {
-            Colors = new ObservableCollection<NamedColor>();
-
+            ColorsCollection = new ObservableCollection<NamedColor>();
             base._navigationService = navigationService;
-            Time = new TimeSpan(0, 5,0);
+            Time = new TimeSpan(00,05,00);
             getColors();
         }
     }

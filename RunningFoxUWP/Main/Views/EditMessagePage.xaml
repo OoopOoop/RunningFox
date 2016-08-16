@@ -24,7 +24,9 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="6*" />
+            <ColumnDefinition Width="1.5*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="1.5*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
@@ -35,21 +37,25 @@
                    Text="Message:" />
         <TextBox Grid.Row="1"
                  Grid.Column="2"
+                 Grid.ColumnSpan="3"
                  Background="{Binding BackgroundColor}"
-                 Foreground="{Binding ForegroundColor}" />
+                 FontSize="20"
+                 Foreground="{Binding ForegroundColor}"
+                 Text="{Binding Message}"
+                 TextWrapping="Wrap" />
 
 
         <TextBlock Grid.Row="3"
                    Grid.Column="1"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   Text="Time:" />
+                   Text="Display Time:" />
 
 
         <TimePicker x:Name="timePicker"
                     Grid.Row="3"
-                    Grid.Column="2"
-                    HorizontalAlignment="Center"
+                    Grid.Column="3"
+                    HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
                     Time="{Binding Time,
                                    Mode=TwoWay}" />
@@ -58,7 +64,7 @@
                    Grid.Column="1"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   Text="Foreground:" />
+                   Text=" Message Foreground:" />
 
 
 
@@ -97,10 +103,8 @@
 
         <ComboBox x:Name="comboBox"
                   Grid.Row="4"
-                  Grid.Column="2"
-                  Width="240"
-                  Height="30"
-                  HorizontalAlignment="Center"
+                  Grid.Column="3"
+                  HorizontalAlignment="Stretch"
                   VerticalAlignment="Center"
                   ItemsSource="{Binding Colors}">
             <interactivity:Interaction.Behaviors>
@@ -112,7 +116,7 @@
                 <DataTemplate>
                     <Grid>
                         <Rectangle Width="240"
-                                   Height="30"
+                                   Height="20"
                                    Margin="2"
                                    Stroke="{ThemeResource SystemControlForegroundBaseHighBrush}"
                                    StrokeThickness="1">
@@ -126,21 +130,18 @@
         </ComboBox>
 
 
-
         <TextBlock Grid.Row="5"
                    Grid.Column="1"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   Text="Background:" />
+                   Text=" Message Background:" />
 
 
 
         <ComboBox x:Name="comboBox2"
                   Grid.Row="5"
-                  Grid.Column="2"
-                  Width="240"
-                  Height="30"
-                  HorizontalAlignment="Center"
+                  Grid.Column="3"
+                  HorizontalAlignment="Stretch"
                   VerticalAlignment="Center"
                   ItemsSource="{Binding Colors}">
             <interactivity:Interaction.Behaviors>
@@ -152,7 +153,7 @@
                 <DataTemplate>
                     <Grid>
                         <Rectangle Width="240"
-                                   Height="30"
+                                   Height="20"
                                    Margin="2"
                                    Stroke="{ThemeResource SystemControlForegroundBaseHighBrush}"
                                    StrokeThickness="1">
