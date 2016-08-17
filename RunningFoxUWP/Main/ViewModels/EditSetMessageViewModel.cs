@@ -33,6 +33,16 @@ namespace Main.ViewModels
 
 
 
+        private string _programDescription;
+        public string ProgramDescription
+        {
+            get { return _programDescription; }
+            set { _programDescription = value; OnPropertyChanged(); }
+        }
+
+
+
+
         private void getMessages()
         {
             Messenger.Default.Register<MessageTable>(

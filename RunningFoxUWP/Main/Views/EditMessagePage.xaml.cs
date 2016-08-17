@@ -36,14 +36,8 @@ namespace Main.Views
         {
             this.InitializeComponent();
 
-
-
-          
-
-
         }
         
     }
-
-
+    
 }

@@ -43,6 +43,10 @@ namespace Main.Models
         //    set { _displayTime = value; OnPropertyChanged(); }
         //}
 
+
+        public string DisplayTimeText => DisplayTime.ToString();
+
+
         public string MessageText { get; set; }
         //{
         //    get { return _messageText; }
