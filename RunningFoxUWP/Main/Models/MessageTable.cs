@@ -44,7 +44,7 @@ namespace Main.Models
         //}
 
 
-        public string DisplayTimeText => DisplayTime.ToString();
+        public string DisplayTimeText => _formatText();
 
 
         public string MessageText { get; set; }
@@ -64,5 +64,23 @@ namespace Main.Models
         //    get { return _colorForeground; }
         //    set { _colorForeground = value; OnPropertyChanged(); }
         //}
+
+
+
+        private string _formatText()
+        {
+            //string time="";
+
+            //if(DisplayTime.Hours==0)
+            //{
+            //    time = $"{DisplayTime.Minutes} {"minutes"}";
+            //}
+            //return time;
+
+
+            return DisplayTime.Hours == 0 ? $"{DisplayTime.Minutes} {"minutes"}" : $"{DisplayTime.Hours} {"hour"} {DisplayTime.Minutes} {"minutes"}";
+
+
+        }
     }
 }

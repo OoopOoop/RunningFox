@@ -12,14 +12,6 @@ namespace Main.Models
         private Guid _setID;
         private string _description;
 
-        
-        //private string _name;
-        //public string Name
-        //{
-        //    get { return _name; }
-        //    set { _name = value; }
-        //}
-
             
         public Guid SetID
         {
@@ -34,5 +26,7 @@ namespace Main.Models
             set { _description = value; OnPropertyChanged(); }
         }
 
+
+        public List<MessageTable> MessageCollection { get; set;}
     }
 }

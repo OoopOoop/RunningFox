@@ -15,16 +15,14 @@ namespace Main.ViewModels
         {
             var navigationService = this.createNavigationService();
             SimpleIoc.Default.Register<INavigationService>(() => navigationService);
-
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<EditSetMessageViewModel>();
             SimpleIoc.Default.Register<EditMessageViewModel>();
-
         }
         
         public MainViewModel MainViewModel => SimpleIoc.Default.GetInstance<MainViewModel>();
-        public EditSetMessageViewModel EditSetMessageViewModel => SimpleIoc.Default.GetInstance<EditSetMessageViewModel>(Guid.NewGuid().ToString());
-        public EditMessageViewModel EditMessageViewModel => SimpleIoc.Default.GetInstance<EditMessageViewModel>();
+        public EditSetMessageViewModel EditSetMessageViewModel => SimpleIoc.Default.GetInstance<EditSetMessageViewModel>();
+        public EditMessageViewModel EditMessageViewModel => SimpleIoc.Default.GetInstance<EditMessageViewModel>(Guid.NewGuid().ToString());
 
 
         private INavigationService createNavigationService()

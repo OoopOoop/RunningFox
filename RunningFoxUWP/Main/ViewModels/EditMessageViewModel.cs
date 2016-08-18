@@ -101,12 +101,15 @@ namespace Main.ViewModels
             var message = new MessageTable()
             { DisplayTime = Time,
                 ColorForeground = this.ForegroundColor ?? new SolidColorBrush(Colors.Black),
-                ColorBackground = this.BackgroundColor??new SolidColorBrush(Colors.White),
-                MessageText = this.Message??"Run, Forrest, Run!",
+                ColorBackground = this.BackgroundColor ?? new SolidColorBrush(Colors.White),
+                MessageText = this.Message?? "Run, Forrest, Run!",
                 MessageID =Guid.NewGuid(),
                 SetID =Guid.NewGuid()};
-            Messenger.Default.Send(message);
+           
+
             _navigationService.NavigateTo("EditSet");
+            Messenger.Default.Send(message);
+
         }
         
 
