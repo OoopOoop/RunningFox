@@ -8,8 +8,25 @@
                             Source={StaticResource Locator}}"
       mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="7*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
 
+        <GridView Grid.Column="0"
+                  Margin="10,10,10,50"
+                  ItemsSource="{Binding MessageSetCollection}">
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="50">
+                        <TextBlock Text="{Binding Description, Mode=TwoWay}" />
+                    </StackPanel>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+
+    </Grid>
     <Page.BottomAppBar>
         <CommandBar>
             <AppBarButton Command="{Binding NavigateToCommand}"
@@ -17,9 +34,9 @@
                           Icon="Add"
                           IsEnabled="True"
                           Label="Add" />
-            <AppBarButton Command="{Binding}"
+            <!--<AppBarButton Command="{Binding}"
                           Icon="Bullets"
-                          Label="Manage" />
+                          Label="Manage" />-->
         </CommandBar>
     </Page.BottomAppBar>
 
