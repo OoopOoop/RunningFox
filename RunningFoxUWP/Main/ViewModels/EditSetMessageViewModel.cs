@@ -12,9 +12,7 @@ using System.Threading.Tasks;
 namespace Main.ViewModels
 {
     public class EditSetMessageViewModel : ViewModelBase
-    {
- 
-        private ObservableCollection<MessageTable> _messages;
+    {        private ObservableCollection<MessageTable> _messages;
         public ObservableCollection<MessageTable> Messages
         {
             get { return _messages; }
@@ -54,6 +52,8 @@ namespace Main.ViewModels
           
             _navigationService.NavigateTo("MainPage");
             Messenger.Default.Send(messageSet);
+            Messages.Clear();
+            ProgramDescription = string.Empty;
         }
 
         

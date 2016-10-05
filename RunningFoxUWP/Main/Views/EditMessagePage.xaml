@@ -176,7 +176,7 @@
             <AppBarButton Command="{Binding SaveCommand}"
                           Icon="Save"
                           IsEnabled="True"
-                          Label="Save" />
+                          Label="Save Message" />
         </CommandBar>
     </Page.BottomAppBar>
 

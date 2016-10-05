@@ -9,18 +9,26 @@
       mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="7*" />
-            <ColumnDefinition Width="3*" />
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="8*" />
+        </Grid.RowDefinitions>
 
-        <GridView Grid.Column="0"
-                  Margin="10,10,10,50"
+        <TextBlock Grid.Row="0"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Text="Programs" />
+
+        <GridView Grid.Row="1"
+                  Margin="30,30,30,50"
                   ItemsSource="{Binding MessageSetCollection}">
             <GridView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Margin="50">
+                    <StackPanel Padding="30">
                         <TextBlock Text="{Binding Description, Mode=TwoWay}" />
+                        <TextBlock Text="Message Count: 5" />
+                        <TextBlock Text="Total Time: 45 min" />
+                        <TextBlock Text="Difficulty: Easy" />
                     </StackPanel>
                 </DataTemplate>
             </GridView.ItemTemplate>
@@ -33,7 +41,7 @@
                           CommandParameter="EditMessage"
                           Icon="Add"
                           IsEnabled="True"
-                          Label="Add" />
+                          Label="Add Message" />
             <!--<AppBarButton Command="{Binding}"
                           Icon="Bullets"
                           Label="Manage" />-->

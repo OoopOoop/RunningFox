@@ -20,7 +20,7 @@ namespace Main.ViewModels
             SimpleIoc.Default.Register<EditMessageViewModel>();
         }
         
-        public MainViewModel MainViewModel => SimpleIoc.Default.GetInstance<MainViewModel>(Guid.NewGuid().ToString());
+        public MainViewModel MainViewModel => SimpleIoc.Default.GetInstance<MainViewModel>();
         public EditSetMessageViewModel EditSetMessageViewModel => SimpleIoc.Default.GetInstance<EditSetMessageViewModel>();
         public EditMessageViewModel EditMessageViewModel => SimpleIoc.Default.GetInstance<EditMessageViewModel>(Guid.NewGuid().ToString());
 
