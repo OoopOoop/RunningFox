@@ -1,6 +1,7 @@
 ﻿using Main.Shared;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,6 @@ namespace Main.Models
         }
 
 
-        public List<MessageTable> MessageCollection { get; set;}
+        public ObservableCollection<MessageTable> MessageCollection { get; set;}
     }
 }

@@ -34,7 +34,8 @@
         <TextBox Grid.Row="1"
                  Grid.Column="2"
                  Margin="10"
-                 Text="{Binding ProgramDescription}" />
+                 Text="{Binding ProgramDescription,
+                                Mode=TwoWay}" />
 
         <TextBlock Grid.Row="2"
                    Grid.Column="1"
@@ -68,7 +69,8 @@
                                    HorizontalAlignment="Left"
                                    Foreground="{Binding ColorForeground}"
                                    Padding="10"
-                                   Text="{Binding MessageText}" TextWrapping="Wrap" />
+                                   Text="{Binding MessageText}"
+                                   TextWrapping="Wrap" />
                         <TextBlock Grid.Column="1"
                                    HorizontalAlignment="Center"
                                    Foreground="{Binding ColorForeground}"

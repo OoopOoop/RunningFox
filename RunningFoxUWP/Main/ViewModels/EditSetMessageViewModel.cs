@@ -13,7 +13,7 @@ namespace Main.ViewModels
 {
     public class EditSetMessageViewModel : ViewModelBase
     {
-
+ 
         private ObservableCollection<MessageTable> _messages;
         public ObservableCollection<MessageTable> Messages
         {
@@ -40,12 +40,26 @@ namespace Main.ViewModels
             set { _programDescription = value; OnPropertyChanged(); }
         }
 
+        
+
+        private RelayCommand _saveNewProgramCommand;
+        public RelayCommand SaveNewProgramCommand => _saveNewProgramCommand ?? (_saveNewProgramCommand = new RelayCommand(saveNewSet));
 
 
+        private void saveNewSet()
+        {
+            var messageSet = new MessageSetTable() { Description = ProgramDescription, MessageCollection = Messages,  SetID=new Guid()};
 
+
+          
+            _navigationService.NavigateTo("MainPage");
+            Messenger.Default.Send(messageSet);
+        }
+
+        
         private void getMessages()
         {
-            Messenger.Default.Register<MessageTable>(
+           Messenger.Default.Register<MessageTable>(
            this,
            message =>
            {

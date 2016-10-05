@@ -106,10 +106,8 @@ namespace Main.ViewModels
                 MessageID =Guid.NewGuid(),
                 SetID =Guid.NewGuid()};
            
-
             _navigationService.NavigateTo("EditSet");
             Messenger.Default.Send(message);
-
         }
         
 
