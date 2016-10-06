@@ -56,7 +56,23 @@ namespace Main.ViewModels
             ProgramDescription = string.Empty;
         }
 
-        
+
+
+
+        private RelayCommand<MessageTable> _selectionChangedCommand;
+        public RelayCommand<MessageTable> SelectionChangedCommand => _selectionChangedCommand ?? (_selectionChangedCommand = new RelayCommand<MessageTable>(ammendMessage));
+
+
+        //Todo: throws casting error
+        private void ammendMessage(MessageTable table)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+
+
         private void getMessages()
         {
            Messenger.Default.Register<MessageTable>(
