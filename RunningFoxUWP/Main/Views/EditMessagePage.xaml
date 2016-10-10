@@ -110,9 +110,10 @@
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Center"
                   ItemsSource="{Binding ColorsCollection}">
+
             <interactivity:Interaction.Behaviors>
                 <core:EventTriggerBehavior EventName="SelectionChanged">
-                    <core:InvokeCommandAction Command="{Binding SelectedForegroundColorCommand}" CommandParameter="{Binding ElementName=comboBox, Path=SelectedItem}" />
+                    <core:InvokeCommandAction Command="{Binding SelectedForegroundColorCommand, Mode=TwoWay}" CommandParameter="{Binding ElementName=comboBox, Path=SelectedItem}" />
                 </core:EventTriggerBehavior>
             </interactivity:Interaction.Behaviors>
             <ComboBox.ItemTemplate>
@@ -168,6 +169,11 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
+
+
+
+
+
     </Grid>
 
 

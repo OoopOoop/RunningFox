@@ -48,25 +48,25 @@ namespace Main.ViewModels
         {
             var messageSet = new MessageSetTable() { Description = ProgramDescription, MessageCollection = Messages,  SetID=new Guid()};
 
-
-          
+            
             _navigationService.NavigateTo("MainPage");
             Messenger.Default.Send(messageSet);
             Messages.Clear();
             ProgramDescription = string.Empty;
         }
 
-
-
+        
 
         private RelayCommand<MessageTable> _selectionChangedCommand;
         public RelayCommand<MessageTable> SelectionChangedCommand => _selectionChangedCommand ?? (_selectionChangedCommand = new RelayCommand<MessageTable>(ammendMessage));
 
 
+        
         //Todo: throws casting error
         private void ammendMessage(MessageTable table)
         {
-            throw new NotImplementedException();
+            _navigationService.NavigateTo("EditMessage");
+            Messenger.Default.Send(table);
         }
 
 

@@ -55,7 +55,7 @@
                   SelectionMode="Single">
             <interactivity:Interaction.Behaviors>
                 <core:EventTriggerBehavior EventName="SelectionChanged">
-                    <core:InvokeCommandAction Command="{Binding SelectionChangedCommand}" CommandParameter="{Binding}" />
+                    <core:InvokeCommandAction Command="{Binding SelectionChangedCommand}" CommandParameter="{Binding SelectedItem, ElementName=messagesListView}" />
                 </core:EventTriggerBehavior>
             </interactivity:Interaction.Behaviors>
             <ListView.ItemContainerStyle>

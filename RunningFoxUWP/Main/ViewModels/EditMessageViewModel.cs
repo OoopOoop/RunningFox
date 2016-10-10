@@ -118,6 +118,30 @@ namespace Main.ViewModels
             base._navigationService = navigationService;
             Time = new TimeSpan(00,05,00);
             getColors();
+            getMessageToEdit();
+        }
+
+
+        //private Color _selectedColor;
+        //public Color SelectedColor
+        //{
+        //    get { return _selectedColor; }
+        //    set { _selectedColor = value; OnPropertyChanged(); }
+        //}
+
+
+        private void getMessageToEdit()
+        {
+            Messenger.Default.Register<MessageTable>(
+            this,
+            message =>
+            {
+                this.Message = message.MessageText;
+          
+                this.ForegroundColor = message.ColorForeground;
+                this.Time = message.DisplayTime;
+
+            });
         }
     }
 }
