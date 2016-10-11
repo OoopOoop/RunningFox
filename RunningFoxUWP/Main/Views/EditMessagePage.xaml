@@ -64,11 +64,11 @@
                                    Mode=TwoWay}" />
 
 
-        <TextBlock Grid.Row="4"
+        <!--<TextBlock Grid.Row="4"
                    Grid.Column="1"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   Text=" Message Foreground:" />
+                   Text=" Message Foreground:" />-->
 
 
         <!--<ComboBox Grid.Row="4"
@@ -104,7 +104,7 @@
         </ComboBox>-->
 
 
-        <ComboBox x:Name="comboBox"
+        <!--<ComboBox x:Name="comboBox"
                   Grid.Row="4"
                   Grid.Column="3"
                   HorizontalAlignment="Stretch"
@@ -131,18 +131,18 @@
                     </Grid>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
-        </ComboBox>
+        </ComboBox>-->
 
 
-        <TextBlock Grid.Row="5"
+        <!--<TextBlock Grid.Row="5"
                    Grid.Column="1"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   Text=" Message Background:" />
+                   Text=" Message Background:" />-->
 
 
 
-        <ComboBox x:Name="comboBox2"
+        <!--<ComboBox x:Name="comboBox2"
                   Grid.Row="5"
                   Grid.Column="3"
                   HorizontalAlignment="Stretch"
@@ -168,10 +168,7 @@
                     </Grid>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
-        </ComboBox>
-
-
-
+        </ComboBox>-->
 
 
     </Grid>
@@ -179,10 +176,16 @@
 
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton Command="{Binding SaveCommand}"
+            <AppBarButton Command="{Binding SaveSingleMessageCommand}"
                           Icon="Save"
                           IsEnabled="True"
-                          Label="Save Message" />
+                          Label="Save single message" />
+
+            <AppBarButton Command="{Binding PopulateMessagesCommand}"
+                          Icon="Refresh"
+                          IsEnabled="True"
+                          Label="Populate messages" />
+
         </CommandBar>
     </Page.BottomAppBar>
 

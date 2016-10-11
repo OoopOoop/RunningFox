@@ -69,17 +69,14 @@ namespace Main.ViewModels
             Messenger.Default.Send(table);
         }
 
-
-
-
-
+        
         private void getMessages()
         {
-           Messenger.Default.Register<MessageTable>(
+           Messenger.Default.Register<ObservableCollection<MessageTable>>(
            this,
            message =>
            {
-               Messages.Add(message);
+               Messages=message;
            });
         }
     }

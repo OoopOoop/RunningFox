@@ -19,6 +19,8 @@ namespace Main.Models
         //private SolidColorBrush _colorBackground;
 
 
+
+
         public Guid SetID { get; set; }
         //{
         //    get { return _setID; }
@@ -53,13 +55,13 @@ namespace Main.Models
         //    set { _messageText = value; OnPropertyChanged(); }
         //}
 
-        public SolidColorBrush ColorForeground { get; set; }
+     //   public SolidColorBrush ColorForeground { get; set; }
         //{
         //    get { return _colorForeground; }
         //    set { _colorForeground = value; OnPropertyChanged(); }
         //}
 
-        public SolidColorBrush ColorBackground { get; set; }
+     //   public SolidColorBrush ColorBackground { get; set; }
         //{
         //    get { return _colorForeground; }
         //    set { _colorForeground = value; OnPropertyChanged(); }

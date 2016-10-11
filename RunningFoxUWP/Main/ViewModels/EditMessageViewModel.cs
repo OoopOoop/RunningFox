@@ -14,47 +14,38 @@ using Windows.UI.Xaml.Media;
 
 namespace Main.ViewModels
 {
-    public class NamedColor
-    {
-        public string Name { get; set; }
-        public Color Color { get; set; }
-    }
+    //public class NamedColor
+    //{
+    //    public string Name { get; set; }
+    //    public Color Color { get; set; }
+    //}
 
 
     public class EditMessageViewModel:ViewModelBase
     {
-        private RelayCommand _saveCommand;
-        public RelayCommand SaveCommand => _saveCommand ?? (_saveCommand = new RelayCommand(saveNewMessage));
+        private RelayCommand _saveSingleMessageCommand;
+        public RelayCommand SaveSingleMessageCommand => _saveSingleMessageCommand ?? (_saveSingleMessageCommand = new RelayCommand(saveNewMessages));
 
-        private RelayCommand<NamedColor> _selectedForegroundColorCommand;
-        public RelayCommand<NamedColor> SelectedForegroundColorCommand => _selectedForegroundColorCommand ?? (_selectedForegroundColorCommand = new RelayCommand<NamedColor>(saveForegroundColor));
 
-        private void saveForegroundColor(NamedColor obj)
+        private RelayCommand _populateMessagesCommand;
+        public RelayCommand PopulateMessagesCommand => _populateMessagesCommand ?? (_populateMessagesCommand = new RelayCommand(savePopulatedMessages));
+
+
+        private ObservableCollection<MessageTable> _populatedMessages;
+        public ObservableCollection<MessageTable> PopulatedMessages
         {
-            var passedColor = obj as NamedColor;
-            if (obj != null)
-            {
-                ForegroundColor = new SolidColorBrush(obj.Color);
-            }
-
+            get { return _populatedMessages; }
+            set { _populatedMessages = value; }
         }
 
 
-        private SolidColorBrush _foregroundColor;
-        public SolidColorBrush ForegroundColor
+        private void savePopulatedMessages()
         {
-            get { return _foregroundColor; }
-            set { _foregroundColor = value; OnPropertyChanged(); }
+            PopulatedMessages.Add(getMessage());
+            Time = new TimeSpan(00, 05, 00);
+            Message = string.Empty;
         }
 
-
-
-        private SolidColorBrush _backgroundColor;
-        public SolidColorBrush BackgroundColor
-        {
-            get { return _backgroundColor; }
-            set { _backgroundColor = value; OnPropertyChanged(); }
-        }
 
         private string _message;
         public string Message
@@ -64,73 +55,124 @@ namespace Main.ViewModels
         }
 
 
-        private RelayCommand<NamedColor> _selectedBackgroundColorCommand;
-        public RelayCommand<NamedColor> SelectedBackgroundColorCommand => _selectedBackgroundColorCommand ?? (_selectedBackgroundColorCommand = new RelayCommand<NamedColor>(saveBackgroundColor));
-
-
-        private void saveBackgroundColor(NamedColor obj)
-        {
-            var passedColor = obj as NamedColor;
-            if (obj != null)
-            {
-                BackgroundColor = new SolidColorBrush(obj.Color);
-            }
-        }
-
-
-        public ObservableCollection<NamedColor> ColorsCollection { get; set; }
-
         private TimeSpan _time;
         public TimeSpan Time
         {
             get { return _time; }
-            set { _time = value;OnPropertyChanged(); }
+            set { _time = value; OnPropertyChanged(); }
         }
 
-        private void getColors()
+        //private RelayCommand<NamedColor> _selectedForegroundColorCommand;
+        //public RelayCommand<NamedColor> SelectedForegroundColorCommand => _selectedForegroundColorCommand ?? (_selectedForegroundColorCommand = new RelayCommand<NamedColor>(saveForegroundColor));
+
+        //private void saveForegroundColor(NamedColor obj)
+        //{
+        //    var passedColor = obj as NamedColor;
+        //    if (obj != null)
+        //    {
+        //        ForegroundColor = new SolidColorBrush(obj.Color);
+        //    }
+
+        //}
+
+
+        //private SolidColorBrush _foregroundColor;
+        //public SolidColorBrush ForegroundColor
+        //{
+        //    get { return _foregroundColor; }
+        //    set { _foregroundColor = value; OnPropertyChanged(); }
+        //}
+
+
+        //private SolidColorBrush _backgroundColor;
+        //public SolidColorBrush BackgroundColor
+        //{
+        //    get { return _backgroundColor; }
+        //    set { _backgroundColor = value; OnPropertyChanged(); }
+        //}
+
+
+        //private RelayCommand<NamedColor> _selectedBackgroundColorCommand;
+        //public RelayCommand<NamedColor> SelectedBackgroundColorCommand => _selectedBackgroundColorCommand ?? (_selectedBackgroundColorCommand = new RelayCommand<NamedColor>(saveBackgroundColor));
+
+
+        //private void saveBackgroundColor(NamedColor obj)
+        //{
+        //    var passedColor = obj as NamedColor;
+        //    if (obj != null)
+        //    {
+        //        BackgroundColor = new SolidColorBrush(obj.Color);
+        //    }
+        //}
+
+
+        //public ObservableCollection<NamedColor> ColorsCollection { get; set; }
+
+
+        //private void getColors()
+        //{
+        //    foreach (var color in typeof(Colors).GetRuntimeProperties())
+        //    {
+        //        ColorsCollection.Add(new NamedColor() { Name = color.Name, Color = (Color)color.GetValue(null) });
+        //    }
+        //}
+
+
+        private void saveNewMessages()
         {
-            foreach (var color in typeof(Colors).GetRuntimeProperties())
+          if(PopulatedMessages.Count==0)
             {
-                ColorsCollection.Add(new NamedColor() { Name = color.Name, Color = (Color)color.GetValue(null) });
+                if(IsMessageToEdit)
+                {
+                    MessageToEdit.DisplayTime = this.Time;
+                    MessageToEdit.MessageText = this.Message;
+                    PopulatedMessages.Add(MessageToEdit);
+                }
+                else
+                {
+                    PopulatedMessages.Add(getMessage());
+                }
+               
             }
-        }
-    
-
-        private void saveNewMessage()
-        {
-            var message = new MessageTable()
-            { DisplayTime = Time,
-                ColorForeground = this.ForegroundColor ?? new SolidColorBrush(Colors.Black),
-                ColorBackground = this.BackgroundColor ?? new SolidColorBrush(Colors.White),
-                MessageText = this.Message?? "Run, Forrest, Run!",
-                MessageID =Guid.NewGuid(),
-                SetID =Guid.NewGuid()};
            
             _navigationService.NavigateTo("EditSet");
-            Messenger.Default.Send(message);
+            Messenger.Default.Send(PopulatedMessages);
+            PopulatedMessages.Clear();
         }
         
 
 
+        private MessageTable getMessage()
+        {
+            var message = new MessageTable()
+            {
+                DisplayTime = Time,
+                MessageText = this.Message ?? "Run, Forrest, Run!",
+                MessageID = Guid.NewGuid(),
+                SetID = Guid.NewGuid()
+            };
+            return message;
+        }
+
+
         public EditMessageViewModel(INavigationService navigationService)
         {
-            ColorsCollection = new ObservableCollection<NamedColor>();
+            // ColorsCollection = new ObservableCollection<NamedColor>();
+            PopulatedMessages = new ObservableCollection<MessageTable>();
             base._navigationService = navigationService;
             Time = new TimeSpan(00,05,00);
-            getColors();
+            //getColors();
             getMessageToEdit();
         }
 
 
-        //private Color _selectedColor;
-        //public Color SelectedColor
-        //{
-        //    get { return _selectedColor; }
-        //    set { _selectedColor = value; OnPropertyChanged(); }
-        //}
+        public bool IsMessageToEdit { get; set; }
 
 
-        private void getMessageToEdit()
+        public MessageTable MessageToEdit { get; set; }
+
+        
+        private MessageTable getMessageToEdit()
         {
             Messenger.Default.Register<MessageTable>(
             this,
@@ -138,10 +180,13 @@ namespace Main.ViewModels
             {
                 this.Message = message.MessageText;
           
-                this.ForegroundColor = message.ColorForeground;
+              // this.ForegroundColor = message.ColorForeground;
                 this.Time = message.DisplayTime;
-
+                IsMessageToEdit = true;
+                MessageToEdit = message;
             });
+
+            return MessageToEdit;
         }
     }
 }
