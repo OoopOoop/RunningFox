@@ -62,6 +62,9 @@ namespace Main.ViewModels
             set { _time = value; OnPropertyChanged(); }
         }
 
+
+        #region ColorPickers
+
         //private RelayCommand<NamedColor> _selectedForegroundColorCommand;
         //public RelayCommand<NamedColor> SelectedForegroundColorCommand => _selectedForegroundColorCommand ?? (_selectedForegroundColorCommand = new RelayCommand<NamedColor>(saveForegroundColor));
 
@@ -117,27 +120,28 @@ namespace Main.ViewModels
         //    }
         //}
 
+        #endregion
+
+
 
         private void saveNewMessages()
         {
-          if(PopulatedMessages.Count==0)
-            {
                 if(IsMessageToEdit)
                 {
                     MessageToEdit.DisplayTime = this.Time;
                     MessageToEdit.MessageText = this.Message;
                     PopulatedMessages.Add(MessageToEdit);
+                    IsMessageToEdit = false;
                 }
                 else
                 {
                     PopulatedMessages.Add(getMessage());
                 }
                
-            }
-           
             _navigationService.NavigateTo("EditSet");
+          
             Messenger.Default.Send(PopulatedMessages);
-            PopulatedMessages.Clear();
+            PopulatedMessages = new ObservableCollection<MessageTable>();
         }
         
 
@@ -188,5 +192,7 @@ namespace Main.ViewModels
 
             return MessageToEdit;
         }
+
+       
     }
 }

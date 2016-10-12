@@ -51,7 +51,7 @@ namespace Main.ViewModels
             
             _navigationService.NavigateTo("MainPage");
             Messenger.Default.Send(messageSet);
-            Messages.Clear();
+            //Messages.Clear();
             ProgramDescription = string.Empty;
         }
 
@@ -76,6 +76,7 @@ namespace Main.ViewModels
            this,
            message =>
            {
+               //todo: change method, items removed bore they getting reassigned
                Messages=message;
            });
         }
