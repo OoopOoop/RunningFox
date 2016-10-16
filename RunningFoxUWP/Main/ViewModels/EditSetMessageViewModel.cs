@@ -12,11 +12,19 @@ using System.Threading.Tasks;
 namespace Main.ViewModels
 {
     public class EditSetMessageViewModel : ViewModelBase
-    {        private ObservableCollection<MessageTable> _messages;
+    {   private ObservableCollection<MessageTable> _messages;
         public ObservableCollection<MessageTable> Messages
         {
             get { return _messages; }
             set { _messages = value; OnPropertyChanged(); }
+        }
+
+
+        private bool _isRepeating;
+        public bool IsRepeating
+        {
+            get { return _isRepeating; }
+            set { _isRepeating = value; OnPropertyChanged(); }
         }
 
 
@@ -39,7 +47,6 @@ namespace Main.ViewModels
         }
 
         
-
         private RelayCommand _saveNewProgramCommand;
         public RelayCommand SaveNewProgramCommand => _saveNewProgramCommand ?? (_saveNewProgramCommand = new RelayCommand(saveNewSet));
 
@@ -62,22 +69,28 @@ namespace Main.ViewModels
 
 
         
-        //Todo: throws casting error
         private void ammendMessage(MessageTable table)
         {
             _navigationService.NavigateTo("EditMessage");
             Messenger.Default.Send(table);
         }
 
-        
+  
+
         private void getMessages()
         {
            Messenger.Default.Register<ObservableCollection<MessageTable>>(
            this,
            message =>
            {
-               //todo: change method, items removed bore they getting reassigned
-               Messages=message;
+               if(Messages.Count==0)
+               {
+                   Messages = message;
+               }
+               else
+               {
+                   Messages.Add(message[0]);
+               }
            });
         }
     }

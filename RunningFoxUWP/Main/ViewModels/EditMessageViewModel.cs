@@ -122,8 +122,6 @@ namespace Main.ViewModels
 
         #endregion
 
-
-
         private void saveNewMessages()
         {
                 if(IsMessageToEdit)
@@ -135,7 +133,8 @@ namespace Main.ViewModels
                 }
                 else
                 {
-                    PopulatedMessages.Add(getMessage());
+                     if(PopulatedMessages.Count!=0&&!string.IsNullOrEmpty(Message))             
+                      PopulatedMessages.Add(getMessage());
                 }
                
             _navigationService.NavigateTo("EditSet");
@@ -151,7 +150,7 @@ namespace Main.ViewModels
             var message = new MessageTable()
             {
                 DisplayTime = Time,
-                MessageText = this.Message ?? "Run, Forrest, Run!",
+                MessageText = string.IsNullOrEmpty(this.Message)? "Run, Forrest, Run!":this.Message,
                 MessageID = Guid.NewGuid(),
                 SetID = Guid.NewGuid()
             };
@@ -192,7 +191,6 @@ namespace Main.ViewModels
 
             return MessageToEdit;
         }
-
-       
+        
     }
 }

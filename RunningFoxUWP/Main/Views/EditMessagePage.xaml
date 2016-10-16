@@ -182,9 +182,9 @@
                           Label="Save single message" />
 
             <AppBarButton Command="{Binding PopulateMessagesCommand}"
-                          Icon="Refresh"
+                          Icon="RepeatOne"
                           IsEnabled="True"
-                          Label="Populate messages" />
+                          Label="Add message" />
 
         </CommandBar>
     </Page.BottomAppBar>
