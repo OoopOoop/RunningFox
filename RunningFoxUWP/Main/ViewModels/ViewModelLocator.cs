@@ -28,12 +28,15 @@ namespace Main.ViewModels
         public EditMessageViewModel EditMessageViewModel => SimpleIoc.Default.GetInstance<EditMessageViewModel>(Guid.NewGuid().ToString());
 
 
+
+
         private INavigationService createNavigationService()
         {
             var navigationService = new NavigationService();
             navigationService.Configure("MainPage", typeof(MainPage));
             navigationService.Configure("EditSet", typeof(EditSetMessagePage));
             navigationService.Configure("EditMessage", typeof(EditMessagePage));
+            navigationService.Configure("EditMessage", typeof(PlayPage));
             return navigationService;
         }
     }
