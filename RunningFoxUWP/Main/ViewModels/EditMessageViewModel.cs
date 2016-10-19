@@ -41,9 +41,14 @@ namespace Main.ViewModels
 
         private void savePopulatedMessages()
         {
-            PopulatedMessages.Add(getMessage());
+            var message = getMessage();
+
+            PopulatedMessages.Add(message);
             Time = new TimeSpan(00, 05, 00);
             Message = string.Empty;
+
+
+            ConfirmMessage = $"Message was added: {message.MessageText} for { message.DisplayTime} long ";
         }
 
 
@@ -133,7 +138,7 @@ namespace Main.ViewModels
                 }
                 else
                 {
-                     if(PopulatedMessages.Count!=0&&!string.IsNullOrEmpty(Message))             
+                     //if(PopulatedMessages.Count!=0&&!string.IsNullOrEmpty(Message))             
                       PopulatedMessages.Add(getMessage());
                 }
                
@@ -142,7 +147,17 @@ namespace Main.ViewModels
             Messenger.Default.Send(PopulatedMessages);
             PopulatedMessages = new ObservableCollection<MessageTable>();
         }
-        
+
+
+
+        private string _confirmMessage;
+        public string ConfirmMessage
+        {
+            get { return _confirmMessage; }
+            set { _confirmMessage = value; OnPropertyChanged(); }
+        }
+
+
 
 
         private MessageTable getMessage()

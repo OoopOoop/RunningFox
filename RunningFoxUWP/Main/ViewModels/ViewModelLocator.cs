@@ -36,7 +36,7 @@ namespace Main.ViewModels
             navigationService.Configure("MainPage", typeof(MainPage));
             navigationService.Configure("EditSet", typeof(EditSetMessagePage));
             navigationService.Configure("EditMessage", typeof(EditMessagePage));
-            navigationService.Configure("EditMessage", typeof(PlayPage));
+            navigationService.Configure("PlayPage", typeof(PlayPage));
             return navigationService;
         }
     }

@@ -38,6 +38,8 @@ namespace Main.ViewModels
         }
 
 
+     
+
 
         private string _programDescription;
         public string ProgramDescription
@@ -60,6 +62,7 @@ namespace Main.ViewModels
             Messenger.Default.Send(messageSet);
             //Messages.Clear();
             ProgramDescription = string.Empty;
+
         }
 
         
@@ -90,6 +93,9 @@ namespace Main.ViewModels
                else
                {
                    Messages.Add(message[0]);
+                    
+                   //TODO: check if received message is in Messages collection already, replace it. (UID?)
+
                }
            });
         }
