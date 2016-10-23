@@ -74,7 +74,7 @@
 
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Background="{Binding ColorBackground}">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -82,13 +82,11 @@
 
                         <TextBlock Grid.Column="0"
                                    HorizontalAlignment="Left"
-                                   Foreground="{Binding ColorForeground}"
                                    Padding="10"
                                    Text="{Binding MessageText}"
                                    TextWrapping="Wrap" />
                         <TextBlock Grid.Column="1"
                                    HorizontalAlignment="Center"
-                                   Foreground="{Binding ColorForeground}"
                                    Padding="10"
                                    Text="{Binding DisplayTimeText}" />
                     </Grid>

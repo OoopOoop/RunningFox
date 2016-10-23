@@ -5,80 +5,139 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      x:Name="AddMessageWindow"
       DataContext="{Binding EditMessageViewModel,
                             Source={StaticResource Locator}}"
       IsTabStop="True"
       mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Margin="10" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*" />
-            <RowDefinition Height="2*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="2*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="1.5*" />
             <ColumnDefinition Width="3*" />
-            <ColumnDefinition Width="1.5*" />
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="4*" />
+
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="1"
-                   Grid.Column="1"
+                   Grid.Column="0"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Text="Message:" />
         <TextBox Grid.Row="1"
-                 Grid.Column="2"
-                 Grid.ColumnSpan="3"
+                 Grid.Column="1"
+                 Margin="20"
                  Background="{Binding BackgroundColor}"
                  FontSize="20"
                  Foreground="{Binding ForegroundColor}"
-                 Text="{Binding Message,
+                 Text="{Binding MessageToDisplay,
                                 Mode=TwoWay}"
                  TextWrapping="Wrap" />
 
 
+        <ListView x:Name="PopulatedMessages"
+                  Grid.Row="1"
+                  Grid.RowSpan="2"
+                  Grid.Column="2"
+                  Margin="20"
+                  ItemsSource="{Binding PopulatedMessages}"
+                  SelectionMode="Single">
 
-        <TextBlock Grid.Row="3"
-                   Grid.Column="1"
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   Margin="10"
+                                   HorizontalAlignment="Center"
+                                   Text="{Binding MessageText}"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Grid.Column="1"
+                                   Margin="10"
+                                   HorizontalAlignment="Center"
+                                   Text="{Binding DisplayTimeText}" />
+                        <Button Grid.Column="2"
+                                Command="{Binding ElementName=AddMessageWindow,
+                                                  Path=DataContext.RemoveMessageFromList}"
+                                CommandParameter="{Binding SelectedItem,
+                                                           ElementName=PopulatedMessages}"
+                                Content="Remove" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+
+
+        <TextBlock Grid.Row="2"
+                   Grid.Column="0"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Text="Display Time:" />
 
 
         <TimePicker x:Name="timePicker"
-                    Grid.Row="3"
-                    Grid.Column="3"
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Margin="20"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
                     Time="{Binding Time,
                                    Mode=TwoWay}" />
 
-
-
-        <TextBlock Grid.Row="5"
-                   Grid.Column="3"
+        <TextBlock Grid.Row="3"
+                   Grid.Column="1"
+                   Margin="20"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   Text="{Binding ConfirmMessage}" />
+                   Text="{Binding ConfirmMessage}"
+                   TextWrapping="Wrap" />
+    </Grid>
 
 
-        <!--<TextBlock Grid.Row="4"
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Command="{Binding SaveSingleMessageCommand}"
+                          Icon="Save"
+                          IsEnabled="True"
+                          Label="Save single message" />
+
+            <AppBarButton Command="{Binding PopulateMessagesCommand}"
+                          Icon="RepeatOne"
+                          IsEnabled="True"
+                          Label="Add message" />
+
+        </CommandBar>
+    </Page.BottomAppBar>
+
+
+    <!--#region ColorPicker-->
+    <!--<TextBlock Grid.Row="4"
                    Grid.Column="1"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Text=" Message Foreground:" />-->
 
 
-        <!--<ComboBox Grid.Row="4"
+    <!--<ComboBox Grid.Row="4"
                   Grid.Column="2"
                   HorizontalAlignment="Center"
                   VerticalAlignment="Center"
@@ -111,7 +170,7 @@
         </ComboBox>-->
 
 
-        <!--<ComboBox x:Name="comboBox"
+    <!--<ComboBox x:Name="comboBox"
                   Grid.Row="4"
                   Grid.Column="3"
                   HorizontalAlignment="Stretch"
@@ -141,7 +200,7 @@
         </ComboBox>-->
 
 
-        <!--<TextBlock Grid.Row="5"
+    <!--<TextBlock Grid.Row="5"
                    Grid.Column="1"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
@@ -149,7 +208,7 @@
 
 
 
-        <!--<ComboBox x:Name="comboBox2"
+    <!--<ComboBox x:Name="comboBox2"
                   Grid.Row="5"
                   Grid.Column="3"
                   HorizontalAlignment="Stretch"
@@ -176,24 +235,7 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>-->
+    <!--#endregion-->
 
-
-    </Grid>
-
-
-    <Page.BottomAppBar>
-        <CommandBar>
-            <AppBarButton Command="{Binding SaveSingleMessageCommand}"
-                          Icon="Save"
-                          IsEnabled="True"
-                          Label="Save single message" />
-
-            <AppBarButton Command="{Binding PopulateMessagesCommand}"
-                          Icon="RepeatOne"
-                          IsEnabled="True"
-                          Label="Add message" />
-
-        </CommandBar>
-    </Page.BottomAppBar>
 
 </Page>

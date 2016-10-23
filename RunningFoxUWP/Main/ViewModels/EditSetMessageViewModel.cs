@@ -82,21 +82,24 @@ namespace Main.ViewModels
 
         private void getMessages()
         {
-           Messenger.Default.Register<ObservableCollection<MessageTable>>(
+           Messenger.Default.Register<MessageTable>(
            this,
            message =>
            {
-               if(Messages.Count==0)
+               var test = Messages.FirstOrDefault(x => x.GuidID == message.GuidID);
+
+
+               if (test!=null)
                {
-                   Messages = message;
+                   //Updating message
+                   test.MessageText = message.MessageText;
+                   test.DisplayTime = message.DisplayTime;
                }
                else
                {
-                   Messages.Add(message[0]);
-                    
-                   //TODO: check if received message is in Messages collection already, replace it. (UID?)
-
+                   Messages.Add(message);
                }
+               
            });
         }
     }

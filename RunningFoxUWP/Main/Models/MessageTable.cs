@@ -10,53 +10,34 @@ namespace Main.Models
 {
     public class MessageTable : NotifyService
     {
+
+        #region ColorPicker
         //private SolidColorBrush _colorForeground;
         //private SolidColorBrush _colorBackground;
+        //   public SolidColorBrush ColorForeground { get; set; }
+        //{
+        //    get { return _colorForeground; }
+        //    set { _colorForeground = value; OnPropertyChanged(); }
+        //}
+
+        //   public SolidColorBrush ColorBackground { get; set; }
+        //{
+        //    get { return _colorForeground; }
+        //    set { _colorForeground = value; OnPropertyChanged(); }
+        //}
+#endregion
 
 
-
-
-        public Guid SetID { get; set; }
-      
-        public Guid MessageID { get; set; }
-    
+        public Guid GuidID { get; set; }
+     
         public int SortOrder { get; set; }
       
         public TimeSpan DisplayTime { get; set; }
   
         public string DisplayTimeText => _formatText();
 
-
         public string MessageText { get; set; }
-   
-     //   public SolidColorBrush ColorForeground { get; set; }
-        //{
-        //    get { return _colorForeground; }
-        //    set { _colorForeground = value; OnPropertyChanged(); }
-        //}
 
-     //   public SolidColorBrush ColorBackground { get; set; }
-        //{
-        //    get { return _colorForeground; }
-        //    set { _colorForeground = value; OnPropertyChanged(); }
-        //}
-
-
-
-        private string _formatText()
-        {
-            //string time="";
-
-            //if(DisplayTime.Hours==0)
-            //{
-            //    time = $"{DisplayTime.Minutes} {"minutes"}";
-            //}
-            //return time;
-
-
-            return DisplayTime.Hours == 0 ? $"{DisplayTime.Minutes} {"minutes"}" : $"{DisplayTime.Hours} {"hour"} {DisplayTime.Minutes} {"minutes"}";
-
-
-        }
+        private string _formatText() => DisplayTime.Hours == 0 ? $"{DisplayTime.Minutes} {"minutes"}" : $"{DisplayTime.Hours} {"hour"} {DisplayTime.Minutes} {"minutes"}";
     }
 }

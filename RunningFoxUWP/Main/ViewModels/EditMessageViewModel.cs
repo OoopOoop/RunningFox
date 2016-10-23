@@ -28,7 +28,21 @@ namespace Main.ViewModels
 
 
         private RelayCommand _populateMessagesCommand;
-        public RelayCommand PopulateMessagesCommand => _populateMessagesCommand ?? (_populateMessagesCommand = new RelayCommand(savePopulatedMessages));
+        public RelayCommand PopulateMessagesCommand => _populateMessagesCommand ?? (_populateMessagesCommand = new RelayCommand(populatedMessage));
+
+
+        private RelayCommand<object> _removeMessageFromList;
+        public RelayCommand<object> RemoveMessageFromList => _removeMessageFromList ?? (_removeMessageFromList = new RelayCommand<object>(deleteMessage));
+
+        private void deleteMessage(object message)
+        {
+            var messageTable = (MessageTable)message;
+            if(messageTable!=null)
+            {
+                PopulatedMessages.Remove(PopulatedMessages.Where(i => i.GuidID == messageTable.GuidID).Single());
+            } 
+         
+        }
 
 
         private ObservableCollection<MessageTable> _populatedMessages;
@@ -39,24 +53,29 @@ namespace Main.ViewModels
         }
 
 
-        private void savePopulatedMessages()
+        private void populatedMessage()
         {
-            var message = getMessage();
-
+            var message = new MessageTable();
+            message.DisplayTime = Time;
+            message.MessageText = MessageToDisplay;
+            message.GuidID = Guid.NewGuid();          
             PopulatedMessages.Add(message);
+          
+            
+            //Clear fields
             Time = new TimeSpan(00, 05, 00);
-            Message = string.Empty;
+            MessageToDisplay = string.Empty;
 
 
-            ConfirmMessage = $"Message was added: {message.MessageText} for { message.DisplayTime} long ";
+            ConfirmMessage = $"Message:  {message.MessageText} was added, duration: { message.DisplayTimeText}";
         }
 
 
-        private string _message;
-        public string Message
+        private string _messageToDisplay;
+        public string MessageToDisplay
         {
-            get { return _message; }
-            set { _message = value; OnPropertyChanged(); }
+            get { return _messageToDisplay; }
+            set { _messageToDisplay = value; OnPropertyChanged(); }
         }
 
 
@@ -127,25 +146,33 @@ namespace Main.ViewModels
 
         #endregion
 
+
+        private MessageTable _newMessage;
+
+        public MessageTable NewMessage
+        {
+            get { return _newMessage; }
+            set { _newMessage = value; }
+        }
+
+
+
+
         private void saveNewMessages()
         {
-                if(IsMessageToEdit)
-                {
-                    MessageToEdit.DisplayTime = this.Time;
-                    MessageToEdit.MessageText = this.Message;
-                    PopulatedMessages.Add(MessageToEdit);
-                    IsMessageToEdit = false;
-                }
-                else
-                {
-                     //if(PopulatedMessages.Count!=0&&!string.IsNullOrEmpty(Message))             
-                      PopulatedMessages.Add(getMessage());
-                }
-               
+            NewMessage.DisplayTime = this.Time;
+            NewMessage.MessageText = string.IsNullOrEmpty(this.MessageToDisplay) ? "Run, Forrest, Run!" : this.MessageToDisplay;
+       
+            //check if message is new  than set new Guid, if it was sent to edit, save original guidID 
+               if (NewMessage.GuidID==null||NewMessage.GuidID==Guid.Empty)
+            {
+                NewMessage.GuidID = Guid.NewGuid();
+            }
+
+
+            Messenger.Default.Send(NewMessage);
             _navigationService.NavigateTo("EditSet");
-          
-            Messenger.Default.Send(PopulatedMessages);
-            PopulatedMessages = new ObservableCollection<MessageTable>();
+
         }
 
 
@@ -159,52 +186,34 @@ namespace Main.ViewModels
 
 
 
-
-        private MessageTable getMessage()
-        {
-            var message = new MessageTable()
-            {
-                DisplayTime = Time,
-                MessageText = string.IsNullOrEmpty(this.Message)? "Run, Forrest, Run!":this.Message,
-                MessageID = Guid.NewGuid(),
-                SetID = Guid.NewGuid()
-            };
-            return message;
-        }
-
-
         public EditMessageViewModel(INavigationService navigationService)
         {
+            NewMessage = new MessageTable();
+
             // ColorsCollection = new ObservableCollection<NamedColor>();
             PopulatedMessages = new ObservableCollection<MessageTable>();
+
             base._navigationService = navigationService;
             Time = new TimeSpan(00,05,00);
             //getColors();
-            getMessageToEdit();
+           getMessageToEdit();
         }
 
 
         public bool IsMessageToEdit { get; set; }
 
 
-        public MessageTable MessageToEdit { get; set; }
-
-        
         private MessageTable getMessageToEdit()
         {
             Messenger.Default.Register<MessageTable>(
             this,
             message =>
             {
-                this.Message = message.MessageText;
-          
-              // this.ForegroundColor = message.ColorForeground;
-                this.Time = message.DisplayTime;
-                IsMessageToEdit = true;
-                MessageToEdit = message;
+                this.MessageToDisplay = message.MessageText;
+                NewMessage = message;
             });
-
-            return MessageToEdit;
+            return NewMessage;
+           
         }
         
     }
