@@ -3,14 +3,8 @@ using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Views;
 using Main.Models;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI;
-using Windows.UI.Xaml.Media;
 
 namespace Main.ViewModels
 {
@@ -20,16 +14,13 @@ namespace Main.ViewModels
     //    public Color Color { get; set; }
     //}
 
-
-    public class EditMessageViewModel:ViewModelBase
+    public class EditMessageViewModel : ViewModelBase
     {
         private RelayCommand _saveSingleMessageCommand;
         public RelayCommand SaveSingleMessageCommand => _saveSingleMessageCommand ?? (_saveSingleMessageCommand = new RelayCommand(saveNewMessages));
 
-
         private RelayCommand _populateMessagesCommand;
         public RelayCommand PopulateMessagesCommand => _populateMessagesCommand ?? (_populateMessagesCommand = new RelayCommand(populatedMessage));
-
 
         private RelayCommand<object> _removeMessageFromList;
         public RelayCommand<object> RemoveMessageFromList => _removeMessageFromList ?? (_removeMessageFromList = new RelayCommand<object>(deleteMessage));
@@ -37,55 +28,50 @@ namespace Main.ViewModels
         private void deleteMessage(object message)
         {
             var messageTable = (MessageTable)message;
-            if(messageTable!=null)
+            if (messageTable != null)
             {
-                PopulatedMessages.Remove(PopulatedMessages.Where(i => i.GuidID == messageTable.GuidID).Single());
-            } 
-         
+                PopulatedMessages.Remove(PopulatedMessages.Where(i => i.GuidID == messageTable.GuidID).FirstOrDefault());
+            }
+
+            ConfirmMessage = $"Message:  {messageTable.MessageText} was removed, duration: { messageTable.DisplayTimeText}";
         }
 
-
         private ObservableCollection<MessageTable> _populatedMessages;
+
         public ObservableCollection<MessageTable> PopulatedMessages
         {
             get { return _populatedMessages; }
             set { _populatedMessages = value; }
         }
 
-
         private void populatedMessage()
         {
-            var message = new MessageTable();
-            message.DisplayTime = Time;
-            message.MessageText = MessageToDisplay;
-            message.GuidID = Guid.NewGuid();          
+            var message = createNewMessage();
             PopulatedMessages.Add(message);
-          
-            
-            //Clear fields
+
+            //Clear time and messageToDisplay fields
             Time = new TimeSpan(00, 05, 00);
             MessageToDisplay = string.Empty;
-
+            NewMessage = new MessageTable();
 
             ConfirmMessage = $"Message:  {message.MessageText} was added, duration: { message.DisplayTimeText}";
         }
 
-
         private string _messageToDisplay;
+
         public string MessageToDisplay
         {
             get { return _messageToDisplay; }
             set { _messageToDisplay = value; OnPropertyChanged(); }
         }
 
-
         private TimeSpan _time;
+
         public TimeSpan Time
         {
             get { return _time; }
             set { _time = value; OnPropertyChanged(); }
         }
-
 
         #region ColorPickers
 
@@ -102,14 +88,12 @@ namespace Main.ViewModels
 
         //}
 
-
         //private SolidColorBrush _foregroundColor;
         //public SolidColorBrush ForegroundColor
         //{
         //    get { return _foregroundColor; }
         //    set { _foregroundColor = value; OnPropertyChanged(); }
         //}
-
 
         //private SolidColorBrush _backgroundColor;
         //public SolidColorBrush BackgroundColor
@@ -118,10 +102,8 @@ namespace Main.ViewModels
         //    set { _backgroundColor = value; OnPropertyChanged(); }
         //}
 
-
         //private RelayCommand<NamedColor> _selectedBackgroundColorCommand;
         //public RelayCommand<NamedColor> SelectedBackgroundColorCommand => _selectedBackgroundColorCommand ?? (_selectedBackgroundColorCommand = new RelayCommand<NamedColor>(saveBackgroundColor));
-
 
         //private void saveBackgroundColor(NamedColor obj)
         //{
@@ -132,9 +114,7 @@ namespace Main.ViewModels
         //    }
         //}
 
-
         //public ObservableCollection<NamedColor> ColorsCollection { get; set; }
-
 
         //private void getColors()
         //{
@@ -144,8 +124,7 @@ namespace Main.ViewModels
         //    }
         //}
 
-        #endregion
-
+        #endregion ColorPickers
 
         private MessageTable _newMessage;
 
@@ -155,53 +134,51 @@ namespace Main.ViewModels
             set { _newMessage = value; }
         }
 
-
-
-
-        private void saveNewMessages()
+        private MessageTable createNewMessage()
         {
             NewMessage.DisplayTime = this.Time;
             NewMessage.MessageText = string.IsNullOrEmpty(this.MessageToDisplay) ? "Run, Forrest, Run!" : this.MessageToDisplay;
-       
-            //check if message is new  than set new Guid, if it was sent to edit, save original guidID 
-               if (NewMessage.GuidID==null||NewMessage.GuidID==Guid.Empty)
+
+            //check if message is new  than set new Guid, if it was sent to edit, save original guidID
+            if (NewMessage.GuidID == null || NewMessage.GuidID == Guid.Empty)
             {
                 NewMessage.GuidID = Guid.NewGuid();
             }
-
-
-            Messenger.Default.Send(NewMessage);
-            _navigationService.NavigateTo("EditSet");
-
+            return NewMessage;
         }
 
+        private void saveNewMessages()
+        {
+            if (PopulatedMessages.Count == 0)
+            {
+                PopulatedMessages.Add(createNewMessage());
+            }
 
+            _navigationService.NavigateTo("EditSet");
+            Messenger.Default.Send(PopulatedMessages);
+        }
 
         private string _confirmMessage;
+
         public string ConfirmMessage
         {
             get { return _confirmMessage; }
             set { _confirmMessage = value; OnPropertyChanged(); }
         }
 
-
-
         public EditMessageViewModel(INavigationService navigationService)
         {
             NewMessage = new MessageTable();
 
             // ColorsCollection = new ObservableCollection<NamedColor>();
-            PopulatedMessages = new ObservableCollection<MessageTable>();
-
-            base._navigationService = navigationService;
-            Time = new TimeSpan(00,05,00);
             //getColors();
-           getMessageToEdit();
+            PopulatedMessages = new ObservableCollection<MessageTable>();
+            base._navigationService = navigationService;
+            Time = new TimeSpan(00, 05, 00);
+            getMessageToEdit();
         }
 
-
         public bool IsMessageToEdit { get; set; }
-
 
         private MessageTable getMessageToEdit()
         {
@@ -210,11 +187,10 @@ namespace Main.ViewModels
             message =>
             {
                 this.MessageToDisplay = message.MessageText;
+                this.Time = message.DisplayTime;
                 NewMessage = message;
             });
             return NewMessage;
-           
         }
-        
     }
 }

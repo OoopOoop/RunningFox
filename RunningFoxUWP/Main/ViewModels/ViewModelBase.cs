@@ -24,6 +24,5 @@ namespace Main.ViewModels
             {
                 _navigationService.NavigateTo(commandParameter);
             }));
-
     }
 }
