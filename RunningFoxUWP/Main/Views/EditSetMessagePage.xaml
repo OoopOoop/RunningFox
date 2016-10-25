@@ -10,7 +10,10 @@
                             Source={StaticResource Locator}}"
       mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid AllowDrop="True"
+          Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+          DragEnter="TargetTextBlock_DragEnter"
+          Drop="TargetTextBlock_Drop">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
@@ -54,11 +57,46 @@
                    Text="Messages" />
 
 
-        <ListView x:Name="messagesListView"
+
+        <!--<TextBlock x:Name="TargetTextBlock"
+                   Grid.Row="3"
+                   Grid.Column="0"
+                   Margin="10"
+                   AllowDrop="True"
+                   DragEnter="TargetTextBlock_DragEnter"
+                   Drop="TargetTextBlock_Drop"
+                   FontFamily="Segoe MDL2 Assets"
+                   FontSize="50"
+                   Text="&#xE74D;" />-->
+
+        <ListView x:Name="SourceListView"
                   Grid.Row="3"
                   Grid.Column="1"
                   Grid.ColumnSpan="2"
                   Margin="50,0,10,0"
+                  AllowDrop="True"
+                  CanDragItems="True"
+                  CanReorderItems="True"
+                  DragItemsCompleted="TargetListView_DragItemsCompleted"
+                  DragItemsStarting="SourceListView_DragItemsStarting"
+                  DragOver="TargetListView_DragOver"
+                  Drop="TargetListView_Drop"
+                  ItemsSource="{Binding MessageTableCollection}"
+                  SelectionMode="Single" />
+
+
+        <!--<ListView x:Name="messagesListView"
+                  Grid.Row="3"
+                  Grid.Column="1"
+                  Grid.ColumnSpan="2"
+                  Margin="50,0,10,0"
+                  AllowDrop="True"
+                  CanDragItems="True"
+                  CanReorderItems="True"
+                  DragItemsCompleted="TargetListView_DragItemsCompleted"
+                  DragItemsStarting="SourceListView_DragItemsStarting"
+                  DragOver="TargetListView_DragOver"
+                  Drop="TargetListView_Drop"
                   ItemsSource="{Binding MessageTableCollection}"
                   SelectionMode="Single">
             <interactivity:Interaction.Behaviors>
@@ -92,7 +130,7 @@
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
-        </ListView>
+        </ListView>-->
 
 
         <StackPanel Grid.Row="3"
