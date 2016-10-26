@@ -69,7 +69,13 @@
                    FontSize="50"
                    Text="&#xE74D;" />-->
 
-        <ListView x:Name="SourceListView"
+        <!--
+            DragOver="TargetListView_DragOver"
+            Drop="TargetListView_Drop"
+        -->
+
+
+        <!--<ListView x:Name="SourceListView"
                   Grid.Row="3"
                   Grid.Column="1"
                   Grid.ColumnSpan="2"
@@ -79,13 +85,17 @@
                   CanReorderItems="True"
                   DragItemsCompleted="TargetListView_DragItemsCompleted"
                   DragItemsStarting="SourceListView_DragItemsStarting"
-                  DragOver="TargetListView_DragOver"
-                  Drop="TargetListView_Drop"
                   ItemsSource="{Binding MessageTableCollection}"
-                  SelectionMode="Single" />
+                  SelectionMode="Single">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding MessageText}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>-->
 
 
-        <!--<ListView x:Name="messagesListView"
+        <ListView x:Name="messagesListView"
                   Grid.Row="3"
                   Grid.Column="1"
                   Grid.ColumnSpan="2"
@@ -95,8 +105,6 @@
                   CanReorderItems="True"
                   DragItemsCompleted="TargetListView_DragItemsCompleted"
                   DragItemsStarting="SourceListView_DragItemsStarting"
-                  DragOver="TargetListView_DragOver"
-                  Drop="TargetListView_Drop"
                   ItemsSource="{Binding MessageTableCollection}"
                   SelectionMode="Single">
             <interactivity:Interaction.Behaviors>
@@ -130,7 +138,7 @@
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
-        </ListView>-->
+        </ListView>
 
 
         <StackPanel Grid.Row="3"

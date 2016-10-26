@@ -1,5 +1,6 @@
 ﻿using Main.ViewModels;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -31,7 +32,7 @@ namespace Main.Views
     public sealed partial class EditSetMessagePage : Page
     {
         ObservableCollection<string> _reference;
-        ObservableCollection<string> _selection;
+      //  ObservableCollection<string> _selection;
         string _deletedItem;
 
 
@@ -39,28 +40,28 @@ namespace Main.Views
         {
             this.InitializeComponent();
             
-            _reference = GetSampleData();
+         //   _reference = GetSampleData();
             //_selection = new ObservableCollection<string>();
-            SourceListView.ItemsSource = _reference;
+           // SourceListView.ItemsSource = _reference;
            // messagesListView.ItemsSource = _selection;
         }
 
 
 
-        private ObservableCollection<string> GetSampleData()
-        {
-            return new ObservableCollection<string>
-            {
-                "My Research Paper",
-                "Electricity Bill",
-                "My To-do list",
-                "TV sales receipt",
-                "Water Bill",
-                "Grocery List",
-                "Superbowl schedule",
-                "World Cup E-ticket"
-            };
-        }
+        //private ObservableCollection<string> GetSampleData()
+        //{
+        //    return new ObservableCollection<string>
+        //    {
+        //        "My Research Paper",
+        //        "Electricity Bill",
+        //        "My To-do list",
+        //        "TV sales receipt",
+        //        "Water Bill",
+        //        "Grocery List",
+        //        "Superbowl schedule",
+        //        "World Cup E-ticket"
+        //    };
+        //}
 
         private void SourceListView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
         {
@@ -78,33 +79,35 @@ namespace Main.Views
         }
 
 
-        private void TargetListView_DragOver(object sender, DragEventArgs e)
-        {
-            // Our list only accepts text
-            e.AcceptedOperation = (e.DataView.Contains(StandardDataFormats.Text)) ? DataPackageOperation.Copy : DataPackageOperation.None;
-        }
+        //private void TargetListView_DragOver(object sender, DragEventArgs e)
+        //{
+        //    // Our list only accepts text
+        //    e.AcceptedOperation = (e.DataView.Contains(StandardDataFormats.Text)) ? DataPackageOperation.Copy : DataPackageOperation.None;
+        //}
 
 
-        private async void TargetListView_Drop(object sender, DragEventArgs e)
-        {
-            // This test is in theory not needed as we returned DataPackageOperation.None if
-            // the DataPackage did not contained text. However, it is always better if each
-            // method is robust by itself
-            if (e.DataView.Contains(StandardDataFormats.Text))
-            {
-                // We need to take a Deferral as we won't be able to confirm the end
-                // of the operation synchronously
-                var def = e.GetDeferral();
-                var s = await e.DataView.GetTextAsync();
-                var items = s.Split('\n');
-                foreach (var item in items)
-                {
-                    _reference.Add(item);
-                }
-                e.AcceptedOperation = DataPackageOperation.Copy;
-                def.Complete();
-            }
-        }
+        //private async void TargetListView_Drop(object sender, DragEventArgs e)
+        //{
+        //    // This test is in theory not needed as we returned DataPackageOperation.None if
+        //    // the DataPackage did not contained text. However, it is always better if each
+        //    // method is robust by itself
+        //    if (e.DataView.Contains(StandardDataFormats.Text))
+        //    {
+        //        // We need to take a Deferral as we won't be able to confirm the end
+        //        // of the operation synchronously
+        //        var def = e.GetDeferral();
+        //        var s = await e.DataView.GetTextAsync();
+        //        var items = s.Split('\n');
+ 
+        //        foreach (var item in items)
+        //        {
+        //             _reference.Add(item);
+                  
+        //        }
+        //        e.AcceptedOperation = DataPackageOperation.Copy;
+        //        def.Complete();
+        //    }
+        //}
 
 
         private void TargetListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
@@ -112,9 +115,13 @@ namespace Main.Views
             // args.DropResult is always Move and therefore we have to rely on _deletedItem to distinguish
             // between reorder and move to trash
             // Another solution would be to listen for events in the ObservableCollection
+
+        
+            //TODO: bind to data context item selection changed event?
             if (_deletedItem != null)
             {
                 _reference.Remove(_deletedItem);
+                            
                 _deletedItem = null;
             }
         }
