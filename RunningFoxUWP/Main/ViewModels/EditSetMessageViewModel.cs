@@ -54,8 +54,8 @@ namespace Main.ViewModels
             ProgramDescription = string.Empty;
         }
 
-        private RelayCommand<MessageTable> _selectionChangedCommand;
-        public RelayCommand<MessageTable> SelectionChangedCommand => _selectionChangedCommand ?? (_selectionChangedCommand = new RelayCommand<MessageTable>(ammendMessage));
+        private RelayCommand<MessageTable> _editMessageTableCommand;
+        public RelayCommand<MessageTable> EditMessageTableCommand => _editMessageTableCommand ?? (_editMessageTableCommand = new RelayCommand<MessageTable>(ammendMessage));
 
         private void ammendMessage(MessageTable table)
         {
@@ -63,6 +63,59 @@ namespace Main.ViewModels
             Messenger.Default.Send(table);
         }
 
+
+        private RelayCommand<MessageTable> _removeSelectedMessageTable;
+        public RelayCommand<MessageTable> RemoveSelectedMessageTable => _removeSelectedMessageTable ?? (_removeSelectedMessageTable = new RelayCommand<MessageTable>(removeMessageTable));
+
+        private void removeMessageTable(MessageTable messageToRemove)
+        {
+           if(messageToRemove!=null)
+            {
+                MessageTableCollection.Remove(messageToRemove);
+            }
+        }
+
+        private RelayCommand<MessageTable> _moveUpMessageTableCommand;
+        public RelayCommand<MessageTable> MoveUpMessageTableCommand => _moveUpMessageTableCommand ?? (_moveUpMessageTableCommand = new RelayCommand<MessageTable>(moveMessageUp));
+
+        private void moveMessageUp(MessageTable messageToMove)
+        {
+            //TODO: keep items selected in the listview while moving them up and down
+            if (messageToMove != null)
+            {
+                int index = MessageTableCollection.IndexOf(messageToMove);
+
+                if(index!=0)
+                {
+                    var previousMessage = MessageTableCollection[index - 1];
+                    MessageTableCollection[index - 1] = messageToMove;
+                    MessageTableCollection[index] = previousMessage;
+                }
+            }
+        }
+
+
+
+        private RelayCommand<MessageTable> _moveDownMessageTableCommand;
+        public RelayCommand<MessageTable> MoveDownMessageTableCommand => _moveDownMessageTableCommand ?? (_moveDownMessageTableCommand = new RelayCommand<MessageTable>(moveMessageDown));
+
+        private void moveMessageDown(MessageTable messageToMove)
+        {
+            if (messageToMove != null)
+            {
+                int index = MessageTableCollection.IndexOf(messageToMove);
+                
+
+                if (index != MessageTableCollection.Count-1)
+                {
+                    var previousMessage = MessageTableCollection[index + 1];
+                    MessageTableCollection[index + 1] = messageToMove;
+                    MessageTableCollection[index] = previousMessage;
+                }
+            }
+        }
+
+        
         /// <summary>
         /// Receive collection of messages, if MessageTableCollection collection already contains any of messages, update the message, if not- add it to the collection.
         /// </summary>

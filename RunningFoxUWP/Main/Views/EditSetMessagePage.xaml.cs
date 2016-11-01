@@ -110,45 +110,41 @@ namespace Main.Views
         //}
 
 
-        private void TargetListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
-        {
-            // args.DropResult is always Move and therefore we have to rely on _deletedItem to distinguish
-            // between reorder and move to trash
-            // Another solution would be to listen for events in the ObservableCollection
-
-        
-            //TODO: bind to data context item selection changed event?
-            if (_deletedItem != null)
-            {
-                _reference.Remove(_deletedItem);
+        //private void TargetListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
+        //{
+        //    if (_deletedItem != null)
+        //    {
+        //        _reference.Remove(_deletedItem);
                             
-                _deletedItem = null;
-            }
-        }
+        //        _deletedItem = null;
+        //    }
+        //}
 
 
-        private async void TargetTextBlock_Drop(object sender, DragEventArgs e)
-        {
-            if (e.DataView.Contains(StandardDataFormats.Text))
-            {
-                // We need to take the deferral as the source will read _deletedItem which
-                // we cannot set synchronously
-                var def = e.GetDeferral();
-                _deletedItem = await e.DataView.GetTextAsync();
-                e.AcceptedOperation = DataPackageOperation.Move;
-                def.Complete();
-            }
-        }
+        //private async void TargetTextBlock_Drop(object sender, DragEventArgs e)
+        //{
+        //    if (e.DataView.Contains(StandardDataFormats.Text))
+        //    {
+                
+        //         // We need to take the deferral as the source will read _deletedItem which
+        //         // we cannot set synchronously
+        //         var def = e.GetDeferral();
+        //        _deletedItem = await e.DataView.GetTextAsync();
+                
+        //        e.AcceptedOperation = DataPackageOperation.Move;
+        //        def.Complete();
+        //    }
+        //}
 
 
-        private void TargetTextBlock_DragEnter(object sender, DragEventArgs e)
-        {
-            // Trash only accepts text
-            e.AcceptedOperation = (e.DataView.Contains(StandardDataFormats.Text) ? DataPackageOperation.Move : DataPackageOperation.None);
-            // We don't want to show the Move icon
-            e.DragUIOverride.IsGlyphVisible = false;
-            e.DragUIOverride.Caption = "Drop item here to remove it from selection";
-        }
+        //private void TargetTextBlock_DragEnter(object sender, DragEventArgs e)
+        //{
+        //    // Trash only accepts text
+        //    e.AcceptedOperation = (e.DataView.Contains(StandardDataFormats.Text) ? DataPackageOperation.Move : DataPackageOperation.None);
+        //    // We don't want to show the Move icon
+        //    e.DragUIOverride.IsGlyphVisible = false;
+          
+        //}
 
 
 
