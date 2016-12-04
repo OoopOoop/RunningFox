@@ -30,6 +30,10 @@
 
 
 
+        <TextBox x:Name="TestTxtBox" />
+
+
+
 
         <CheckBox Grid.Row="0"
                   Grid.Column="1"
