@@ -123,7 +123,15 @@
                   CanReorderItems="True"
                   DragItemsStarting="SourceListView_DragItemsStarting"
                   ItemsSource="{Binding MessageTableCollection}"
-                  SelectionMode="Single">
+                  SelectionMode="Single"
+                  SelectedIndex="{Binding MessageListSelectdIndex,Mode=TwoWay}">
+
+            <!--<interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="SelectionChanged">
+                    <core:InvokeCommandAction Command="{Binding EditMessageTableCommand}" CommandParameter="{Binding SelectedItem, ElementName=messagesListView}" />
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>-->
+            
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -161,6 +169,7 @@
             <StackPanel.Resources>
                 <Style TargetType="Button">
                     <Setter Property="Margin" Value="0,30,0,0" />
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
 
                 </Style>
             </StackPanel.Resources>
@@ -187,9 +196,10 @@
 
 
             <Button Command="{Binding EditMessageTableCommand}"
+                   HorizontalAlignment="Stretch"
                     CommandParameter="{Binding Path=SelectedItem,
                                                ElementName=messagesListView}"
-                    Content=""
+                    Content="✎"
                     FontFamily="Segoe UI Symbol" />
 
 

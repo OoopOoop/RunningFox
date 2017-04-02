@@ -10,6 +10,13 @@ namespace Main.ViewModels
 {
     public class EditSetMessageViewModel : ViewModelBase
     {
+        private int _messageListSelectdIndex=0;
+        public int MessageListSelectdIndex
+        {
+            get { return _messageListSelectdIndex; }
+            set { _messageListSelectdIndex = value;OnPropertyChanged(); }
+        }
+
         private ObservableCollection<MessageTable> _messageTableCollection;
 
         public ObservableCollection<MessageTable> MessageTableCollection
@@ -80,7 +87,6 @@ namespace Main.ViewModels
 
         private void moveMessageUp(MessageTable messageToMove)
         {
-            //TODO: keep items selected in the listview while moving them up and down
             if (messageToMove != null)
             {
                 int index = MessageTableCollection.IndexOf(messageToMove);
@@ -90,11 +96,11 @@ namespace Main.ViewModels
                     var previousMessage = MessageTableCollection[index - 1];
                     MessageTableCollection[index - 1] = messageToMove;
                     MessageTableCollection[index] = previousMessage;
+                    MessageListSelectdIndex = MessageTableCollection.IndexOf(messageToMove);
                 }
             }
         }
-
-
+        
 
         private RelayCommand<MessageTable> _moveDownMessageTableCommand;
         public RelayCommand<MessageTable> MoveDownMessageTableCommand => _moveDownMessageTableCommand ?? (_moveDownMessageTableCommand = new RelayCommand<MessageTable>(moveMessageDown));
@@ -111,6 +117,7 @@ namespace Main.ViewModels
                     var previousMessage = MessageTableCollection[index + 1];
                     MessageTableCollection[index + 1] = messageToMove;
                     MessageTableCollection[index] = previousMessage;
+                    MessageListSelectdIndex = MessageTableCollection.IndexOf(messageToMove);
                 }
             }
         }

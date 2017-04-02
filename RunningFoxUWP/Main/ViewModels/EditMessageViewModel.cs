@@ -16,11 +16,14 @@ namespace Main.ViewModels
 
     public class EditMessageViewModel : ViewModelBase
     {
+        private TimeSpan _defaultTime=new TimeSpan(00, 05, 00);
+        private string _defaultMessage=string.Empty;
+
         private RelayCommand _saveSingleMessageCommand;
         public RelayCommand SaveSingleMessageCommand => _saveSingleMessageCommand ?? (_saveSingleMessageCommand = new RelayCommand(saveNewMessages));
 
         private RelayCommand _populateMessagesCommand;
-        public RelayCommand PopulateMessagesCommand => _populateMessagesCommand ?? (_populateMessagesCommand = new RelayCommand(populatedMessage));
+        public RelayCommand PopulateMessagesCommand => _populateMessagesCommand ?? (_populateMessagesCommand = new RelayCommand(populateMessage));
 
         private RelayCommand<object> _removeMessageFromList;
         public RelayCommand<object> RemoveMessageFromList => _removeMessageFromList ?? (_removeMessageFromList = new RelayCommand<object>(deleteMessage));
@@ -44,17 +47,18 @@ namespace Main.ViewModels
             set { _populatedMessages = value; }
         }
 
-        private void populatedMessage()
+        private void populateMessage()
         {
-            var message = createNewMessage();
-            PopulatedMessages.Add(message);
+                var message = createNewMessage();
+                PopulatedMessages.Add(message);
 
-            //Clear time and messageToDisplay fields
-            Time = new TimeSpan(00, 05, 00);
-            MessageToDisplay = string.Empty;
-            NewMessage = new MessageTable();
+                //Clear time and messageToDisplay fields
+                Time = _defaultTime;
+                MessageToDisplay = _defaultMessage;
+                NewMessage = new MessageTable();
 
-            ConfirmMessage = $"Message:  {message.MessageText} was added, duration: { message.DisplayTimeText}";
+                ConfirmMessage = $"Message:  {message.MessageText} was added, duration: { message.DisplayTimeText}";
+            
         }
 
         private string _messageToDisplay;
@@ -149,11 +153,11 @@ namespace Main.ViewModels
 
         private void saveNewMessages()
         {
-            if (PopulatedMessages.Count == 0)
+            if (PopulatedMessages.Count == 0 || Time != _defaultTime || MessageToDisplay != _defaultMessage)
             {
                 PopulatedMessages.Add(createNewMessage());
             }
-
+            
             _navigationService.NavigateTo("EditSet");
             Messenger.Default.Send(PopulatedMessages);
         }
@@ -174,7 +178,7 @@ namespace Main.ViewModels
             //getColors();
             PopulatedMessages = new ObservableCollection<MessageTable>();
             base._navigationService = navigationService;
-            Time = new TimeSpan(00, 05, 00);
+            Time = _defaultTime;
             getMessageToEdit();
         }
 
@@ -193,4 +197,4 @@ namespace Main.ViewModels
             return NewMessage;
         }
     }
-}
+} //TODO: bind buttons enabled/disabled when deleting, edititing without selection, moving last item down or first item up.
