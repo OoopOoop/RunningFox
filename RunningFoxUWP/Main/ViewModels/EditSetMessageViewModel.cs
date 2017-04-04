@@ -10,6 +10,14 @@ namespace Main.ViewModels
 {
     public class EditSetMessageViewModel : ViewModelBase
     {
+        private bool _isSetToRepeat;
+        public bool IsSetToRepeat
+        {
+            get { return _isSetToRepeat; }
+            set { _isSetToRepeat = value; OnPropertyChanged(); }
+        }
+
+
         private int _messageListSelectdIndex=0;
         public int MessageListSelectdIndex
         {
@@ -18,7 +26,6 @@ namespace Main.ViewModels
         }
 
         private ObservableCollection<MessageTable> _messageTableCollection;
-
         public ObservableCollection<MessageTable> MessageTableCollection
         {
             get { return _messageTableCollection; }
@@ -26,7 +33,6 @@ namespace Main.ViewModels
         }
 
         private bool _isRepeating;
-
         public bool IsRepeating
         {
             get { return _isRepeating; }
@@ -37,7 +43,6 @@ namespace Main.ViewModels
         {
             base._navigationService = navigationService;
             MessageTableCollection = new ObservableCollection<MessageTable>();
-
             getMessages();
         }
 
@@ -62,30 +67,51 @@ namespace Main.ViewModels
         }
 
         private RelayCommand<MessageTable> _editMessageTableCommand;
-        public RelayCommand<MessageTable> EditMessageTableCommand => _editMessageTableCommand ?? (_editMessageTableCommand = new RelayCommand<MessageTable>(ammendMessage));
-
-        private void ammendMessage(MessageTable table)
+        public RelayCommand<MessageTable> EditMessageTableCommand => _editMessageTableCommand ?? (_editMessageTableCommand = new RelayCommand<MessageTable>(EditMessageTable, canRemoveMessageTable));
+        
+      
+        private void EditMessageTable(MessageTable messageToEdit)
         {
             _navigationService.NavigateTo("EditMessage");
-            Messenger.Default.Send(table);
+            Messenger.Default.Send(messageToEdit);
         }
 
 
         private RelayCommand<MessageTable> _removeSelectedMessageTable;
-        public RelayCommand<MessageTable> RemoveSelectedMessageTable => _removeSelectedMessageTable ?? (_removeSelectedMessageTable = new RelayCommand<MessageTable>(removeMessageTable));
+        public RelayCommand<MessageTable> RemoveSelectedMessageTable => _removeSelectedMessageTable ?? (_removeSelectedMessageTable = new RelayCommand<MessageTable>(removeMessageTable,canRemoveMessageTable));
+
+        private bool canRemoveMessageTable(MessageTable messageToRemove) => MessageTableCollection.Count != 0;
+
 
         private void removeMessageTable(MessageTable messageToRemove)
         {
            if(messageToRemove!=null)
             {
+                int removeAtIndex = MessageTableCollection.IndexOf(messageToRemove);
                 MessageTableCollection.Remove(messageToRemove);
+                if(removeAtIndex!=0)
+                {
+                    MessageListSelectdIndex = removeAtIndex - 1;
+                }
+                else
+                {
+                    if(MessageTableCollection.Count!=0)
+                    {
+                        MessageListSelectdIndex = 0;
+                    }
+                   
+                }
+            
             }
         }
 
         private RelayCommand<MessageTable> _moveUpMessageTableCommand;
-        public RelayCommand<MessageTable> MoveUpMessageTableCommand => _moveUpMessageTableCommand ?? (_moveUpMessageTableCommand = new RelayCommand<MessageTable>(moveMessageUp));
+        public RelayCommand<MessageTable> MoveUpMessageTableCommand => _moveUpMessageTableCommand ?? (_moveUpMessageTableCommand = new RelayCommand<MessageTable>(MoveMessageUp, CanMoveMessageUp));
+        
 
-        private void moveMessageUp(MessageTable messageToMove)
+        private bool CanMoveMessageUp(MessageTable messagetoMove) => MessageTableCollection.IndexOf(messagetoMove) != 0&&MessageTableCollection.Count!=0;
+
+        private void MoveMessageUp(MessageTable messageToMove)
         {
             if (messageToMove != null)
             {
@@ -101,17 +127,19 @@ namespace Main.ViewModels
             }
         }
         
+        //TODO: make all methods and properties uppercases
 
         private RelayCommand<MessageTable> _moveDownMessageTableCommand;
-        public RelayCommand<MessageTable> MoveDownMessageTableCommand => _moveDownMessageTableCommand ?? (_moveDownMessageTableCommand = new RelayCommand<MessageTable>(moveMessageDown));
+        public RelayCommand<MessageTable> MoveDownMessageTableCommand => _moveDownMessageTableCommand ?? (_moveDownMessageTableCommand = new RelayCommand<MessageTable>(moveMessageDown, canMoveMessageDown));
+
+        private bool canMoveMessageDown(MessageTable messageToMove) => MessageTableCollection.IndexOf(messageToMove) != MessageTableCollection.Count - 1;
 
         private void moveMessageDown(MessageTable messageToMove)
         {
             if (messageToMove != null)
             {
                 int index = MessageTableCollection.IndexOf(messageToMove);
-                
-
+               
                 if (index != MessageTableCollection.Count-1)
                 {
                     var previousMessage = MessageTableCollection[index + 1];
