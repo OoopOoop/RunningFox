@@ -44,22 +44,24 @@ namespace Main.ViewModels
             base._navigationService = navigationService;
             MessageTableCollection = new ObservableCollection<MessageTable>();
             getMessages();
+          
         }
 
-        private string _programDescription;
 
+        private string _programDescription;
         public string ProgramDescription
         {
             get { return _programDescription; }
             set { _programDescription = value; OnPropertyChanged(); }
         }
 
+        
         private RelayCommand _saveNewProgramCommand;
         public RelayCommand SaveNewProgramCommand => _saveNewProgramCommand ?? (_saveNewProgramCommand = new RelayCommand(saveNewSet));
 
         private void saveNewSet()
         {
-            var messageSet = new MessageSetTable() { Description = ProgramDescription, MessageCollection = MessageTableCollection, SetID = new Guid() };
+            var messageSet = new MessageSetTable() { Description = ProgramDescription, MessageCollection = MessageTableCollection, SetID = new Guid(),SetToRepeat=IsRepeating };
 
             _navigationService.NavigateTo("MainPage");
             Messenger.Default.Send(messageSet);

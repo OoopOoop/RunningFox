@@ -8,6 +8,12 @@
                             Source={StaticResource Locator}}"
       mc:Ignorable="d">
 
+    <Page.Resources>
+        <Style TargetType="StackPanel" x:Key="ProgramDescriptionStackPanelStyle" >
+            <Setter Property="Orientation" Value="Horizontal"/>
+        </Style>
+    </Page.Resources>
+    
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -19,16 +25,29 @@
                    VerticalAlignment="Center"
                    Text="Programs" />
 
-        <GridView Grid.Row="1"
-                  Margin="30,30,30,50"
+        <GridView x:Name="MainGrid" Grid.Row="1"
+                  Margin="30 30 30 50"
                   ItemsSource="{Binding MessageSetCollection}">
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Padding="30">
                         <TextBlock Text="{Binding Description, Mode=TwoWay}" />
-                        <TextBlock Text="Message Count: 5" />
-                        <TextBlock Text="Total Time: 45 min" />
-                        <TextBlock Text="Difficulty: Easy" />
+                        
+                        <StackPanel Style="{StaticResource ProgramDescriptionStackPanelStyle}">
+                            <TextBlock Text="Message Count:" />
+                            <TextBlock Text="{Binding MessagesTotalCount}" />
+                        </StackPanel>
+
+                        <StackPanel Style="{StaticResource ProgramDescriptionStackPanelStyle}">
+                            <TextBlock Text="Total Time:" />
+                            <TextBlock Text="{Binding ProgramTotalTime, Mode=TwoWay}"/>
+                        </StackPanel>
+
+                        <StackPanel Style="{StaticResource ProgramDescriptionStackPanelStyle}">
+                            <TextBlock Text="Difficulty:"/>
+                            <TextBlock Text="{Binding ProgramDifficulty, Mode=TwoWay}"/>
+                        </StackPanel>
+                       
                     </StackPanel>
                 </DataTemplate>
             </GridView.ItemTemplate>

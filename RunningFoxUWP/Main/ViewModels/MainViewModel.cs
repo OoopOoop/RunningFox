@@ -21,6 +21,30 @@ namespace Main.ViewModels
         }
 
 
+        private int _messagesTotalCount;
+        public int MessagesTotalCount
+        {
+            get { return _messagesTotalCount; }
+            set { _messagesTotalCount = value; OnPropertyChanged(); }
+        }
+
+
+        private int _programTotalTime;
+        public int ProgramTotalTime
+        {
+            get { return _programTotalTime; }
+            set { _programTotalTime = value; OnPropertyChanged(); }
+        }
+
+
+        private string _programDifficulty;
+        public string ProgramDifficulty
+        {
+            get { return _programDifficulty; }
+            set { _programDifficulty = value;OnPropertyChanged(); }
+        }
+        
+
         public MainViewModel(INavigationService navigationService)
         {
             base._navigationService = navigationService;
@@ -29,26 +53,12 @@ namespace Main.ViewModels
         }
 
 
-
-        //ToRemove
-        private string _testDescription;
-        public string TestDescription
-        {
-            get { return _testDescription; }
-            set { _testDescription = value; OnPropertyChanged(); }
-        }
-
-        
-
         private void getMessageSets()
         {
             Messenger.Default.Register<MessageSetTable>(
            this,
            messageSet =>
            {
-
-               TestDescription = messageSet.Description;
-
                MessageSetCollection.Add(messageSet);
            });
         }

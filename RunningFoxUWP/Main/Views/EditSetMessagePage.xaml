@@ -29,6 +29,43 @@
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
+
+        <StackPanel Grid.Row="3"
+                    Grid.Column="1"
+                    Orientation="Vertical"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top">
+            <StackPanel.Resources>
+                <Style TargetType="RadioButton">
+                    <Setter Property="Margin" Value="0,20,0,0" />
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                </Style>
+            </StackPanel.Resources>
+
+            <TextBlock Text="Difficulty:"
+                       VerticalAlignment="Top"
+                       HorizontalAlignment="Center"/>
+
+
+            <RadioButton
+                  HorizontalAlignment="Center"
+                  Content="Easy"
+                  IsChecked="{Binding ,
+                                      Mode=TwoWay}" />
+
+            <RadioButton 
+                  HorizontalAlignment="Center"
+                  Content="Medium"
+                  IsChecked="{Binding ,
+                                      Mode=TwoWay}" />
+
+            <RadioButton 
+                  HorizontalAlignment="Center"
+                  Content="Hard"
+                  IsChecked="{Binding ,
+                                      Mode=TwoWay}" />
+        </StackPanel>
+
         <CheckBox Grid.Row="4"
                   Grid.Column="2"
                   HorizontalAlignment="Center"
@@ -36,24 +73,26 @@
                   IsChecked="{Binding IsRepeating,
                                       Mode=TwoWay}" />
 
+        
         <TextBlock Grid.Row="1"
                    Grid.Column="1"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Text="Program Description:" />
 
+        
         <TextBox Grid.Row="1"
                  Grid.Column="2"
                  Margin="10"
                  Text="{Binding ProgramDescription,
                                 Mode=TwoWay}" />
 
+        
         <TextBlock Grid.Row="2"
                    Grid.Column="2"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Text="Messages" />
-
 
 
         <!--<TextBlock x:Name="TargetTextBlock"
@@ -109,7 +148,7 @@
         <ListView x:Name="messagesListView"
                   Grid.Row="3"
                   Grid.RowSpan="2"
-                  Grid.Column="1"
+                  Grid.Column="2"
                   Grid.ColumnSpan="2"
                   AllowDrop="True"
                   CanDragItems="True"
@@ -117,14 +156,14 @@
                   DragItemsStarting="SourceListView_DragItemsStarting"
                   ItemsSource="{Binding MessageTableCollection}"
                   SelectionMode="Single"
-                  SelectedIndex="{Binding MessageListSelectdIndex,Mode=TwoWay}">
+                  SelectedIndex="{Binding MessageListSelectdIndex,Mode=TwoWay}" Margin="27,5,101,55">
 
             <!--<interactivity:Interaction.Behaviors>
                 <core:EventTriggerBehavior EventName="SelectionChanged">
                     <core:InvokeCommandAction Command="{Binding EditMessageTableCommand}" CommandParameter="{Binding SelectedItem, ElementName=messagesListView}" />
                 </core:EventTriggerBehavior>
             </interactivity:Interaction.Behaviors>-->
-            
+
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
