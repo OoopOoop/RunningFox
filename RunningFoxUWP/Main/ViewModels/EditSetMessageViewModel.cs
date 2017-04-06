@@ -59,9 +59,28 @@ namespace Main.ViewModels
         private RelayCommand _saveNewProgramCommand;
         public RelayCommand SaveNewProgramCommand => _saveNewProgramCommand ?? (_saveNewProgramCommand = new RelayCommand(saveNewSet));
 
+
+        private RelayCommand<string> _diffucultyIsCheckedCommand;
+
+        public RelayCommand<string> DiffucultyIsCheckedCommand =>_diffucultyIsCheckedCommand ?? (_diffucultyIsCheckedCommand = new RelayCommand<string>(setDifficulty));
+     
+        private string programDiffculty;
+
+        private void setDifficulty(string diffuculty)
+        {
+            programDiffculty = diffuculty;
+        }
+        
         private void saveNewSet()
         {
-            var messageSet = new MessageSetTable() { Description = ProgramDescription, MessageCollection = MessageTableCollection, SetID = new Guid(),SetToRepeat=IsRepeating };
+            var messageSet = new MessageSetTable() { Description = ProgramDescription,
+                MessageCollection = MessageTableCollection,
+                SetID = new Guid(),
+                SetToRepeat =IsRepeating,
+                ProgramDifficulty=programDiffculty,
+                MessagesTotalCount=MessageTableCollection.Count,
+                ProgramTotalTime=MessageTableCollection.Sum(x=>x.DisplayTime.Minutes),
+            };
 
             _navigationService.NavigateTo("MainPage");
             Messenger.Default.Send(messageSet);

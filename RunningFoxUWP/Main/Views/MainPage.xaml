@@ -47,7 +47,13 @@
                             <TextBlock Text="Difficulty:"/>
                             <TextBlock Text="{Binding ProgramDifficulty, Mode=TwoWay}"/>
                         </StackPanel>
-                       
+
+
+                        <StackPanel Style="{StaticResource ProgramDescriptionStackPanelStyle}">
+                            <TextBlock Text="Set to Repeat:"/>
+                            <TextBlock Text="{Binding SetToRepeat, Mode=TwoWay}"/>
+                        </StackPanel>
+
                     </StackPanel>
                 </DataTemplate>
             </GridView.ItemTemplate>
@@ -66,8 +72,4 @@
                           Label="Manage" />-->
         </CommandBar>
     </Page.BottomAppBar>
-
-
-
-
 </Page>
