@@ -52,6 +52,21 @@ namespace Main.ViewModels
             getMessageSets();
         }
 
+        private RelayCommand<object> _removeProgramCommand;
+        public RelayCommand<object> RemoveProgramCommand => _removeProgramCommand ?? (_removeProgramCommand = new RelayCommand<object>(RemoveProgram));
+        
+        private void RemoveProgram(object program)
+        {
+
+            var messageTable = (MessageSetTable)program;
+            if (messageTable != null)
+            {
+               // MessageSetCollection.Remove(program);
+            }
+        }
+
+
+
 
         private void getMessageSets()
         {

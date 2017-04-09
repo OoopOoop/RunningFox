@@ -216,15 +216,10 @@
                                                Path=SelectedItem}"
                     Content=""
                     FontFamily="Segoe UI Symbol" />
-
-
             <Button Command="{Binding RemoveSelectedMessageTable}"
-                    CommandParameter="{Binding ElementName=messagesListView,
-                                               Path=SelectedItem}"
-                    Content=""
+                    CommandParameter="{Binding SelectedItem, ElementName=messagesListView}"
+                    Content="&#xE107;"
                     FontFamily="Segoe UI Symbol" />
-
-
 
 
             <Button Command="{Binding EditMessageTableCommand}"

@@ -9,11 +9,11 @@
       mc:Ignorable="d">
 
     <Page.Resources>
-        <Style TargetType="StackPanel" x:Key="ProgramDescriptionStackPanelStyle" >
-            <Setter Property="Orientation" Value="Horizontal"/>
+        <Style x:Key="ProgramDescriptionStackPanelStyle" TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal" />
         </Style>
     </Page.Resources>
-    
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -25,36 +25,72 @@
                    VerticalAlignment="Center"
                    Text="Programs" />
 
-        <GridView x:Name="MainGrid" Grid.Row="1"
+        <GridView x:Name="MainGrid"
+                  Grid.Row="1"
                   Margin="30 30 30 50"
-                  ItemsSource="{Binding MessageSetCollection}">
+                  ItemsSource="{Binding MessageSetCollection}"
+                  SelectionMode="None">
             <GridView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Padding="30">
-                        <TextBlock Text="{Binding Description, Mode=TwoWay}" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Padding="30">
+                            <TextBlock Text="{Binding Description, Mode=TwoWay}" />
+                            <StackPanel Style="{StaticResource ProgramDescriptionStackPanelStyle}">
+                                <TextBlock Margin="0 0 10 0" Text="Message Count:" />
+                                <TextBlock Text="{Binding MessagesTotalCount}" />
+                            </StackPanel>
+
+                            <StackPanel Style="{StaticResource ProgramDescriptionStackPanelStyle}">
+                                <TextBlock Margin="0 0 10 0" Text="Total Time:" />
+                                <TextBlock Text="{Binding ProgramTotalTime, Mode=TwoWay}" />
+                            </StackPanel>
+
+                            <StackPanel Style="{StaticResource ProgramDescriptionStackPanelStyle}">
+                                <TextBlock Margin="0 0 10 0" Text="Difficulty:" />
+                                <TextBlock Text="{Binding ProgramDifficulty, Mode=TwoWay}" />
+                            </StackPanel>
+
+
+                            <StackPanel Style="{StaticResource ProgramDescriptionStackPanelStyle}">
+                                <TextBlock Margin="0 0 10 0" Text="Set to Repeat:" />
+                                <TextBlock Text="{Binding SetToRepeat, Mode=TwoWay}" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    Orientation="Vertical">
+                            <StackPanel.Resources>
+                                <Style TargetType="Button">
+                                    <Setter Property="Padding" Value="10" />
+                                </Style>
+
+                            </StackPanel.Resources>
+                            <Button Command="{Binding PlayProgramCommand}"
+                                    CommandParameter="{Binding ElementName=MessageSetCollection,
+                                                               Path=SelectedItem}"
+                                    Content=""
+                                    FontFamily="Segoe UI Symbol" />
+
+                            <Button Command="{Binding RemoveProgramCommand}"
+                                    CommandParameter="{Binding}"
+                                    Content=""
+                                    FontFamily="Segoe UI Symbol" />
+
+                            <Button HorizontalAlignment="Stretch"
+                                    Command="{Binding EditProgramCommand}"
+                                    CommandParameter="{Binding Path=SelectedItem,
+                                                               ElementName=MessageSetCollection}"
+                                    Content="✎"
+                                    FontFamily="Segoe UI Symbol" />
+                        </StackPanel>
                         
-                        <StackPanel Style="{StaticResource ProgramDescriptionStackPanelStyle}">
-                            <TextBlock Text="Message Count:" />
-                            <TextBlock Text="{Binding MessagesTotalCount}" />
-                        </StackPanel>
-
-                        <StackPanel Style="{StaticResource ProgramDescriptionStackPanelStyle}">
-                            <TextBlock Text="Total Time:" />
-                            <TextBlock Text="{Binding ProgramTotalTime, Mode=TwoWay}"/>
-                        </StackPanel>
-
-                        <StackPanel Style="{StaticResource ProgramDescriptionStackPanelStyle}">
-                            <TextBlock Text="Difficulty:"/>
-                            <TextBlock Text="{Binding ProgramDifficulty, Mode=TwoWay}"/>
-                        </StackPanel>
-
-
-                        <StackPanel Style="{StaticResource ProgramDescriptionStackPanelStyle}">
-                            <TextBlock Text="Set to Repeat:"/>
-                            <TextBlock Text="{Binding SetToRepeat, Mode=TwoWay}"/>
-                        </StackPanel>
-
-                    </StackPanel>
+                    </Grid>
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>
