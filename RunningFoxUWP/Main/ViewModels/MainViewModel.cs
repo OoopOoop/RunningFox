@@ -52,22 +52,30 @@ namespace Main.ViewModels
             getMessageSets();
         }
 
-        private RelayCommand<object> _removeProgramCommand;
-        public RelayCommand<object> RemoveProgramCommand => _removeProgramCommand ?? (_removeProgramCommand = new RelayCommand<object>(RemoveProgram));
-        
-        private void RemoveProgram(object program)
-        {
+        private RelayCommand _editProgramCommand;
+        public RelayCommand EditProgramCommand => _editProgramCommand ?? (_editProgramCommand = new RelayCommand(EditProgram));
 
-            var messageTable = (MessageSetTable)program;
-            if (messageTable != null)
-            {
-               // MessageSetCollection.Remove(program);
-            }
+        private void EditProgram()
+        {
         }
 
 
+        private RelayCommand _removeProgramCommand;
+        public RelayCommand RemoveProgramCommand => _removeProgramCommand ?? (_removeProgramCommand = new RelayCommand(RemoveProgram));
+        
+        private void RemoveProgram()
+        {
+        }
+
+        private RelayCommand _playProgramCommand;
+        public RelayCommand PlayProgramCommand => _playProgramCommand ?? (_playProgramCommand = new RelayCommand(PlayProgram));
+
+        private void PlayProgram()
+        {
+        }
 
 
+        
         private void getMessageSets()
         {
             Messenger.Default.Register<MessageSetTable>(

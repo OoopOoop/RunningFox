@@ -71,21 +71,16 @@
                                 </Style>
 
                             </StackPanel.Resources>
-                            <Button Command="{Binding PlayProgramCommand}"
-                                    CommandParameter="{Binding ElementName=MessageSetCollection,
-                                                               Path=SelectedItem}"
+                            <Button Command="{Binding DataContext.PlayProgramCommand, ElementName=MainGrid}"
                                     Content=""
                                     FontFamily="Segoe UI Symbol" />
 
-                            <Button Command="{Binding RemoveProgramCommand}"
-                                    CommandParameter="{Binding}"
+                            <Button Command="{Binding DataContext.RemoveProgramCommand, ElementName=MainGrid}"
                                     Content=""
                                     FontFamily="Segoe UI Symbol" />
 
                             <Button HorizontalAlignment="Stretch"
-                                    Command="{Binding EditProgramCommand}"
-                                    CommandParameter="{Binding Path=SelectedItem,
-                                                               ElementName=MessageSetCollection}"
+                                    Command="{Binding DataContext.EditProgramCommand, ElementName=MainGrid}"
                                     Content="✎"
                                     FontFamily="Segoe UI Symbol" />
                         </StackPanel>
