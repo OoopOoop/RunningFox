@@ -69,18 +69,21 @@
                                 <Style TargetType="Button">
                                     <Setter Property="Padding" Value="10" />
                                 </Style>
-
                             </StackPanel.Resources>
+                            
                             <Button Command="{Binding DataContext.PlayProgramCommand, ElementName=MainGrid}"
                                     Content=""
+                                    CommandParameter="{Binding}"
                                     FontFamily="Segoe UI Symbol" />
 
                             <Button Command="{Binding DataContext.RemoveProgramCommand, ElementName=MainGrid}"
                                     Content=""
+                                    CommandParameter="{Binding}"
                                     FontFamily="Segoe UI Symbol" />
 
                             <Button HorizontalAlignment="Stretch"
                                     Command="{Binding DataContext.EditProgramCommand, ElementName=MainGrid}"
+                                    CommandParameter="{Binding}"
                                     Content="✎"
                                     FontFamily="Segoe UI Symbol" />
                         </StackPanel>

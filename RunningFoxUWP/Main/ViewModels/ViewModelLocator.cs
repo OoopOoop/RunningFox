@@ -2,10 +2,6 @@
 using GalaSoft.MvvmLight.Views;
 using Main.Views;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Main.ViewModels
 {
@@ -19,8 +15,11 @@ namespace Main.ViewModels
             SimpleIoc.Default.Register<EditSetMessageViewModel>();
             SimpleIoc.Default.Register<EditMessageViewModel>();
         }
-        
+
+       // public MainViewModel MainViewModel => SimpleIoc.Default.GetInstance<MainViewModel>(Guid.NewGuid().ToString());
+
         public MainViewModel MainViewModel => SimpleIoc.Default.GetInstance<MainViewModel>();
+        
         public EditSetMessageViewModel EditSetMessageViewModel => SimpleIoc.Default.GetInstance<EditSetMessageViewModel>();
 
 

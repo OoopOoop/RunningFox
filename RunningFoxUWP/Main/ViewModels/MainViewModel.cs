@@ -2,16 +2,12 @@
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Views;
 using Main.Models;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Main.ViewModels
 {
-   public class MainViewModel:ViewModelBase
+    public class MainViewModel:ViewModelBase
     {
         private ObservableCollection<MessageSetTable> _messageSetCollection;
         public ObservableCollection<MessageSetTable> MessageSetCollection
@@ -27,7 +23,7 @@ namespace Main.ViewModels
             get { return _messagesTotalCount; }
             set { _messagesTotalCount = value; OnPropertyChanged(); }
         }
-
+            
 
         private int _programTotalTime;
         public int ProgramTotalTime
@@ -52,11 +48,12 @@ namespace Main.ViewModels
             getMessageSets();
         }
 
-        private RelayCommand _editProgramCommand;
-        public RelayCommand EditProgramCommand => _editProgramCommand ?? (_editProgramCommand = new RelayCommand(EditProgram));
+        private RelayCommand<MessageSetTable> _editProgramCommand;
+        public RelayCommand<MessageSetTable> EditProgramCommand => _editProgramCommand ?? (_editProgramCommand = new RelayCommand<MessageSetTable>(EditProgram));
 
-        private void EditProgram()
+        private void EditProgram(MessageSetTable messageSet)
         {
+            _navigationService.NavigateTo("EditSet",messageSet);
         }
 
 
@@ -74,15 +71,24 @@ namespace Main.ViewModels
         {
         }
 
-
         
         private void getMessageSets()
         {
-            Messenger.Default.Register<MessageSetTable>(
+           Messenger.Default.Register<MessageSetTable>(
            this,
            messageSet =>
            {
-               MessageSetCollection.Add(messageSet);
+               var collection = MessageSetCollection.Where(x => x.SetID == messageSet.SetID).FirstOrDefault();
+               if(collection!=null)
+               {
+                   int indexOfCollection = MessageSetCollection.IndexOf(messageSet);
+                   MessageSetCollection[indexOfCollection] = messageSet;
+               }
+               else
+               {
+                   MessageSetCollection.Add(messageSet);
+               }
+            
            });
         }
     }

@@ -73,9 +73,10 @@ namespace Main.ViewModels
         
         private void saveNewSet()
         {
+            SetMessagesSortOrder();
             var messageSet = new MessageSetTable() { Description = ProgramDescription,
                 MessageCollection = MessageTableCollection,
-                SetID = new Guid(),
+                SetID = Guid.NewGuid(),
                 SetToRepeat =IsRepeating,
                 ProgramDifficulty=programDiffculty,
                 MessagesTotalCount=MessageTableCollection.Count,
@@ -85,6 +86,11 @@ namespace Main.ViewModels
             _navigationService.NavigateTo("MainPage");
             Messenger.Default.Send(messageSet);
             ProgramDescription = string.Empty;
+        }
+
+        private void SetMessagesSortOrder()
+        {
+            MessageTableCollection.All(x => { x.SortOrder = MessageTableCollection.IndexOf(x)+1; return true; });
         }
 
         private RelayCommand<MessageTable> _editMessageTableCommand;
@@ -120,9 +126,7 @@ namespace Main.ViewModels
                     {
                         MessageListSelectdIndex = 0;
                     }
-                   
                 }
-            
             }
         }
 

@@ -40,7 +40,6 @@ namespace Main.ViewModels
         }
 
         private ObservableCollection<MessageTable> _populatedMessages;
-
         public ObservableCollection<MessageTable> PopulatedMessages
         {
             get { return _populatedMessages; }
@@ -56,13 +55,10 @@ namespace Main.ViewModels
                 Time = _defaultTime;
                 MessageToDisplay = _defaultMessage;
                 NewMessage = new MessageTable();
-
-                ConfirmMessage = $"Message:  {message.MessageText} was added, duration: { message.DisplayTimeText}";
-            
+                ConfirmMessage = $"Message:  {message.MessageText} was added, duration: { message.DisplayTimeText}";  
         }
 
         private string _messageToDisplay;
-
         public string MessageToDisplay
         {
             get { return _messageToDisplay; }
@@ -70,7 +66,6 @@ namespace Main.ViewModels
         }
 
         private TimeSpan _time;
-
         public TimeSpan Time
         {
             get { return _time; }
@@ -141,7 +136,7 @@ namespace Main.ViewModels
         private MessageTable createNewMessage()
         {
             NewMessage.DisplayTime = this.Time;
-            NewMessage.MessageText = string.IsNullOrEmpty(this.MessageToDisplay) ? "Run, Forrest, Run!" : this.MessageToDisplay;
+            NewMessage.MessageText = string.IsNullOrEmpty(this.MessageToDisplay) ? "Run, Forrest, Run!" : MessageToDisplay;
 
             //check if message is new  than set new Guid, if it was sent to edit, save original guidID
             if (NewMessage.GuidID == null || NewMessage.GuidID == Guid.Empty)
@@ -177,7 +172,7 @@ namespace Main.ViewModels
             // ColorsCollection = new ObservableCollection<NamedColor>();
             //getColors();
             PopulatedMessages = new ObservableCollection<MessageTable>();
-            base._navigationService = navigationService;
+            _navigationService = navigationService;
             Time = _defaultTime;
             getMessageToEdit();
         }
@@ -190,8 +185,8 @@ namespace Main.ViewModels
             this,
             message =>
             {
-                this.MessageToDisplay = message.MessageText;
-                this.Time = message.DisplayTime;
+                MessageToDisplay = message.MessageText;
+                Time = message.DisplayTime;
                 NewMessage = message;
             });
             return NewMessage;
