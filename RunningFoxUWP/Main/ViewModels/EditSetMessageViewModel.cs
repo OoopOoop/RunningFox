@@ -32,6 +32,13 @@ namespace Main.ViewModels
             set { _messageTableCollection = value; OnPropertyChanged(); }
         }
 
+        private ObservableCollection<MessageSetTable> _messageSetTableCollection;
+        public ObservableCollection<MessageSetTable> MessageSetTableCollection
+        {
+            get { return _messageSetTableCollection; }
+            set { _messageSetTableCollection = value; OnPropertyChanged(); }
+        }
+
         private bool _isRepeating;
         public bool IsRepeating
         {
@@ -43,8 +50,10 @@ namespace Main.ViewModels
         {
             base._navigationService = navigationService;
             MessageTableCollection = new ObservableCollection<MessageTable>();
+            MessageSetTableCollection = new ObservableCollection<MessageSetTable>();
+           
             getMessages();
-          
+            getMessageSet();
         }
 
 
@@ -82,6 +91,8 @@ namespace Main.ViewModels
                 MessagesTotalCount=MessageTableCollection.Count,
                 ProgramTotalTime=MessageTableCollection.Sum(x=>x.DisplayTime.Minutes),
             };
+
+            MessageSetTableCollection.Add(messageSet);
 
             _navigationService.NavigateTo("MainPage");
             Messenger.Default.Send(messageSet);
@@ -175,7 +186,7 @@ namespace Main.ViewModels
             }
         }
 
-        
+
         /// <summary>
         /// Receive collection of messages, if MessageTableCollection collection already contains any of messages, update the message, if not- add it to the collection.
         /// </summary>
@@ -187,12 +198,12 @@ namespace Main.ViewModels
             {
                 foreach (MessageTable message in messageCollection)
                 {
-                    var test = MessageTableCollection.Where(x => x.GuidID == message.GuidID).FirstOrDefault();
+                    var savedMessage = MessageTableCollection.Where(x => x.GuidID == message.GuidID).FirstOrDefault();
 
-                    if (test != null)
+                    if (savedMessage != null)
                     {
-                        test.MessageText = message.MessageText;
-                        test.DisplayTime = message.DisplayTime;
+                        savedMessage.MessageText = message.MessageText;
+                        savedMessage.DisplayTime = message.DisplayTime;
                     }
                     else
                     {
@@ -200,6 +211,28 @@ namespace Main.ViewModels
                     }
                 }
             });
+
+           
+        }
+
+
+        private void getMessageSet()
+        {
+           Messenger.Default.Register<ObservableCollection<MessageSetTable>>(
+           this,
+           messageSetTableCollection =>
+           {
+               foreach (MessageSetTable messageTable in messageSetTableCollection)
+               {
+                   var savedMessageSetTable = MessageSetTableCollection.Where(x => x.SetID == messageTable.SetID).FirstOrDefault();
+                   if (savedMessageSetTable != null)
+                   {
+                       ProgramDescription = savedMessageSetTable.Description;
+                       programDiffculty = savedMessageSetTable.ProgramDifficulty;
+                   }
+               }
+
+           });
         }
     }
 }

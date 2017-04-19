@@ -53,7 +53,13 @@ namespace Main.ViewModels
 
         private void EditProgram(MessageSetTable messageSet)
         {
-            _navigationService.NavigateTo("EditSet",messageSet);
+
+            var toRemoveCollection = new ObservableCollection<MessageSetTable>();
+            toRemoveCollection.Add(messageSet);
+
+            //_navigationService.NavigateTo("EditSet",messageSet);
+            _navigationService.NavigateTo("EditSet");
+            Messenger.Default.Send(toRemoveCollection);
         }
 
 
@@ -91,5 +97,13 @@ namespace Main.ViewModels
             
            });
         }
+
+
+        //protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        //{
+        //    Messenger.Default.Unregister<StatusMessage>(
+        //      this, HandleStatusMessage);
+        //    base.OnNavigatingFrom(e);
+        //}
     }
 }
