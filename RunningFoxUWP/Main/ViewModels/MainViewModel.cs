@@ -54,12 +54,13 @@ namespace Main.ViewModels
         private void EditProgram(MessageSetTable messageSet)
         {
 
-            var toRemoveCollection = new ObservableCollection<MessageSetTable>();
-            toRemoveCollection.Add(messageSet);
+            //var toRemoveCollection = new ObservableCollection<MessageSetTable>();
+            //toRemoveCollection.Add(messageSet);
 
-            //_navigationService.NavigateTo("EditSet",messageSet);
+            Messenger.Default.Send(messageSet);
             _navigationService.NavigateTo("EditSet");
-            Messenger.Default.Send(toRemoveCollection);
+            //_navigationService.NavigateTo("EditSet");
+            //Messenger.Default.Send(toRemoveCollection);
         }
 
 

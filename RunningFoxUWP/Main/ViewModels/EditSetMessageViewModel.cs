@@ -70,9 +70,12 @@ namespace Main.ViewModels
 
 
         private RelayCommand<string> _diffucultyIsCheckedCommand;
-
         public RelayCommand<string> DiffucultyIsCheckedCommand =>_diffucultyIsCheckedCommand ?? (_diffucultyIsCheckedCommand = new RelayCommand<string>(setDifficulty));
      
+
+        public MessageSetTable TableSetToEdit { get; set; }
+
+
         private string programDiffculty;
 
         private void setDifficulty(string diffuculty)
@@ -83,19 +86,29 @@ namespace Main.ViewModels
         private void saveNewSet()
         {
             SetMessagesSortOrder();
-            var messageSet = new MessageSetTable() { Description = ProgramDescription,
-                MessageCollection = MessageTableCollection,
-                SetID = Guid.NewGuid(),
-                SetToRepeat =IsRepeating,
-                ProgramDifficulty=programDiffculty,
-                MessagesTotalCount=MessageTableCollection.Count,
-                ProgramTotalTime=MessageTableCollection.Sum(x=>x.DisplayTime.Minutes),
-            };
 
-            MessageSetTableCollection.Add(messageSet);
+            if (TableSetToEdit != null)
+            {
+                TableSetToEdit.MessageCollection = MessageTableCollection;
+                Messenger.Default.Send(TableSetToEdit);
+            }
 
+            else
+            {
+                var messageSet = new MessageSetTable()
+                {
+                    Description = ProgramDescription,
+                    MessageCollection = MessageTableCollection,
+                    SetID = Guid.NewGuid(),
+                    SetToRepeat = IsRepeating,
+                    ProgramDifficulty = programDiffculty,
+                    MessagesTotalCount = MessageTableCollection.Count,
+                    ProgramTotalTime = MessageTableCollection.Sum(x => x.DisplayTime.Minutes),
+                };
+                MessageSetTableCollection.Add(messageSet);
+                Messenger.Default.Send(messageSet);
+            }
             _navigationService.NavigateTo("MainPage");
-            Messenger.Default.Send(messageSet);
             ProgramDescription = string.Empty;
         }
 
@@ -211,28 +224,38 @@ namespace Main.ViewModels
                     }
                 }
             });
-
-           
         }
 
 
         private void getMessageSet()
         {
-           Messenger.Default.Register<ObservableCollection<MessageSetTable>>(
+           Messenger.Default.Register<MessageSetTable>(
            this,
-           messageSetTableCollection =>
-           {
-               foreach (MessageSetTable messageTable in messageSetTableCollection)
-               {
-                   var savedMessageSetTable = MessageSetTableCollection.Where(x => x.SetID == messageTable.SetID).FirstOrDefault();
-                   if (savedMessageSetTable != null)
-                   {
-                       ProgramDescription = savedMessageSetTable.Description;
-                       programDiffculty = savedMessageSetTable.ProgramDifficulty;
-                   }
-               }
+             //messageSetTableCollection =>
+             //{
+             //    foreach (MessageSetTable messageTable in messageSetTableCollection)
+             //    {
+             //        TableSetToEdit = MessageSetTableCollection.Where(x => x.SetID == messageTable.SetID).FirstOrDefault();
+             //        if (TableSetToEdit != null)
+             //        {
 
-           });
+             //            ProgramDescription = TableSetToEdit.Description;
+             //            programDiffculty = TableSetToEdit.ProgramDifficulty;
+             //        }
+             //    }
+             //});
+
+             messageSet =>
+             {
+                     TableSetToEdit = MessageSetTableCollection.Where(x => x.SetID == messageSet.SetID).FirstOrDefault();
+                     if (TableSetToEdit != null)
+                     {
+                        TableSetToEdit = messageSet;
+                        ProgramDescription = TableSetToEdit.Description;
+                         programDiffculty = TableSetToEdit.ProgramDifficulty;
+                     }
+               
+             });
         }
     }
 }
