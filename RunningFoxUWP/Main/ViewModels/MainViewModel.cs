@@ -53,7 +53,6 @@ namespace Main.ViewModels
 
         private void EditProgram(MessageSetTable messageSet)
         {
-
             //var toRemoveCollection = new ObservableCollection<MessageSetTable>();
             //toRemoveCollection.Add(messageSet);
 

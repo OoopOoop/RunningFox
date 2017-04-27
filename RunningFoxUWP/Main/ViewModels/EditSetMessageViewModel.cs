@@ -247,13 +247,15 @@ namespace Main.ViewModels
 
              messageSet =>
              {
-                     TableSetToEdit = MessageSetTableCollection.Where(x => x.SetID == messageSet.SetID).FirstOrDefault();
-                     if (TableSetToEdit != null)
-                     {
+                 //TableSetToEdit = MessageSetTableCollection.Where(x => x.SetID == messageSet.SetID).FirstOrDefault();
+                 //TableSetToEdit = messageSet;
+
+                     //if (TableSetToEdit != null)
+                     //{
                         TableSetToEdit = messageSet;
                         ProgramDescription = TableSetToEdit.Description;
-                         programDiffculty = TableSetToEdit.ProgramDifficulty;
-                     }
+                        programDiffculty = TableSetToEdit.ProgramDifficulty;
+                     //}
                
              });
         }
