@@ -25,6 +25,9 @@ namespace Main.ViewModels
             set { _messageListSelectdIndex = value;OnPropertyChanged(); }
         }
 
+
+        //test
+
         private ObservableCollection<MessageTable> _messageTableCollection;
         public ObservableCollection<MessageTable> MessageTableCollection
         {
