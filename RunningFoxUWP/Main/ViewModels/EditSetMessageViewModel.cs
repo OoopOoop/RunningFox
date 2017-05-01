@@ -258,8 +258,7 @@ namespace Main.ViewModels
                         TableSetToEdit = messageSet;
                         ProgramDescription = TableSetToEdit.Description;
                         programDiffculty = TableSetToEdit.ProgramDifficulty;
-                     //}
-               
+                     //}             
              });
         }
     }
