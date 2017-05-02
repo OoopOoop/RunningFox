@@ -24,22 +24,12 @@ namespace Main.ViewModels
             get { return _messageListSelectdIndex; }
             set { _messageListSelectdIndex = value;OnPropertyChanged(); }
         }
-
-
-        //test
-
+        
         private ObservableCollection<MessageTable> _messageTableCollection;
         public ObservableCollection<MessageTable> MessageTableCollection
         {
             get { return _messageTableCollection; }
             set { _messageTableCollection = value; OnPropertyChanged(); }
-        }
-
-        private ObservableCollection<MessageSetTable> _messageSetTableCollection;
-        public ObservableCollection<MessageSetTable> MessageSetTableCollection
-        {
-            get { return _messageSetTableCollection; }
-            set { _messageSetTableCollection = value; OnPropertyChanged(); }
         }
 
         private bool _isRepeating;
@@ -53,7 +43,6 @@ namespace Main.ViewModels
         {
             base._navigationService = navigationService;
             MessageTableCollection = new ObservableCollection<MessageTable>();
-            MessageSetTableCollection = new ObservableCollection<MessageSetTable>();
            
             getMessages();
             getMessageSet();
@@ -74,10 +63,8 @@ namespace Main.ViewModels
 
         private RelayCommand<string> _diffucultyIsCheckedCommand;
         public RelayCommand<string> DiffucultyIsCheckedCommand =>_diffucultyIsCheckedCommand ?? (_diffucultyIsCheckedCommand = new RelayCommand<string>(setDifficulty));
-     
 
-        public MessageSetTable TableSetToEdit { get; set; }
-
+        private Guid TableSetGuidId;
 
         private string programDiffculty;
 
@@ -90,29 +77,25 @@ namespace Main.ViewModels
         {
             SetMessagesSortOrder();
 
-            if (TableSetToEdit != null)
-            {
-                TableSetToEdit.MessageCollection = MessageTableCollection;
-                Messenger.Default.Send(TableSetToEdit);
-            }
-
-            else
-            {
                 var messageSet = new MessageSetTable()
                 {
                     Description = ProgramDescription,
                     MessageCollection = MessageTableCollection,
-                    SetID = Guid.NewGuid(),
+                    SetID = TableSetGuidId == Guid.Empty?Guid.NewGuid(): TableSetGuidId,
                     SetToRepeat = IsRepeating,
                     ProgramDifficulty = programDiffculty,
                     MessagesTotalCount = MessageTableCollection.Count,
                     ProgramTotalTime = MessageTableCollection.Sum(x => x.DisplayTime.Minutes),
                 };
-                MessageSetTableCollection.Add(messageSet);
+            
                 Messenger.Default.Send(messageSet);
-            }
+            
+            MessageTableCollection.Clear();
+
             _navigationService.NavigateTo("MainPage");
             ProgramDescription = string.Empty;
+            TableSetGuidId = Guid.Empty;
+         
         }
 
         private void SetMessagesSortOrder()
@@ -234,31 +217,14 @@ namespace Main.ViewModels
         {
            Messenger.Default.Register<MessageSetTable>(
            this,
-             //messageSetTableCollection =>
-             //{
-             //    foreach (MessageSetTable messageTable in messageSetTableCollection)
-             //    {
-             //        TableSetToEdit = MessageSetTableCollection.Where(x => x.SetID == messageTable.SetID).FirstOrDefault();
-             //        if (TableSetToEdit != null)
-             //        {
-
-             //            ProgramDescription = TableSetToEdit.Description;
-             //            programDiffculty = TableSetToEdit.ProgramDifficulty;
-             //        }
-             //    }
-             //});
-
              messageSet =>
              {
-                 //TableSetToEdit = MessageSetTableCollection.Where(x => x.SetID == messageSet.SetID).FirstOrDefault();
-                 //TableSetToEdit = messageSet;
-
-                     //if (TableSetToEdit != null)
-                     //{
-                        TableSetToEdit = messageSet;
-                        ProgramDescription = TableSetToEdit.Description;
-                        programDiffculty = TableSetToEdit.ProgramDifficulty;
-                     //}             
+                 if (messageSet != null)
+                 {
+                     ProgramDescription = messageSet.Description;
+                     programDiffculty = messageSet.ProgramDifficulty;
+                     TableSetGuidId = messageSet.SetID;
+                 }
              });
         }
     }

@@ -53,13 +53,8 @@ namespace Main.ViewModels
 
         private void EditProgram(MessageSetTable messageSet)
         {
-            //var toRemoveCollection = new ObservableCollection<MessageSetTable>();
-            //toRemoveCollection.Add(messageSet);
-
             Messenger.Default.Send(messageSet);
-            _navigationService.NavigateTo("EditSet");
-            //_navigationService.NavigateTo("EditSet");
-            //Messenger.Default.Send(toRemoveCollection);
+            _navigationService.NavigateTo("EditSet");        
         }
 
 
@@ -87,23 +82,14 @@ namespace Main.ViewModels
                var collection = MessageSetCollection.Where(x => x.SetID == messageSet.SetID).FirstOrDefault();
                if(collection!=null)
                {
-                   int indexOfCollection = MessageSetCollection.IndexOf(messageSet);
+                   int indexOfCollection = MessageSetCollection.IndexOf(collection);
                    MessageSetCollection[indexOfCollection] = messageSet;
                }
                else
                {
                    MessageSetCollection.Add(messageSet);
-               }
-            
+               }           
            });
         }
-
-
-        //protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
-        //{
-        //    Messenger.Default.Unregister<StatusMessage>(
-        //      this, HandleStatusMessage);
-        //    base.OnNavigatingFrom(e);
-        //}
     }
 }
