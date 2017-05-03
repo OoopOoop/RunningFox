@@ -48,14 +48,26 @@ namespace Main.ViewModels
 
         private void populateMessage()
         {
-                var message = createNewMessage();
-                PopulatedMessages.Add(message);
+            var messageToCopy= new MessageTable();
 
+            if (PopulatedMessages.Count != 0)
+            {
+                messageToCopy = PopulatedMessages[PopulatedMessages.Count-1];
+                messageToCopy.DisplayTime = PopulatedMessages[PopulatedMessages.Count - 1].DisplayTime;
+                messageToCopy.GuidID = Guid.NewGuid();
+                messageToCopy.MessageText = PopulatedMessages[PopulatedMessages.Count - 1].MessageText;
+                PopulatedMessages.Add(messageToCopy);
+            }
+            else
+            {
+                messageToCopy = createNewMessage();
+                PopulatedMessages.Add(messageToCopy);
+            }             
                 //Clear time and messageToDisplay fields
                 Time = _defaultTime;
                 MessageToDisplay = _defaultMessage;
                 NewMessage = new MessageTable();
-                ConfirmMessage = $"Message:  {message.MessageText} was added, duration: { message.DisplayTimeText}";  
+                ConfirmMessage = $"Message:  {messageToCopy.MessageText} was added, duration: { messageToCopy.DisplayTimeText}";  
         }
 
         private string _messageToDisplay;
@@ -136,7 +148,7 @@ namespace Main.ViewModels
         private MessageTable createNewMessage()
         {
             NewMessage.DisplayTime = this.Time;
-            NewMessage.MessageText = string.IsNullOrEmpty(this.MessageToDisplay) ? "Run, Forrest, Run!" : MessageToDisplay;
+            NewMessage.MessageText = string.IsNullOrEmpty(this.MessageToDisplay) ? "test" : MessageToDisplay;
 
             //check if message is new  than set new Guid, if it was sent to edit, save original guidID
             if (NewMessage.GuidID == null || NewMessage.GuidID == Guid.Empty)
