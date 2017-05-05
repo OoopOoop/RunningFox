@@ -50,20 +50,17 @@
             <RadioButton GroupName="DifficultyGroup"
                   HorizontalAlignment="Center"
                   Content="Easy"
-                  Command="{Binding DiffucultyIsCheckedCommand}" 
-                  CommandParameter="Easy"/>
+                  IsChecked="{Binding ValueAsEasy, Mode=TwoWay}"/>
 
             <RadioButton GroupName="DifficultyGroup"
                   HorizontalAlignment="Center"
-                  Content="Medium"
-                  Command="{Binding DiffucultyIsCheckedCommand}"
-                  CommandParameter="Medium"/>
+                  IsChecked="{Binding ValueAsMedium, Mode=TwoWay}"
+                  Content="Medium"/>
 
             <RadioButton GroupName="DifficultyGroup"
                   HorizontalAlignment="Center"
                   Content="Hard"
-                  Command="{Binding DiffucultyIsCheckedCommand}" 
-                   CommandParameter="Hard"/>
+                  Command="{Binding ValueAsHard, Mode=TwoWay}"/>
         </StackPanel>
 
         <CheckBox Grid.Row="4"

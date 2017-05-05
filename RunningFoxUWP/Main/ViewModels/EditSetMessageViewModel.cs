@@ -45,7 +45,7 @@ namespace Main.ViewModels
             MessageTableCollection = new ObservableCollection<MessageTable>();
            
             getMessages();
-            getMessageSet();
+            getMessageSet();          
         }
 
 
@@ -61,18 +61,56 @@ namespace Main.ViewModels
         public RelayCommand SaveNewProgramCommand => _saveNewProgramCommand ?? (_saveNewProgramCommand = new RelayCommand(saveNewSet));
 
 
-        private RelayCommand<string> _diffucultyIsCheckedCommand;
-        public RelayCommand<string> DiffucultyIsCheckedCommand =>_diffucultyIsCheckedCommand ?? (_diffucultyIsCheckedCommand = new RelayCommand<string>(setDifficulty));
+        //private RelayCommand<string> _diffucultyIsCheckedCommand;
+        //public RelayCommand<string> DiffucultyIsCheckedCommand =>_diffucultyIsCheckedCommand ?? (_diffucultyIsCheckedCommand = new RelayCommand<string>(setDifficulty));
 
         private Guid TableSetGuidId;
 
         private string programDiffculty;
+       
+        //private bool valueAsEasy;
+        //public bool ValueAsEasy
+        //{
+        //    get { return Value.Equals(1); }
+        //    set { Value = 1; OnPropertyChanged(nameof(Value)); }
+        //}
 
-        private void setDifficulty(string diffuculty)
-        {
-            programDiffculty = diffuculty;
-        }
+        //private bool valueAsMedium;
+        //public bool ValueAsMedium
+        //{
+        //    get { return Value.Equals(2); }
+        //    set { Value = 2; OnPropertyChanged(nameof(Value)); }
+        //}
+
+        //private bool valueAsHard;
+        //public bool ValueAsHard
+        //{
+        //    get { return Value.Equals(3); }
+        //    set { Value = 3;
+        //        OnPropertyChanged(nameof(Value));
+        //    }
+        //}
+
+        //private int _value=default(int);
+        //public int Value
+        //{
+        //    get { return _value; }
+        //    set
+        //    {
+        //        _value = value;
+                
+        //        //OnPropertyChanged(nameof(ValueAsEasy));
+        //        //OnPropertyChanged(nameof(ValueAsMedium));
+        //        //OnPropertyChanged(nameof(ValueAsHard));
+        //    }
+        //}
+
         
+        //private void setDifficulty(string diffuculty)
+        //{
+        //    programDiffculty = diffuculty;
+        //}
+
         private void saveNewSet()
         {
             SetMessagesSortOrder();
@@ -82,20 +120,20 @@ namespace Main.ViewModels
                     Description = ProgramDescription,
                     MessageCollection = MessageTableCollection,
                     SetID = TableSetGuidId == Guid.Empty?Guid.NewGuid(): TableSetGuidId,
-                    SetToRepeat = IsRepeating,
-                    ProgramDifficulty = programDiffculty,
+                    SetToRepeat = IsRepeating,                 
+                   // ProgramDifficulty = Value.ToString(),
                     MessagesTotalCount = MessageTableCollection.Count,
                     ProgramTotalTime = MessageTableCollection.Sum(x => x.DisplayTime.Minutes),
                 };
+
+            Messenger.Default.Send(messageSet);
             
-                Messenger.Default.Send(messageSet);
-            
-            MessageTableCollection.Clear();
+          //  MessageTableCollection.Clear();
 
             _navigationService.NavigateTo("MainPage");
             ProgramDescription = string.Empty;
             TableSetGuidId = Guid.Empty;
-         
+
         }
 
         private void SetMessagesSortOrder()

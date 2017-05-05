@@ -52,7 +52,6 @@ namespace Main.ViewModels
 
             if (PopulatedMessages.Count != 0)
             {
-                messageToCopy = PopulatedMessages[PopulatedMessages.Count-1];
                 messageToCopy.DisplayTime = PopulatedMessages[PopulatedMessages.Count - 1].DisplayTime;
                 messageToCopy.GuidID = Guid.NewGuid();
                 messageToCopy.MessageText = PopulatedMessages[PopulatedMessages.Count - 1].MessageText;

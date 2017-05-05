@@ -37,9 +37,13 @@ namespace Main.ViewModels
         public string ProgramDifficulty
         {
             get { return _programDifficulty; }
-            set { _programDifficulty = value;OnPropertyChanged(); }
+            set
+            {
+                _programDifficulty = value;
+                OnPropertyChanged();
+            }
         }
-        
+
 
         public MainViewModel(INavigationService navigationService)
         {
@@ -56,13 +60,13 @@ namespace Main.ViewModels
             Messenger.Default.Send(messageSet);
             _navigationService.NavigateTo("EditSet");        
         }
-
-
-        private RelayCommand _removeProgramCommand;
-        public RelayCommand RemoveProgramCommand => _removeProgramCommand ?? (_removeProgramCommand = new RelayCommand(RemoveProgram));
         
-        private void RemoveProgram()
+        private RelayCommand<MessageSetTable> _removeProgramCommand;
+        public RelayCommand<MessageSetTable> RemoveProgramCommand => _removeProgramCommand ?? (_removeProgramCommand = new RelayCommand<MessageSetTable>(RemoveProgram));
+        
+        private void RemoveProgram(MessageSetTable messageSet)
         {
+            MessageSetCollection.Remove(messageSet);
         }
 
         private RelayCommand _playProgramCommand;
@@ -70,6 +74,7 @@ namespace Main.ViewModels
 
         private void PlayProgram()
         {
+           
         }
 
         
