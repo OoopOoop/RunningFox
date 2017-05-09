@@ -98,6 +98,7 @@
     <Compile Include="Models\MessageSetTable.cs" />
     <Compile Include="Models\MessageTable.cs" />
     <Compile Include="Shared\NotifyService.cs" />
+    <Compile Include="Shared\RadioButtonToIntConverter.cs" />
     <Compile Include="ViewModels\EditMessageViewModel.cs" />
     <Compile Include="ViewModels\EditSetMessageViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />

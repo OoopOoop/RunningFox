@@ -6,10 +6,14 @@
       xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:local="using:Main.Views"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:converters="using:Main.Shared"
       DataContext="{Binding EditSetMessageViewModel,
                             Source={StaticResource Locator}}"
       mc:Ignorable="d">
-
+    <Page.Resources>
+        <converters:RadioButtonToIntConverter x:Key="RadioButtonConverter"/>
+    </Page.Resources>
+    
     <Grid AllowDrop="True" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
 
@@ -50,17 +54,17 @@
             <RadioButton GroupName="DifficultyGroup"
                   HorizontalAlignment="Center"
                   Content="Easy"
-                  IsChecked="{Binding ValueAsEasy, Mode=TwoWay}"/>
+                  IsChecked="{Binding ProgramDiffuculty,Converter={StaticResource RadioButtonConverter},ConverterParameter=1,Mode=TwoWay}"/>
 
             <RadioButton GroupName="DifficultyGroup"
                   HorizontalAlignment="Center"
-                  IsChecked="{Binding ValueAsMedium, Mode=TwoWay}"
+                  IsChecked="{Binding ProgramDiffuculty,Converter={StaticResource RadioButtonConverter},ConverterParameter=2,Mode=TwoWay}"
                   Content="Medium"/>
 
             <RadioButton GroupName="DifficultyGroup"
                   HorizontalAlignment="Center"
                   Content="Hard"
-                  Command="{Binding ValueAsHard, Mode=TwoWay}"/>
+                  IsChecked="{Binding ProgramDiffuculty,Converter={StaticResource RadioButtonConverter},ConverterParameter=3,Mode=TwoWay}"/>
         </StackPanel>
 
         <CheckBox Grid.Row="4"

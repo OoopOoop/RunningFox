@@ -31,9 +31,9 @@ namespace Main.Views
     /// </summary>
     public sealed partial class EditSetMessagePage : Page
     {
-        ObservableCollection<string> _reference;
+       // ObservableCollection<string> _reference;
       //  ObservableCollection<string> _selection;
-        string _deletedItem;
+       // string _deletedItem;
 
 
         public EditSetMessagePage()
@@ -157,7 +157,7 @@ namespace Main.Views
                 e.Data.SetText(e.Items[0] as string);
                 // Reorder or move to trash are always a move
                 e.Data.RequestedOperation = DataPackageOperation.Move;
-                _deletedItem = null;
+                //_deletedItem = null;
             }
         }
  

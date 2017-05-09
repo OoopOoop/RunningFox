@@ -59,57 +59,20 @@ namespace Main.ViewModels
         
         private RelayCommand _saveNewProgramCommand;
         public RelayCommand SaveNewProgramCommand => _saveNewProgramCommand ?? (_saveNewProgramCommand = new RelayCommand(saveNewSet));
+        
 
+        private int programDifficulty;
+        public int ProgramDifficulty
+        {
+            get { return programDifficulty; }
+            set { programDifficulty = value; OnPropertyChanged(); }
+        }
 
-        //private RelayCommand<string> _diffucultyIsCheckedCommand;
-        //public RelayCommand<string> DiffucultyIsCheckedCommand =>_diffucultyIsCheckedCommand ?? (_diffucultyIsCheckedCommand = new RelayCommand<string>(setDifficulty));
 
         private Guid TableSetGuidId;
 
-        private string programDiffculty;
+       // private string programDiffculty;
        
-        //private bool valueAsEasy;
-        //public bool ValueAsEasy
-        //{
-        //    get { return Value.Equals(1); }
-        //    set { Value = 1; OnPropertyChanged(nameof(Value)); }
-        //}
-
-        //private bool valueAsMedium;
-        //public bool ValueAsMedium
-        //{
-        //    get { return Value.Equals(2); }
-        //    set { Value = 2; OnPropertyChanged(nameof(Value)); }
-        //}
-
-        //private bool valueAsHard;
-        //public bool ValueAsHard
-        //{
-        //    get { return Value.Equals(3); }
-        //    set { Value = 3;
-        //        OnPropertyChanged(nameof(Value));
-        //    }
-        //}
-
-        //private int _value=default(int);
-        //public int Value
-        //{
-        //    get { return _value; }
-        //    set
-        //    {
-        //        _value = value;
-                
-        //        //OnPropertyChanged(nameof(ValueAsEasy));
-        //        //OnPropertyChanged(nameof(ValueAsMedium));
-        //        //OnPropertyChanged(nameof(ValueAsHard));
-        //    }
-        //}
-
-        
-        //private void setDifficulty(string diffuculty)
-        //{
-        //    programDiffculty = diffuculty;
-        //}
 
         private void saveNewSet()
         {
@@ -121,7 +84,7 @@ namespace Main.ViewModels
                     MessageCollection = MessageTableCollection,
                     SetID = TableSetGuidId == Guid.Empty?Guid.NewGuid(): TableSetGuidId,
                     SetToRepeat = IsRepeating,                 
-                   // ProgramDifficulty = Value.ToString(),
+                    ProgramDifficulty = ProgramDifficulty.ToString(),
                     MessagesTotalCount = MessageTableCollection.Count,
                     ProgramTotalTime = MessageTableCollection.Sum(x => x.DisplayTime.Minutes),
                 };
@@ -260,7 +223,7 @@ namespace Main.ViewModels
                  if (messageSet != null)
                  {
                      ProgramDescription = messageSet.Description;
-                     programDiffculty = messageSet.ProgramDifficulty;
+                    // ProgramDifficulty =Convert.ToInt32(messageSet.ProgramDifficulty);
                      TableSetGuidId = messageSet.SetID;
                  }
              });
