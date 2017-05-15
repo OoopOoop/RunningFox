@@ -49,13 +49,7 @@
                                 <TextBlock Margin="0 0 10 0" Text="Total Time:" />
                                 <TextBlock Text="{Binding ProgramTotalTime, Mode=TwoWay}" />
                             </StackPanel>
-
-                            <StackPanel Style="{StaticResource ProgramDescriptionStackPanelStyle}">
-                                <TextBlock Margin="0 0 10 0" Text="Difficulty:" />
-                                <TextBlock Text="{Binding ProgramDifficulty, Mode=TwoWay}" />
-                            </StackPanel>
-
-
+                          
                             <StackPanel Style="{StaticResource ProgramDescriptionStackPanelStyle}">
                                 <TextBlock Margin="0 0 10 0" Text="Set to Repeat:" />
                                 <TextBlock Text="{Binding SetToRepeat, Mode=TwoWay}" />

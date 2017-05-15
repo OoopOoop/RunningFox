@@ -40,14 +40,6 @@ namespace Main.Models
         }
 
 
-        private string _programDifficulty;
-        public string ProgramDifficulty
-        {
-            get { return _programDifficulty; }
-            set { _programDifficulty = value; OnPropertyChanged(); }
-        }
-
-
         private bool _setToRepeat;
         public bool SetToRepeat
         {

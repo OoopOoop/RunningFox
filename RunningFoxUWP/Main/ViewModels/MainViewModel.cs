@@ -23,25 +23,13 @@ namespace Main.ViewModels
             get { return _messagesTotalCount; }
             set { _messagesTotalCount = value; OnPropertyChanged(); }
         }
-            
+        
 
         private int _programTotalTime;
         public int ProgramTotalTime
         {
             get { return _programTotalTime; }
             set { _programTotalTime = value; OnPropertyChanged(); }
-        }
-
-
-        private string _programDifficulty;
-        public string ProgramDifficulty
-        {
-            get { return _programDifficulty; }
-            set
-            {
-                _programDifficulty = value;
-                OnPropertyChanged();
-            }
         }
 
 

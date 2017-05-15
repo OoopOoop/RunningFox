@@ -45,26 +45,6 @@
                     <Setter Property="HorizontalAlignment" Value="Stretch"/>
                 </Style>
             </StackPanel.Resources>
-
-            <TextBlock Text="Difficulty:"
-                       VerticalAlignment="Top"
-                       HorizontalAlignment="Center"/>
-
-
-            <RadioButton GroupName="DifficultyGroup"
-                  HorizontalAlignment="Center"
-                  Content="Easy"
-                  IsChecked="{Binding ProgramDiffuculty,Converter={StaticResource RadioButtonConverter},ConverterParameter=1,Mode=TwoWay}"/>
-
-            <RadioButton GroupName="DifficultyGroup"
-                  HorizontalAlignment="Center"
-                  IsChecked="{Binding ProgramDiffuculty,Converter={StaticResource RadioButtonConverter},ConverterParameter=2,Mode=TwoWay}"
-                  Content="Medium"/>
-
-            <RadioButton GroupName="DifficultyGroup"
-                  HorizontalAlignment="Center"
-                  Content="Hard"
-                  IsChecked="{Binding ProgramDiffuculty,Converter={StaticResource RadioButtonConverter},ConverterParameter=3,Mode=TwoWay}"/>
         </StackPanel>
 
         <CheckBox Grid.Row="4"

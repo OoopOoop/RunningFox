@@ -60,20 +60,9 @@ namespace Main.ViewModels
         private RelayCommand _saveNewProgramCommand;
         public RelayCommand SaveNewProgramCommand => _saveNewProgramCommand ?? (_saveNewProgramCommand = new RelayCommand(saveNewSet));
         
-
-        private int programDifficulty;
-        public int ProgramDifficulty
-        {
-            get { return programDifficulty; }
-            set { programDifficulty = value; OnPropertyChanged(); }
-        }
-
-
+        
         private Guid TableSetGuidId;
-
-       // private string programDiffculty;
-       
-
+        
         private void saveNewSet()
         {
             SetMessagesSortOrder();
@@ -83,8 +72,7 @@ namespace Main.ViewModels
                     Description = ProgramDescription,
                     MessageCollection = MessageTableCollection,
                     SetID = TableSetGuidId == Guid.Empty?Guid.NewGuid(): TableSetGuidId,
-                    SetToRepeat = IsRepeating,                 
-                    ProgramDifficulty = ProgramDifficulty.ToString(),
+                    SetToRepeat = IsRepeating,  
                     MessagesTotalCount = MessageTableCollection.Count,
                     ProgramTotalTime = MessageTableCollection.Sum(x => x.DisplayTime.Minutes),
                 };
