@@ -57,12 +57,13 @@ namespace Main.ViewModels
             MessageSetCollection.Remove(messageSet);
         }
 
-        private RelayCommand _playProgramCommand;
-        public RelayCommand PlayProgramCommand => _playProgramCommand ?? (_playProgramCommand = new RelayCommand(PlayProgram));
+        private RelayCommand<MessageSetTable> _playProgramCommand;
+        public RelayCommand<MessageSetTable> PlayProgramCommand => _playProgramCommand ?? (_playProgramCommand = new RelayCommand<MessageSetTable>(PlayProgram));
 
-        private void PlayProgram()
+        private void PlayProgram(MessageSetTable messageSet)
         {
-           
+           _navigationService.NavigateTo("PlayPage");
+            Messenger.Default.Send(messageSet);
         }
 
         

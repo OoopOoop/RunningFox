@@ -10,12 +10,8 @@
       DataContext="{Binding EditSetMessageViewModel,
                             Source={StaticResource Locator}}"
       mc:Ignorable="d">
-    <Page.Resources>
-        <converters:RadioButtonToIntConverter x:Key="RadioButtonConverter"/>
-    </Page.Resources>
     
     <Grid AllowDrop="True" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
 
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />

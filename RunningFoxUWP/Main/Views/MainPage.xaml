@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:Main"
+      xmlns:converters="using:Main.Shared"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       DataContext="{Binding MainViewModel,
                             Source={StaticResource Locator}}"
@@ -12,6 +13,7 @@
         <Style x:Key="ProgramDescriptionStackPanelStyle" TargetType="StackPanel">
             <Setter Property="Orientation" Value="Horizontal" />
         </Style>
+        <converters:BoolToYesNoConverter x:Key="BoolToYesNoConverter"/>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -52,7 +54,7 @@
                           
                             <StackPanel Style="{StaticResource ProgramDescriptionStackPanelStyle}">
                                 <TextBlock Margin="0 0 10 0" Text="Set to Repeat:" />
-                                <TextBlock Text="{Binding SetToRepeat, Mode=TwoWay}" />
+                                <TextBlock Text="{Binding SetToRepeat, Mode=TwoWay, Converter={StaticResource BoolToYesNoConverter}}" />
                             </StackPanel>
                         </StackPanel>
 
