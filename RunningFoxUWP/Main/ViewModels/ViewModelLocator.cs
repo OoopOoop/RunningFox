@@ -14,6 +14,7 @@ namespace Main.ViewModels
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<EditSetMessageViewModel>();
             SimpleIoc.Default.Register<EditMessageViewModel>();
+            SimpleIoc.Default.Register<PlayPageViewModel>();
         }
 
         public MainViewModel MainViewModel => SimpleIoc.Default.GetInstance<MainViewModel>();
@@ -22,6 +23,8 @@ namespace Main.ViewModels
 
         public EditMessageViewModel EditMessageViewModel => SimpleIoc.Default.GetInstance<EditMessageViewModel>(Guid.NewGuid().ToString());
         
+        public PlayPageViewModel PlayPageViewModel => SimpleIoc.Default.GetInstance<PlayPageViewModel>();
+
         private INavigationService createNavigationService()
         {
             var navigationService = new NavigationService();

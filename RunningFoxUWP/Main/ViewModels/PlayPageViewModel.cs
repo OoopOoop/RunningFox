@@ -1,18 +1,48 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using Windows.UI.Xaml;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Views;
 using Main.Models;
+using GalaSoft.MvvmLight.Command;
 
 namespace Main.ViewModels
 {
     public class PlayPageViewModel: ViewModelBase
     {
-        private ObservableCollection<MessageSetTable> _playCollection;
-        public ObservableCollection<MessageSetTable> PlayCollection
+        private DispatcherTimer _timer;
+        private int _basetime;
+        
+        private MessageSetTable _playCollection;
+        public  MessageSetTable PlayCollection
         {
             get { return _playCollection; }
             set { _playCollection = value; OnPropertyChanged(); }
+        }
+        
+        private RelayCommand _startProgrammCommand;
+        public RelayCommand StartProgrammCommand => _startProgrammCommand ?? (_startProgrammCommand = new RelayCommand(StartProgram));
+        
+        private void StartProgram()
+        {
+            _basetime = PlayCollection.MessageCollection[0].DisplayTime.Minutes;
+
+            TimeLeft = _basetime.ToString();
+
+            _timer = new DispatcherTimer();
+            _timer.Interval = new TimeSpan(0,0,0,1);
+            _timer.Tick += _timer_Tick;
+            
+            _timer.Start();
+        }
+
+        private void _timer_Tick(object sender, object e)
+        {
+            _basetime = _basetime - 1;
+            TimeLeft = _basetime.ToString();
+            if (_basetime == 0)
+            {
+                _timer.Stop();
+            }
         }
 
 
@@ -20,6 +50,7 @@ namespace Main.ViewModels
         {
             base._navigationService=navigationService;
             getProgramToPlay();
+            
         }
 
         private string _currentMessage;
@@ -38,8 +69,8 @@ namespace Main.ViewModels
         }
 
 
-        private DateTime _timeLeft;
-        public DateTime TimeLeft
+        private string _timeLeft;
+        public string TimeLeft
         {
             get { return _timeLeft; }
             set { _timeLeft = value; OnPropertyChanged(); }
@@ -48,8 +79,12 @@ namespace Main.ViewModels
         private void getProgramToPlay()
         {
             Messenger.Default.Register<MessageSetTable>(
-                this,
-                messageSet => { CurrentMessage = messageSet.MessageCollection[0].MessageText; });
+                this, messageSet =>
+                    {
+                        PlayCollection = messageSet;
+                        CurrentMessage = PlayCollection?.MessageCollection[0].MessageText;
+                        TimeLeft = messageSet.MessageCollection[0].DisplayTime.ToString();
+                    });
         }
     }
 }
