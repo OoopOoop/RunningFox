@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.UI.Xaml;
 using GalaSoft.MvvmLight.Messaging;
@@ -12,9 +13,8 @@ namespace Main.ViewModels
     {
         private DispatcherTimer _timer;
         private TimeSpan _basetime;
-
-
-        //private int currentMessageIndex=0;
+        
+        private int currentMessageIndex=0;
 
         private MessageSetTable _playCollection;
         public  MessageSetTable PlayCollection
@@ -22,20 +22,18 @@ namespace Main.ViewModels
             get { return _playCollection; }
             set { _playCollection = value; OnPropertyChanged(); }
         }
-
-
+        
         private RelayCommand _setNextProgrammCommand;
         public RelayCommand SetNextProgrammCommand => _setNextProgrammCommand ?? (_setNextProgrammCommand = new RelayCommand(SetNextProgram, CanSetProgram));
 
         private void SetNextProgram()
         {
-            
+            currentMessageIndex++;
+            setNewMessage(currentMessageIndex);
         }
 
-        private bool CanSetProgram() => PlayCollection.MessageCollection.Count != 0;
-
-
-
+        private bool CanSetProgram() => PlayCollection.MessageCollection.IndexOf(PlayCollection.MessageCollection[currentMessageIndex])!= -1;
+        
         private RelayCommand _pauseProgrammCommand;
         public RelayCommand PauseProgrammCommand => _pauseProgrammCommand ?? (_pauseProgrammCommand = new RelayCommand(PauseProgram));
 
@@ -60,21 +58,20 @@ namespace Main.ViewModels
 
         private void StartProgram()
         {
-            //var time = PlayCollection.MessageCollection[currentMessageIndex].DisplayTime;
+            if (PlayCollection.MessageCollection.ElementAtOrDefault(currentMessageIndex) != null)
+            {
+                var time = PlayCollection.MessageCollection[currentMessageIndex].DisplayTime;
 
-            //TODO: check for null; create a playlist with previous message, and next one
+                _basetime = new TimeSpan(0, time.Hours, time.Minutes, time.Seconds);
 
-            var time = PlayCollection.MessageCollection[0].DisplayTime;
+                TimeLeft = _basetime.ToString();
+                _timer.Interval = new TimeSpan(0, 0, 1);
 
-            _basetime = new TimeSpan(0,time.Hours, time.Minutes, time.Seconds);
+                _timer.Tick += _timer_Tick;
+                _timer.Start();
 
-            TimeLeft = _basetime.ToString();
-            _timer.Interval = new TimeSpan(0, 0, 1);
-
-            _timer.Tick += _timer_Tick;
-            _timer.Start();         
-
-            PlayCollection.MessageCollection.RemoveAt(0);
+                CanSetProgram();
+            }
         }
 
         private void _timer_Tick(object sender, object e)
@@ -84,24 +81,33 @@ namespace Main.ViewModels
             if (_basetime == new TimeSpan(0, 0, 0, 0))
             {
                 _timer.Stop();
-                //  currentMessageIndex++;
-                //setNewMessage(currentMessageIndex);
-
-                setNewMessage();
+                 currentMessageIndex++;
+                 setNewMessage(currentMessageIndex);
+               
+                //checkForLastMessage(currentMessageIndex);
             }
+            CanSetProgram();
         }
-
-        //private void setNewMessage(int index)
+        
+        //private void checkForLastMessage(int index)
         //{
-        //    CurrentMessage = PlayCollection?.MessageCollection[index].MessageText;
-        //    StartProgram();
+        //    if (PlayCollection.MessageCollection.Count == index)
+        //    {
+        //        CanSetProgram();
+        //    }
         //}
 
-
-        private void setNewMessage()
+        private void setNewMessage(int index)
         {
-            CurrentMessage = PlayCollection?.MessageCollection[0].MessageText;
-            StartProgram();
+            if (PlayCollection.MessageCollection.ElementAtOrDefault(index) != null)
+            {
+                CurrentMessage = PlayCollection?.MessageCollection[index].MessageText;
+                StartProgram();
+            }
+            else
+            {
+                _timer.Stop();
+            }
         }
 
         public PlayPageViewModel(INavigationService navigationService)
