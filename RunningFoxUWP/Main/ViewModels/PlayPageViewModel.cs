@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.UI.Xaml;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Views;
 using Main.Models;
 using GalaSoft.MvvmLight.Command;
+using System.Collections.ObjectModel;
 
 namespace Main.ViewModels
 {
@@ -15,6 +15,51 @@ namespace Main.ViewModels
         private TimeSpan _basetime;
         
         private int currentMessageIndex=0;
+        
+        //previous
+        private string _previousMessage;
+        public string PreviousMessage
+        {
+            get { return _previousMessage; }
+            set { _previousMessage = value; OnPropertyChanged(); }
+        }
+
+        private string _previousMesageTimeLeft;
+        public string PreviousMesageTimeLeft
+        {
+            get { return _previousMesageTimeLeft; }
+            set { _previousMesageTimeLeft = value; OnPropertyChanged(); }
+        }
+
+        //current
+        private string _currentMessage;
+        public string CurrentMessage
+        {
+            get { return _currentMessage; }
+            set { _currentMessage = value; OnPropertyChanged(); }
+        }
+
+        private string _currentTimeLeft;
+        public string CurrentTimeLeft
+        {
+            get { return _currentTimeLeft; }
+            set { _currentTimeLeft = value; OnPropertyChanged(); }
+        }
+
+        //next
+        private string _nextMessage;
+        public string NextMessage
+        {
+            get { return _nextMessage; }
+            set { _nextMessage = value; OnPropertyChanged(); }
+        }
+        private string _nextMessageTimeLeft;
+        public string NextMessageTimeLeft
+        {
+            get { return _nextMessageTimeLeft; }
+            set { _nextMessageTimeLeft = value; OnPropertyChanged(); }
+        }
+
 
         private MessageSetTable _playCollection;
         public  MessageSetTable PlayCollection
@@ -48,8 +93,7 @@ namespace Main.ViewModels
                 _timer.Start();
             }
         }
-
-
+        
         private RelayCommand _startProgrammCommand;
         public RelayCommand StartProgrammCommand => _startProgrammCommand ?? (_startProgrammCommand = new RelayCommand(StartProgram, CanStartProgram));
         
@@ -64,7 +108,7 @@ namespace Main.ViewModels
 
                 _basetime = new TimeSpan(0, time.Hours, time.Minutes, time.Seconds);
 
-                TimeLeft = _basetime.ToString();
+                CurrentTimeLeft = _basetime.ToString();
                 _timer.Interval = new TimeSpan(0, 0, 1);
 
                 _timer.Tick += _timer_Tick;
@@ -77,31 +121,22 @@ namespace Main.ViewModels
         private void _timer_Tick(object sender, object e)
         {  
             _basetime = _basetime.Subtract(TimeSpan.FromSeconds(1));
-            TimeLeft = _basetime.ToString();
+            CurrentTimeLeft = _basetime.ToString();
             if (_basetime == new TimeSpan(0, 0, 0, 0))
             {
                 _timer.Stop();
                  currentMessageIndex++;
                  setNewMessage(currentMessageIndex);
-               
-                //checkForLastMessage(currentMessageIndex);
             }
             CanSetProgram();
         }
         
-        //private void checkForLastMessage(int index)
-        //{
-        //    if (PlayCollection.MessageCollection.Count == index)
-        //    {
-        //        CanSetProgram();
-        //    }
-        //}
-
+     
         private void setNewMessage(int index)
         {
             if (PlayCollection.MessageCollection.ElementAtOrDefault(index) != null)
             {
-                CurrentMessage = PlayCollection?.MessageCollection[index].MessageText;
+                _setDisplayMessagesAndDuration(index);
                 StartProgram();
             }
             else
@@ -112,33 +147,46 @@ namespace Main.ViewModels
 
         public PlayPageViewModel(INavigationService navigationService)
         {
+            PlayCollection = new MessageSetTable
+            {
+                MessagesTotalCount = 4,
+                SetToRepeat = true,
+                MessageCollection = new ObservableCollection<MessageTable>()
+                {new MessageTable(){ SortOrder=1, DisplayTime = new TimeSpan(0,2,0), MessageText="test message 1"},
+                 new MessageTable(){ SortOrder=2, DisplayTime = new TimeSpan(0,1,0), MessageText="test message 2"},
+                 new MessageTable(){ SortOrder=3, DisplayTime = new TimeSpan(0,5,0), MessageText="test message 3"},
+                 new MessageTable(){ SortOrder=4, DisplayTime = new TimeSpan(0,2,0), MessageText="test message 4"},
+                 new MessageTable(){ SortOrder=5, DisplayTime = new TimeSpan(0,1,0), MessageText="test message 5"},
+                 new MessageTable(){ SortOrder=6, DisplayTime = new TimeSpan(0,5,0), MessageText="test message 6"}
+                }
+            };
+            
+            _setDisplayMessagesAndDuration(0);
+          
             base._navigationService=navigationService;
-            getProgramToPlay();
             _timer = new DispatcherTimer();
-        }
+            // getProgramToPlay();
 
-        private string _currentMessage;
-        public string CurrentMessage
+        }
+        
+        private void _setDisplayMessagesAndDuration(int currentMessageIndex)
         {
-            get { return _currentMessage; }
-            set { _currentMessage = value; OnPropertyChanged(); }
+          
+            CurrentMessage = PlayCollection?.MessageCollection[currentMessageIndex].MessageText;
+            CurrentTimeLeft = PlayCollection.MessageCollection[currentMessageIndex].DisplayTime.ToString();
+
+            //check if not on last message and program not on repeat.
+            NextMessage= PlayCollection?.MessageCollection[currentMessageIndex+1].MessageText;
+            NextMessageTimeLeft=PlayCollection.MessageCollection[currentMessageIndex+1].DisplayTime.ToString();
+
+            if(currentMessageIndex!=0)
+            {
+                PreviousMessage = PlayCollection?.MessageCollection[currentMessageIndex - 1].MessageText;
+                PreviousMesageTimeLeft = PlayCollection.MessageCollection[currentMessageIndex - 1].DisplayTime.ToString();
+            }
+           
         }
 
-
-        private string _nextMessage;
-        public string NextMessage
-        {
-            get { return _nextMessage; }
-            set { _nextMessage = value; OnPropertyChanged(); }
-        }
-
-
-        private string _timeLeft;
-        public string TimeLeft
-        {
-            get { return _timeLeft; }
-            set { _timeLeft = value; OnPropertyChanged(); }
-        }
 
         private void getProgramToPlay()
         {
@@ -147,7 +195,7 @@ namespace Main.ViewModels
                     {
                         PlayCollection = messageSet;
                         CurrentMessage = PlayCollection?.MessageCollection[0].MessageText;
-                        TimeLeft = messageSet.MessageCollection[0].DisplayTime.ToString();
+                        CurrentTimeLeft = messageSet.MessageCollection[0].DisplayTime.ToString();
                     });
         }
     }
