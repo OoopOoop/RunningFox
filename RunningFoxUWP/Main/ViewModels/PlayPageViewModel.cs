@@ -69,7 +69,7 @@ namespace Main.ViewModels
         }
         
         private RelayCommand _setNextProgrammCommand;
-        public RelayCommand SetNextProgrammCommand => _setNextProgrammCommand ?? (_setNextProgrammCommand = new RelayCommand(SetNextProgram, CanSetProgram));
+        public RelayCommand SetNextProgrammCommand => _setNextProgrammCommand ?? (_setNextProgrammCommand = new RelayCommand(SetNextProgram));
 
         private void SetNextProgram()
         {
@@ -77,18 +77,13 @@ namespace Main.ViewModels
             setNewMessage(currentMessageIndex);
         }
 
-        private bool CanSetProgram() => PlayCollection.MessageCollection.IndexOf(PlayCollection.MessageCollection[currentMessageIndex])!= -1;
-        
+     
         private RelayCommand _pauseProgrammCommand;
         public RelayCommand PauseProgrammCommand => _pauseProgrammCommand ?? (_pauseProgrammCommand = new RelayCommand(PauseProgram));
 
         private void PauseProgram()
         {
-            if (_timer.IsEnabled)
-            {
-                _timer.Stop();
-            }
-            else
+            if (!_timer.IsEnabled)
             {
                 _timer.Start();
             }
@@ -113,8 +108,7 @@ namespace Main.ViewModels
 
                 _timer.Tick += _timer_Tick;
                 _timer.Start();
-
-                CanSetProgram();
+                
             }
         }
 
@@ -128,7 +122,6 @@ namespace Main.ViewModels
                  currentMessageIndex++;
                  setNewMessage(currentMessageIndex);
             }
-            CanSetProgram();
         }
         
      
@@ -171,14 +164,15 @@ namespace Main.ViewModels
         
         private void _setDisplayMessagesAndDuration(int currentMessageIndex)
         {
-          
             CurrentMessage = PlayCollection?.MessageCollection[currentMessageIndex].MessageText;
             CurrentTimeLeft = PlayCollection.MessageCollection[currentMessageIndex].DisplayTime.ToString();
 
-            //check if not on last message and program not on repeat.
-            NextMessage= PlayCollection?.MessageCollection[currentMessageIndex+1].MessageText;
-            NextMessageTimeLeft=PlayCollection.MessageCollection[currentMessageIndex+1].DisplayTime.ToString();
-
+          if(currentMessageIndex+1!= PlayCollection.MessageCollection.Count)
+            {
+                NextMessage = PlayCollection.MessageCollection[currentMessageIndex + 1].MessageText;
+                NextMessageTimeLeft = PlayCollection.MessageCollection[currentMessageIndex + 1].DisplayTime.ToString();
+            }
+         
             if(currentMessageIndex!=0)
             {
                 PreviousMessage = PlayCollection?.MessageCollection[currentMessageIndex - 1].MessageText;
@@ -186,8 +180,7 @@ namespace Main.ViewModels
             }
            
         }
-
-
+        
         private void getProgramToPlay()
         {
             Messenger.Default.Register<MessageSetTable>(
