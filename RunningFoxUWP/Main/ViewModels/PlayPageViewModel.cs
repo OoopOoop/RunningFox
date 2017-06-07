@@ -143,7 +143,7 @@ namespace Main.ViewModels
             PlayCollection = new MessageSetTable
             {
                 MessagesTotalCount = 4,
-                SetToRepeat = true,
+                SetToRepeat = false,
                 MessageCollection = new ObservableCollection<MessageTable>()
                 {new MessageTable(){ SortOrder=1, DisplayTime = new TimeSpan(0,2,0), MessageText="test message 1"},
                  new MessageTable(){ SortOrder=2, DisplayTime = new TimeSpan(0,1,0), MessageText="test message 2"},
@@ -164,23 +164,43 @@ namespace Main.ViewModels
         
         private void _setDisplayMessagesAndDuration(int currentMessageIndex)
         {
+            bool isLastMessageActive = currentMessageIndex + 1 == PlayCollection.MessageCollection.Count;
+            bool isFirstMessageActive = currentMessageIndex == 0;
+            bool isOnRepeat = PlayCollection.SetToRepeat;
+
             CurrentMessage = PlayCollection?.MessageCollection[currentMessageIndex].MessageText;
             CurrentTimeLeft = PlayCollection.MessageCollection[currentMessageIndex].DisplayTime.ToString();
 
-          if(currentMessageIndex+1!= PlayCollection.MessageCollection.Count)
-            {
-                NextMessage = PlayCollection.MessageCollection[currentMessageIndex + 1].MessageText;
-                NextMessageTimeLeft = PlayCollection.MessageCollection[currentMessageIndex + 1].DisplayTime.ToString();
-            }
-         
-            if(currentMessageIndex!=0)
+
+            if (!isFirstMessageActive)
             {
                 PreviousMessage = PlayCollection?.MessageCollection[currentMessageIndex - 1].MessageText;
                 PreviousMesageTimeLeft = PlayCollection.MessageCollection[currentMessageIndex - 1].DisplayTime.ToString();
             }
-           
+
+            if (isLastMessageActive)
+            {
+                if(isOnRepeat)
+                {
+                    repeatProgram();
+                }
+                
+            }
+         else
+            {
+                NextMessage = PlayCollection.MessageCollection[currentMessageIndex + 1].MessageText;
+                NextMessageTimeLeft = PlayCollection.MessageCollection[currentMessageIndex + 1].DisplayTime.ToString();               
+            }
         }
-        
+
+        private void repeatProgram()
+        {
+            currentMessageIndex = 0;
+            StartProgram();
+        }
+
+
+
         private void getProgramToPlay()
         {
             Messenger.Default.Register<MessageSetTable>(
