@@ -116,6 +116,27 @@
                    FontSize="30"
             Text="{Binding PreviousMesageTimeLeft}"/>
         </StackPanel>
+
+        <StackPanel HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Margin="30 10 10 10"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Orientation="Horizontal">
+            <TextBlock  Text="Time left"/>
+            <TextBlock  Text="{Binding TotalTimeLeft}"/>
+        </StackPanel>
+
+        <StackPanel HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Margin="30 10 10 10"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Orientation="Horizontal">
+            <TextBlock  Text="Total exercises time"/>
+            <TextBlock  Text="{Binding TotalExercisesTime}"/>
+        </StackPanel>
+
     </Grid>
 </Page>
 

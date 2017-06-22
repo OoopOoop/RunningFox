@@ -13,7 +13,23 @@ namespace Main.ViewModels
     {
         private DispatcherTimer _timer;
         private TimeSpan _basetime;
+
+        private TimeSpan _totalTimeLeft;
+        public TimeSpan TotalTimeLeft
+        {
+            get { return _totalTimeLeft; }
+            set { _totalTimeLeft = value;OnPropertyChanged();}
+        }
         
+
+        private TimeSpan _totalExercisesTime;
+        public TimeSpan TotalExercisesTime
+        {
+            get { return _totalExercisesTime; }
+            set { _totalExercisesTime = value; OnPropertyChanged(); }
+        }
+
+
         private int currentMessageIndex=0;
         
         //previous
@@ -60,7 +76,7 @@ namespace Main.ViewModels
             set { _nextMessageTimeLeft = value; OnPropertyChanged(); }
         }
 
-
+      
         private MessageSetTable _playCollection;
         public  MessageSetTable PlayCollection
         {
@@ -100,22 +116,33 @@ namespace Main.ViewModels
             if (PlayCollection.MessageCollection.ElementAtOrDefault(currentMessageIndex) != null)
             {
                 var time = PlayCollection.MessageCollection[currentMessageIndex].DisplayTime;
-
+                
                 _basetime = new TimeSpan(0, time.Hours, time.Minutes, time.Seconds);
+                TotalExercisesTime = new TimeSpan(0, 0, 0, 0);
+
+
+                //TODO: update total time when next message is clicked
+                // TotalTimeSpan.Subtract(PlayCollection.MessageCollection[currentMessageIndex - 1].DisplayTime);
+
 
                 CurrentTimeLeft = _basetime.ToString();
                 _timer.Interval = new TimeSpan(0, 0, 1);
 
                 _timer.Tick += _timer_Tick;
                 _timer.Start();
-                
             }
         }
 
         private void _timer_Tick(object sender, object e)
         {  
             _basetime = _basetime.Subtract(TimeSpan.FromSeconds(1));
+            TotalTimeLeft = TotalTimeLeft.Subtract(TimeSpan.FromSeconds(1));
+         
             CurrentTimeLeft = _basetime.ToString();
+
+            TotalExercisesTime = TotalExercisesTime.Add(TimeSpan.FromSeconds(1));
+
+
             if (_basetime == new TimeSpan(0, 0, 0, 0))
             {
                 _timer.Stop();
@@ -153,7 +180,9 @@ namespace Main.ViewModels
                  new MessageTable(){ SortOrder=6, DisplayTime = new TimeSpan(0,5,0), MessageText="test message 6"}
                 }
             };
-            
+
+            TotalTimeLeft = getTotalTimeLeft();
+
             _setDisplayMessagesAndDuration(0);
           
             base._navigationService=navigationService;
@@ -161,7 +190,19 @@ namespace Main.ViewModels
             // getProgramToPlay();
 
         }
-        
+
+        private TimeSpan getTotalTimeLeft()
+        {
+            var time = new TimeSpan();
+
+            foreach (var item in PlayCollection.MessageCollection)
+            {
+                time = time.Add(item.DisplayTime);
+            }
+            return time;
+        }
+
+
         private void _setDisplayMessagesAndDuration(int currentMessageIndex)
         {
             bool isLastMessageActive = currentMessageIndex + 1 == PlayCollection.MessageCollection.Count;
