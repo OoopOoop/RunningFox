@@ -32,11 +32,11 @@
                 VerticalAlignment="Center" 
                 Command="{Binding StartProgrammCommand, Mode=TwoWay}">
             <Button.Content>
-                <TextBlock Text="Start"/>
+                <TextBlock Text="{Binding StartPauseBtnText}"/>
             </Button.Content>
          </Button>
 
-        <Button 
+        <!--<Button 
                 Width="150" 
                 Height="50"
                 HorizontalAlignment="Center" 
@@ -45,7 +45,7 @@
             <Button.Content>
                 <TextBlock Text="Pause" />
             </Button.Content>
-        </Button>
+        </Button>-->
 
         <Button 
                 Width="150" 
@@ -90,12 +90,11 @@
                    FontSize="50"
                    Margin="0 0 50 0"
                    Text="{Binding CurrentMessage}"/>
-        <TextBlock Grid.Row="1"
-                   Grid.Column="2"
+        <TextBlock 
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    FontSize="50"
-            Text="{Binding CurrentTimeLeft}"/>
+            Text="{Binding MessageTime}"/>
         </StackPanel>
 
         <StackPanel  Orientation="Horizontal"
@@ -115,16 +114,6 @@
                    VerticalAlignment="Center"
                    FontSize="30"
             Text="{Binding PreviousMesageTimeLeft}"/>
-        </StackPanel>
-
-        <StackPanel HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Margin="30 10 10 10"
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Orientation="Horizontal">
-            <TextBlock  Text="Time left"/>
-            <TextBlock  Text="{Binding TotalTimeLeft}"/>
         </StackPanel>
 
         <StackPanel HorizontalAlignment="Left"

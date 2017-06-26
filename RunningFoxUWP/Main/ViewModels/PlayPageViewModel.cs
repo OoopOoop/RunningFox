@@ -12,21 +12,31 @@ namespace Main.ViewModels
     public class PlayPageViewModel: ViewModelBase
     {
         private DispatcherTimer _timer;
-        private TimeSpan _basetime;
+        private bool _isProgramInUse;
 
-        private TimeSpan _totalTimeLeft;
-        public TimeSpan TotalTimeLeft
+        private const string STARTBUTTONCONTENT = "Start";
+        private const string PAUSEBUTTONCONTENT = "Pause";
+
+        private TimeSpan _messageTime;
+        public TimeSpan MessageTime
         {
-            get { return _totalTimeLeft; }
-            set { _totalTimeLeft = value;OnPropertyChanged();}
+            get { return _messageTime; }
+            set { _messageTime = value; OnPropertyChanged(); }
         }
         
-
         private TimeSpan _totalExercisesTime;
         public TimeSpan TotalExercisesTime
         {
             get { return _totalExercisesTime; }
             set { _totalExercisesTime = value; OnPropertyChanged(); }
+        }
+
+
+        private string _startPauseBtnText;
+        public string StartPauseBtnText
+        {
+            get { return _startPauseBtnText; }
+            set { _startPauseBtnText = value; OnPropertyChanged(); }
         }
 
 
@@ -89,61 +99,82 @@ namespace Main.ViewModels
 
         private void SetNextProgram()
         {
+            _timer.Tick -= _timer_Tick;
             currentMessageIndex++;
             setNewMessage(currentMessageIndex);
         }
+        
+
+        private void _pauseProgram()
+        {
+            StartPauseBtnText = STARTBUTTONCONTENT;
+            _timer.Stop();
+            _isProgramInUse = true;
+        }
+        
+
+        private RelayCommand _startProgrammCommand;
+        // public RelayCommand StartProgrammCommand => _startProgrammCommand ?? (_startProgrammCommand = new RelayCommand(StartProgram, CanStartProgram));
+        // private bool CanStartProgram() => !_timer.IsEnabled;
+        public RelayCommand StartProgrammCommand => _startProgrammCommand ?? (_startProgrammCommand = new RelayCommand(StartProgram));
 
      
-        private RelayCommand _pauseProgrammCommand;
-        public RelayCommand PauseProgrammCommand => _pauseProgrammCommand ?? (_pauseProgrammCommand = new RelayCommand(PauseProgram));
-
-        private void PauseProgram()
+        private void StartProgram()
         {
-            if (!_timer.IsEnabled)
+            if (_timer.IsEnabled)
+            {
+                _pauseProgram();
+               
+            }
+            else
+            {
+                _startProgram();
+            }
+            
+        }
+        
+
+        private void _startProgram()
+        {
+            StartPauseBtnText = PAUSEBUTTONCONTENT;
+
+            if (_isProgramInUse)
             {
                 _timer.Start();
             }
+            else
+            {
+                _startNewMessageProgram();
+            }
         }
         
-        private RelayCommand _startProgrammCommand;
-        public RelayCommand StartProgrammCommand => _startProgrammCommand ?? (_startProgrammCommand = new RelayCommand(StartProgram, CanStartProgram));
-        
-        private bool CanStartProgram() => !_timer.IsEnabled;
-
-
-        private void StartProgram()
+        private void _startNewMessageProgram()
         {
             if (PlayCollection.MessageCollection.ElementAtOrDefault(currentMessageIndex) != null)
             {
+                StartPauseBtnText = PAUSEBUTTONCONTENT;
+
                 var time = PlayCollection.MessageCollection[currentMessageIndex].DisplayTime;
-                
-                _basetime = new TimeSpan(0, time.Hours, time.Minutes, time.Seconds);
-                TotalExercisesTime = new TimeSpan(0, 0, 0, 0);
 
+                MessageTime = new TimeSpan(0, time.Hours, time.Minutes, time.Seconds);
 
-                //TODO: update total time when next message is clicked
-                // TotalTimeSpan.Subtract(PlayCollection.MessageCollection[currentMessageIndex - 1].DisplayTime);
-
-
-                CurrentTimeLeft = _basetime.ToString();
                 _timer.Interval = new TimeSpan(0, 0, 1);
 
                 _timer.Tick += _timer_Tick;
+
                 _timer.Start();
             }
         }
 
+        
         private void _timer_Tick(object sender, object e)
-        {  
-            _basetime = _basetime.Subtract(TimeSpan.FromSeconds(1));
-            TotalTimeLeft = TotalTimeLeft.Subtract(TimeSpan.FromSeconds(1));
-         
-            CurrentTimeLeft = _basetime.ToString();
-
+        {
+            MessageTime = MessageTime.Subtract(TimeSpan.FromSeconds(1));
+          
             TotalExercisesTime = TotalExercisesTime.Add(TimeSpan.FromSeconds(1));
 
 
-            if (_basetime == new TimeSpan(0, 0, 0, 0))
+            if (MessageTime == new TimeSpan(0, 0, 0, 0))
             {
                 _timer.Stop();
                  currentMessageIndex++;
@@ -157,7 +188,9 @@ namespace Main.ViewModels
             if (PlayCollection.MessageCollection.ElementAtOrDefault(index) != null)
             {
                 _setDisplayMessagesAndDuration(index);
-                StartProgram();
+                _startNewMessageProgram();
+
+                // StartProgram();
             }
             else
             {
@@ -172,36 +205,30 @@ namespace Main.ViewModels
                 MessagesTotalCount = 4,
                 SetToRepeat = false,
                 MessageCollection = new ObservableCollection<MessageTable>()
-                {new MessageTable(){ SortOrder=1, DisplayTime = new TimeSpan(0,2,0), MessageText="test message 1"},
-                 new MessageTable(){ SortOrder=2, DisplayTime = new TimeSpan(0,1,0), MessageText="test message 2"},
-                 new MessageTable(){ SortOrder=3, DisplayTime = new TimeSpan(0,5,0), MessageText="test message 3"},
-                 new MessageTable(){ SortOrder=4, DisplayTime = new TimeSpan(0,2,0), MessageText="test message 4"},
-                 new MessageTable(){ SortOrder=5, DisplayTime = new TimeSpan(0,1,0), MessageText="test message 5"},
-                 new MessageTable(){ SortOrder=6, DisplayTime = new TimeSpan(0,5,0), MessageText="test message 6"}
+                {new MessageTable{ SortOrder=1, DisplayTime = new TimeSpan(0,2,0), MessageText="test message 1"},
+                 new MessageTable{ SortOrder=2, DisplayTime = new TimeSpan(0,1,0), MessageText="test message 2"},
+                 new MessageTable{ SortOrder=3, DisplayTime = new TimeSpan(0,5,0), MessageText="test message 3"},
+                 new MessageTable{ SortOrder=4, DisplayTime = new TimeSpan(0,2,0), MessageText="test message 4"},
+                 new MessageTable{ SortOrder=5, DisplayTime = new TimeSpan(0,1,0), MessageText="test message 5"},
+                 new MessageTable{ SortOrder=6, DisplayTime = new TimeSpan(0,5,0), MessageText="test message 6"}
                 }
             };
 
-            TotalTimeLeft = getTotalTimeLeft();
 
+            TotalExercisesTime = new TimeSpan(0, 0, 0, 0);
             _setDisplayMessagesAndDuration(0);
-          
             base._navigationService=navigationService;
             _timer = new DispatcherTimer();
+
+
+             StartPauseBtnText = STARTBUTTONCONTENT;
+
+
+
             // getProgramToPlay();
 
         }
-
-        private TimeSpan getTotalTimeLeft()
-        {
-            var time = new TimeSpan();
-
-            foreach (var item in PlayCollection.MessageCollection)
-            {
-                time = time.Add(item.DisplayTime);
-            }
-            return time;
-        }
-
+        
 
         private void _setDisplayMessagesAndDuration(int currentMessageIndex)
         {
