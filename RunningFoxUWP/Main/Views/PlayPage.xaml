@@ -126,6 +126,11 @@
             <TextBlock  Text="{Binding TotalExercisesTime}"/>
         </StackPanel>
 
+        <Button Content="Repeat" 
+                Visibility="{Binding RepeatButtonVisibility}"
+                Command="{Binding RepeatProgramCommand}"/>
+
+
     </Grid>
 </Page>
 

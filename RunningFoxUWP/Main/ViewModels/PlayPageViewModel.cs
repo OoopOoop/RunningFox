@@ -38,6 +38,14 @@ namespace Main.ViewModels
             get { return _startPauseBtnText; }
             set { _startPauseBtnText = value; OnPropertyChanged(); }
         }
+        
+
+        private bool _repeatButtonVisibility;
+        public bool RepeatButtonVisibility
+        {
+            get { return _repeatButtonVisibility; }
+            set { _repeatButtonVisibility = value; OnPropertyChanged(); }
+        }
 
 
         private int currentMessageIndex=0;
@@ -96,7 +104,7 @@ namespace Main.ViewModels
         
         private RelayCommand _setNextProgrammCommand;
         public RelayCommand SetNextProgrammCommand => _setNextProgrammCommand ?? (_setNextProgrammCommand = new RelayCommand(SetNextProgram));
-
+        
         private void SetNextProgram()
         {
             _timer.Tick -= _timer_Tick;
@@ -111,7 +119,10 @@ namespace Main.ViewModels
             _timer.Stop();
             _isProgramInUse = true;
         }
-        
+
+        private RelayCommand _repeatProgramCommand;
+        public RelayCommand RepeatProgramCommand => _repeatProgramCommand ?? (_repeatProgramCommand = new RelayCommand(repeatProgram));
+
 
         private RelayCommand _startProgrammCommand;
         // public RelayCommand StartProgrammCommand => _startProgrammCommand ?? (_startProgrammCommand = new RelayCommand(StartProgram, CanStartProgram));
@@ -148,6 +159,7 @@ namespace Main.ViewModels
             }
         }
         
+
         private void _startNewMessageProgram()
         {
             if (PlayCollection.MessageCollection.ElementAtOrDefault(currentMessageIndex) != null)
@@ -161,8 +173,8 @@ namespace Main.ViewModels
                 _timer.Interval = new TimeSpan(0, 0, 1);
 
                 _timer.Tick += _timer_Tick;
-
-                _timer.Start();
+                
+                _timer.Start();              
             }
         }
 
@@ -237,14 +249,14 @@ namespace Main.ViewModels
             bool isOnRepeat = PlayCollection.SetToRepeat;
 
             CurrentMessage = PlayCollection?.MessageCollection[currentMessageIndex].MessageText;
-            CurrentTimeLeft = PlayCollection.MessageCollection[currentMessageIndex].DisplayTime.ToString();
-
+           
 
             if (!isFirstMessageActive)
             {
                 PreviousMessage = PlayCollection?.MessageCollection[currentMessageIndex - 1].MessageText;
                 PreviousMesageTimeLeft = PlayCollection.MessageCollection[currentMessageIndex - 1].DisplayTime.ToString();
             }
+
 
             if (isLastMessageActive)
             {
@@ -254,20 +266,27 @@ namespace Main.ViewModels
                 }
                 
             }
+
          else
             {
+                
                 NextMessage = PlayCollection.MessageCollection[currentMessageIndex + 1].MessageText;
                 NextMessageTimeLeft = PlayCollection.MessageCollection[currentMessageIndex + 1].DisplayTime.ToString();               
             }
         }
 
+
         private void repeatProgram()
         {
             currentMessageIndex = 0;
-            StartProgram();
+            CurrentMessage = PlayCollection?.MessageCollection[currentMessageIndex].MessageText;
+            CurrentTimeLeft = PlayCollection.MessageCollection[currentMessageIndex].DisplayTime.ToString();
+            NextMessage = PlayCollection.MessageCollection[currentMessageIndex + 1].MessageText;
+            NextMessageTimeLeft = PlayCollection.MessageCollection[currentMessageIndex + 1].DisplayTime.ToString();
+            PreviousMessage = string.Empty;
+            PreviousMesageTimeLeft = string.Empty;
         }
-
-
+        
 
         private void getProgramToPlay()
         {
