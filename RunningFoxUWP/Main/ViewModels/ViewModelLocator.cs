@@ -15,6 +15,7 @@ namespace Main.ViewModels
             SimpleIoc.Default.Register<EditSetMessageViewModel>();
             SimpleIoc.Default.Register<EditMessageViewModel>();
             SimpleIoc.Default.Register<PlayPageViewModel>();
+            SimpleIoc.Default.Register<IProgramPlayer,ProgramPlayer>();
         }
 
         public MainViewModel MainViewModel => SimpleIoc.Default.GetInstance<MainViewModel>();

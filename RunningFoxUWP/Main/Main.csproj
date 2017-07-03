@@ -101,8 +101,10 @@
     <Compile Include="Shared\NotifyService.cs" />
     <Compile Include="ViewModels\EditMessageViewModel.cs" />
     <Compile Include="ViewModels\EditSetMessageViewModel.cs" />
+    <Compile Include="ViewModels\IProgramPlayer.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PlayPageViewModel.cs" />
+    <Compile Include="ViewModels\ProgramPlayer.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Views\EditMessagePage.xaml.cs">

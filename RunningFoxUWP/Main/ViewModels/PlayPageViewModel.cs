@@ -125,8 +125,6 @@ namespace Main.ViewModels
 
 
         private RelayCommand _startProgrammCommand;
-        // public RelayCommand StartProgrammCommand => _startProgrammCommand ?? (_startProgrammCommand = new RelayCommand(StartProgram, CanStartProgram));
-        // private bool CanStartProgram() => !_timer.IsEnabled;
         public RelayCommand StartProgrammCommand => _startProgrammCommand ?? (_startProgrammCommand = new RelayCommand(StartProgram));
 
      
@@ -141,7 +139,6 @@ namespace Main.ViewModels
             {
                 _startProgram();
             }
-            
         }
         
 
