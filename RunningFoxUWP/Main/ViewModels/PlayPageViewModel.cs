@@ -21,7 +21,7 @@ namespace Main.ViewModels
         public TimeSpan MessageTime
         {
             get { return _messageTime; }
-            set { _messageTime = value; OnPropertyChanged(); }
+            set { _messageTime = _programPlayer.CurrentMessageTime; OnPropertyChanged(); }
         }
         
         private TimeSpan _totalExercisesTime;
@@ -55,14 +55,14 @@ namespace Main.ViewModels
         public string PreviousMessage
         {
             get { return _previousMessage; }
-            set { _previousMessage = value; OnPropertyChanged(); }
+            set { _previousMessage = _programPlayer.PreviousMessage; OnPropertyChanged(); }
         }
 
         private string _previousMesageTimeLeft;
         public string PreviousMesageTimeLeft
         {
             get { return _previousMesageTimeLeft; }
-            set { _previousMesageTimeLeft = value; OnPropertyChanged(); }
+            set { _previousMesageTimeLeft =value; OnPropertyChanged(); }
         }
 
         //current
@@ -70,7 +70,7 @@ namespace Main.ViewModels
         public string CurrentMessage
         {
             get { return _currentMessage; }
-            set { _currentMessage = value; OnPropertyChanged(); }
+            set { _currentMessage = _programPlayer.CurrentMessage; OnPropertyChanged(); }
         }
 
         private string _currentTimeLeft;
@@ -207,8 +207,12 @@ namespace Main.ViewModels
             }
         }
 
-        public PlayPageViewModel(INavigationService navigationService)
+        private readonly IProgramPlayer _programPlayer;
+
+        public PlayPageViewModel(INavigationService navigationService,IProgramPlayer programPlayer)
         {
+            _programPlayer = programPlayer;
+
             PlayCollection = new MessageSetTable
             {
                 MessagesTotalCount = 4,
@@ -276,7 +280,7 @@ namespace Main.ViewModels
         private void repeatProgram()
         {
             currentMessageIndex = 0;
-            CurrentMessage = PlayCollection?.MessageCollection[currentMessageIndex].MessageText;
+            CurrentMessage = PlayCollection.MessageCollection[currentMessageIndex].MessageText;
             CurrentTimeLeft = PlayCollection.MessageCollection[currentMessageIndex].DisplayTime.ToString();
             NextMessage = PlayCollection.MessageCollection[currentMessageIndex + 1].MessageText;
             NextMessageTimeLeft = PlayCollection.MessageCollection[currentMessageIndex + 1].DisplayTime.ToString();

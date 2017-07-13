@@ -1,6 +1,5 @@
 ﻿using Main.Models;
 using System;
-using System.Collections.Generic;
 using Windows.UI.Xaml;
 
 namespace Main.ViewModels
@@ -10,7 +9,7 @@ namespace Main.ViewModels
         private DispatcherTimer _timer;
         private int _currentPlayingMessageIndex;
 
-        private List<MessageSetTable> PlayCollection { get; set; }
+        private MessageSetTable PlayCollection { get; set; }
 
         private TimeSpan _currentMessageTime;
         public TimeSpan CurrentMessageTime
@@ -73,9 +72,9 @@ namespace Main.ViewModels
             return _timer.IsEnabled;
         }
         
-        public void SetProgram(List<MessageSetTable> _playCollection)
+        public void SetProgram(MessageSetTable playCollection)
         {
-            PlayCollection = _playCollection;
+            PlayCollection = playCollection;
             _currentPlayingMessageIndex = 0;
             SetMessageAndTime(_currentPlayingMessageIndex);
         }
@@ -91,11 +90,11 @@ namespace Main.ViewModels
 
             CurrentMessageTime = messageToPlay.DisplayTime;
             _timer.Interval = new TimeSpan(0, 0, 1);
-            _timer.Tick += _timer_Tick;
+            _timer.Tick += Timer_Tick;
             _timer.Start();
         }
         
-        private void _timer_Tick(object sender, object e)
+        private void Timer_Tick(object sender, object e)
         {
             TotalExerciseTime = TotalExerciseTime.Add(TimeSpan.FromSeconds(1));
             if(CurrentMessageTime!=TimeSpan.FromSeconds(0))
@@ -110,17 +109,32 @@ namespace Main.ViewModels
         
         private void SetMessageAndTime(int currentIndex)
         {
+            if (PlayCollection.MessageCollection[currentIndex] == null)
+            {
+                if (PlayCollection.SetToRepeat)
+                {
+                    RepeatProgram();
+                }
+                return;
+            }
 
+            //set previous message and time
+            PreviousMessage = PlayCollection.MessageCollection[currentIndex - 1]!=null?PlayCollection.MessageCollection[currentIndex-1].MessageText:String.Empty;
+            PreviousMessageTime = PlayCollection.MessageCollection[currentIndex - 1] != null ? PlayCollection.MessageCollection[currentIndex - 1].DisplayTime : new TimeSpan(0,0,0);
+
+            //set next message and time
+            NextMessage = PlayCollection.MessageCollection[currentIndex +1] != null ? PlayCollection.MessageCollection[currentIndex + 1].MessageText : String.Empty;
+            NextMessageTime = PlayCollection.MessageCollection[currentIndex + 1].DisplayTime;
         }
 
         public void StopProgram()
         {
             _timer.Stop();
         }
-
-        public string DisplayTime()
+        
+        private void RepeatProgram()
         {
-            return null;
+            SetMessageAndTime(0);
         }
     }
 }

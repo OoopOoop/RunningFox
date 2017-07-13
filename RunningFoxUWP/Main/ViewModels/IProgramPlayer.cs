@@ -14,9 +14,8 @@ namespace Main.ViewModels
         string PreviousMessage { get; set; }
         string NextMessage { get; set; }
         string PlayButtonContext { get; set; }
-        void SetProgram(List<MessageSetTable> PlayCollection);
+        void SetProgram(MessageSetTable PlayCollection);
         void PlayProgram(MessageTable messageToPlay);
         void StopProgram();
-        string DisplayTime();
     }
 }
