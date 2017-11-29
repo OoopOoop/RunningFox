@@ -213,19 +213,19 @@ namespace Main.ViewModels
         {
             _programPlayer = programPlayer;
 
-            PlayCollection = new MessageSetTable
-            {
-                MessagesTotalCount = 4,
-                SetToRepeat = false,
-                MessageCollection = new ObservableCollection<MessageTable>()
-                {new MessageTable{ SortOrder=1, DisplayTime = new TimeSpan(0,2,0), MessageText="test message 1"},
-                 new MessageTable{ SortOrder=2, DisplayTime = new TimeSpan(0,1,0), MessageText="test message 2"},
-                 new MessageTable{ SortOrder=3, DisplayTime = new TimeSpan(0,5,0), MessageText="test message 3"},
-                 new MessageTable{ SortOrder=4, DisplayTime = new TimeSpan(0,2,0), MessageText="test message 4"},
-                 new MessageTable{ SortOrder=5, DisplayTime = new TimeSpan(0,1,0), MessageText="test message 5"},
-                 new MessageTable{ SortOrder=6, DisplayTime = new TimeSpan(0,5,0), MessageText="test message 6"}
-                }
-            };
+            //PlayCollection = new MessageSetTable
+            //{
+            //    MessagesTotalCount = 4,
+            //    SetToRepeat = false,
+            //    MessageCollection = new ObservableCollection<MessageTable>()
+            //    {new MessageTable{ SortOrder=1, DisplayTime = new TimeSpan(0,2,0), MessageText="test message 1"},
+            //     new MessageTable{ SortOrder=2, DisplayTime = new TimeSpan(0,1,0), MessageText="test message 2"},
+            //     new MessageTable{ SortOrder=3, DisplayTime = new TimeSpan(0,5,0), MessageText="test message 3"},
+            //     new MessageTable{ SortOrder=4, DisplayTime = new TimeSpan(0,2,0), MessageText="test message 4"},
+            //     new MessageTable{ SortOrder=5, DisplayTime = new TimeSpan(0,1,0), MessageText="test message 5"},
+            //     new MessageTable{ SortOrder=6, DisplayTime = new TimeSpan(0,5,0), MessageText="test message 6"}
+            //    }
+            //};
 
 
             TotalExercisesTime = new TimeSpan(0, 0, 0, 0);
@@ -238,7 +238,7 @@ namespace Main.ViewModels
 
 
 
-            // getProgramToPlay();
+             getProgramToPlay();
 
         }
         
@@ -301,5 +301,3 @@ namespace Main.ViewModels
         }
     }
 }
-
-//test commit 2

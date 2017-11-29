@@ -1,4 +1,5 @@
-﻿using Main.Models;
+﻿using GalaSoft.MvvmLight.Command;
+using Main.Models;
 using System;
 using Windows.UI.Xaml;
 
@@ -6,6 +7,23 @@ namespace Main.ViewModels
 {
     public class ProgramPlayer : ViewModelBase, IProgramPlayer
     {
+        private const string STARTBUTTONCONTENT = "Start";
+        private const string PAUSEBUTTONCONTENT = "Pause";
+
+        private bool _repeatButtonVisibility;
+        public bool RepeatButtonVisibility
+        {
+            get { return _repeatButtonVisibility; }
+            set { _repeatButtonVisibility = value; OnPropertyChanged(); }
+        }
+
+        private TimeSpan _totalExercisesTime;
+        public TimeSpan TotalExercisesTime
+        {
+            get { return _totalExercisesTime; }
+            set { _totalExercisesTime = value; OnPropertyChanged(); }
+        }
+
         private DispatcherTimer _timer;
         private int _currentPlayingMessageIndex;
 
@@ -71,16 +89,31 @@ namespace Main.ViewModels
         {
             return _timer.IsEnabled;
         }
-        
+
+        private RelayCommand _setNextProgrammCommand;
+        public RelayCommand SetNextProgrammCommand => _setNextProgrammCommand ?? (_setNextProgrammCommand = new RelayCommand(SetNextProgram));
+
+        private RelayCommand _repeatProgramCommand;
+        public RelayCommand RepeatProgramCommand => _repeatProgramCommand ?? (_repeatProgramCommand = new RelayCommand(RepeatProgram));
+
+        private RelayCommand _startProgrammCommand;
+        public RelayCommand StartProgrammCommand => _startProgrammCommand ?? (_startProgrammCommand = new RelayCommand(PlayProgram));
+
+        private void SetNextProgram()
+        {
+            _timer.Tick -= Timer_Tick;
+            _currentPlayingMessageIndex++;
+            SetMessageAndTime(_currentPlayingMessageIndex);
+        }
+
         public void SetProgram(MessageSetTable playCollection)
         {
             PlayCollection = playCollection;
             _currentPlayingMessageIndex = 0;
             SetMessageAndTime(_currentPlayingMessageIndex);
         }
-
-    
-        public void PlayProgram(MessageTable messageToPlay)
+        
+        public void PlayProgram()
         {
             if(IsMessagePlaying())
             {
@@ -88,7 +121,7 @@ namespace Main.ViewModels
                 return;
             }
 
-            CurrentMessageTime = messageToPlay.DisplayTime;
+            CurrentMessageTime =PlayCollection.MessageCollection[_currentPlayingMessageIndex].DisplayTime;
             _timer.Interval = new TimeSpan(0, 0, 1);
             _timer.Tick += Timer_Tick;
             _timer.Start();
@@ -135,6 +168,11 @@ namespace Main.ViewModels
         private void RepeatProgram()
         {
             SetMessageAndTime(0);
+        }
+
+        public void PlayProgram(MessageTable messageToPlay)
+        {
+            throw new NotImplementedException();
         }
     }
 }

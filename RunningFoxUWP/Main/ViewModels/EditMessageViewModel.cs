@@ -8,45 +8,55 @@ using System.Linq;
 
 namespace Main.ViewModels
 {
-    //public class NamedColor
-    //{
-    //    public string Name { get; set; }
-    //    public Color Color { get; set; }
-    //}
-
     public class EditMessageViewModel : ViewModelBase
     {
-        private TimeSpan _defaultTime=new TimeSpan(00, 05, 00);
-        private string _defaultMessage=string.Empty;
-
+        private readonly TimeSpan _defaultTime=new TimeSpan(00, 05, 00);
+        private readonly string _defaultMessage=string.Empty;
+        private string _confirmMessage;
+        private string _messageToDisplay;
+        private bool _isRepeatEnabled;
         private RelayCommand _saveSingleMessageCommand;
-        public RelayCommand SaveSingleMessageCommand => _saveSingleMessageCommand ?? (_saveSingleMessageCommand = new RelayCommand(saveNewMessages));
-
-        private RelayCommand _populateMessagesCommand;
-        public RelayCommand PopulateMessagesCommand => _populateMessagesCommand ?? (_populateMessagesCommand = new RelayCommand(populateMessage));
-
+        private RelayCommand _duplicatePreviousMessageCommand;
         private RelayCommand<object> _removeMessageFromList;
-        public RelayCommand<object> RemoveMessageFromList => _removeMessageFromList ?? (_removeMessageFromList = new RelayCommand<object>(deleteMessage));
-
-        private void deleteMessage(object message)
+        private RelayCommand _saveMessageCommand;
+        private TimeSpan _time;
+        private MessageTable CurrentMessage { get; set; }
+        
+        public bool IsRepeatEnabled
         {
-            var messageTable = (MessageTable)message;
-            if (messageTable != null)
-            {
-                PopulatedMessages.Remove(PopulatedMessages.Where(i => i.GuidID == messageTable.GuidID).FirstOrDefault());
-            }
-
-            ConfirmMessage = $"Message:  {messageTable.MessageText} was removed, duration: { messageTable.DisplayTimeText}";
+            get => _isRepeatEnabled;
+            set { _isRepeatEnabled = value; OnPropertyChanged();}
         }
+        
+        public RelayCommand SaveSingleMessageCommand => _saveSingleMessageCommand ?? (_saveSingleMessageCommand = new RelayCommand(SaveProgram));
+        
+        public RelayCommand DuplicatePreviousMessagesCommand => _duplicatePreviousMessageCommand ?? (_duplicatePreviousMessageCommand = new RelayCommand(DuplicatePreviousMessage));
+        
+        public RelayCommand<object> RemoveMessageFromList => _removeMessageFromList ?? (_removeMessageFromList = new RelayCommand<object>(DeleteMessage));
+        
+        public RelayCommand SaveMessageCommand => _saveMessageCommand ?? (_saveMessageCommand = new RelayCommand(SaveNewMessage));
 
-        private ObservableCollection<MessageTable> _populatedMessages;
-        public ObservableCollection<MessageTable> PopulatedMessages
+        public ObservableCollection<MessageTable> PopulatedMessages { get; private set; }
+        
+        public string ConfirmMessage
         {
-            get { return _populatedMessages; }
-            set { _populatedMessages = value; }
+            get => _confirmMessage;
+            private set { _confirmMessage = value; OnPropertyChanged(); }
         }
-
-        private void populateMessage()
+        
+        public string MessageToDisplay
+        {
+            get => _messageToDisplay;
+            set { _messageToDisplay = value; OnPropertyChanged(); }
+        }
+        
+        public TimeSpan Time
+        {
+            get => _time;
+            set { _time = value; OnPropertyChanged(); }
+        }
+        
+        private void DuplicatePreviousMessage()
         {
             var messageToCopy= new MessageTable();
 
@@ -56,141 +66,72 @@ namespace Main.ViewModels
                 messageToCopy.GuidID = Guid.NewGuid();
                 messageToCopy.MessageText = PopulatedMessages[PopulatedMessages.Count - 1].MessageText;
                 PopulatedMessages.Add(messageToCopy);
+                return;
             }
-            else
+
+            ConfirmNewMessage(CreateNewMessage());
+        }
+
+        private void ConfirmNewMessage(MessageTable message)
+        {
+            PopulatedMessages.Add(message);
+            Time = _defaultTime;
+            MessageToDisplay = _defaultMessage;
+            ConfirmMessage = $"Message:  {message.MessageText} was added, duration: { message.DisplayTimeText}";
+        }
+        
+        private void DeleteMessage(object message)
+        {
+            var messageTable = (MessageTable)message;
+            if (messageTable != null)
             {
-                messageToCopy = createNewMessage();
-                PopulatedMessages.Add(messageToCopy);
-            }             
-                //Clear time and messageToDisplay fields
-                Time = _defaultTime;
-                MessageToDisplay = _defaultMessage;
-                NewMessage = new MessageTable();
-                ConfirmMessage = $"Message:  {messageToCopy.MessageText} was added, duration: { messageToCopy.DisplayTimeText}";  
-        }
-
-        private string _messageToDisplay;
-        public string MessageToDisplay
-        {
-            get { return _messageToDisplay; }
-            set { _messageToDisplay = value; OnPropertyChanged(); }
-        }
-
-        private TimeSpan _time;
-        public TimeSpan Time
-        {
-            get { return _time; }
-            set { _time = value; OnPropertyChanged(); }
-        }
-
-        #region ColorPickers
-
-        //private RelayCommand<NamedColor> _selectedForegroundColorCommand;
-        //public RelayCommand<NamedColor> SelectedForegroundColorCommand => _selectedForegroundColorCommand ?? (_selectedForegroundColorCommand = new RelayCommand<NamedColor>(saveForegroundColor));
-
-        //private void saveForegroundColor(NamedColor obj)
-        //{
-        //    var passedColor = obj as NamedColor;
-        //    if (obj != null)
-        //    {
-        //        ForegroundColor = new SolidColorBrush(obj.Color);
-        //    }
-
-        //}
-
-        //private SolidColorBrush _foregroundColor;
-        //public SolidColorBrush ForegroundColor
-        //{
-        //    get { return _foregroundColor; }
-        //    set { _foregroundColor = value; OnPropertyChanged(); }
-        //}
-
-        //private SolidColorBrush _backgroundColor;
-        //public SolidColorBrush BackgroundColor
-        //{
-        //    get { return _backgroundColor; }
-        //    set { _backgroundColor = value; OnPropertyChanged(); }
-        //}
-
-        //private RelayCommand<NamedColor> _selectedBackgroundColorCommand;
-        //public RelayCommand<NamedColor> SelectedBackgroundColorCommand => _selectedBackgroundColorCommand ?? (_selectedBackgroundColorCommand = new RelayCommand<NamedColor>(saveBackgroundColor));
-
-        //private void saveBackgroundColor(NamedColor obj)
-        //{
-        //    var passedColor = obj as NamedColor;
-        //    if (obj != null)
-        //    {
-        //        BackgroundColor = new SolidColorBrush(obj.Color);
-        //    }
-        //}
-
-        //public ObservableCollection<NamedColor> ColorsCollection { get; set; }
-
-        //private void getColors()
-        //{
-        //    foreach (var color in typeof(Colors).GetRuntimeProperties())
-        //    {
-        //        ColorsCollection.Add(new NamedColor() { Name = color.Name, Color = (Color)color.GetValue(null) });
-        //    }
-        //}
-
-        #endregion ColorPickers
-
-        private MessageTable _newMessage;
-
-        public MessageTable NewMessage
-        {
-            get { return _newMessage; }
-            set { _newMessage = value; }
-        }
-
-        private MessageTable createNewMessage()
-        {
-            NewMessage.DisplayTime = this.Time;
-            NewMessage.MessageText = string.IsNullOrEmpty(this.MessageToDisplay) ? "test" : MessageToDisplay;
-
-            //check if message is new  than set new Guid, if it was sent to edit, save original guidID
-            if (NewMessage.GuidID == null || NewMessage.GuidID == Guid.Empty)
-            {
-                NewMessage.GuidID = Guid.NewGuid();
+                PopulatedMessages.Remove(PopulatedMessages.FirstOrDefault(i => i.GuidID == messageTable.GuidID));
             }
-            return NewMessage;
+
+            IsRepeatEnabled = PopulatedMessages.Count > 0;
+            ConfirmMessage = $"Message:  {messageTable?.MessageText} was removed, duration: { messageTable?.DisplayTimeText}";
         }
 
-        private void saveNewMessages()
+        private void SaveNewMessage()
+        {
+            ConfirmNewMessage(CreateNewMessage());
+        }
+
+        private MessageTable CreateNewMessage()
+        {
+            if (CurrentMessage == null)
+            {
+                CurrentMessage = new MessageTable { GuidID = Guid.NewGuid() };
+            }
+
+            CurrentMessage.DisplayTime = Time;
+            CurrentMessage.MessageText = string.IsNullOrEmpty(this.MessageToDisplay) ? "test" : MessageToDisplay;
+            IsRepeatEnabled = true;
+            return CurrentMessage;
+        }
+
+        private void SaveProgram()
         {
             if (PopulatedMessages.Count == 0 || Time != _defaultTime || MessageToDisplay != _defaultMessage)
             {
-                PopulatedMessages.Add(createNewMessage());
+                PopulatedMessages.Add(CreateNewMessage());
             }
             
             _navigationService.NavigateTo("EditSet");
             Messenger.Default.Send(PopulatedMessages);
         }
-
-        private string _confirmMessage;
-
-        public string ConfirmMessage
-        {
-            get { return _confirmMessage; }
-            set { _confirmMessage = value; OnPropertyChanged(); }
-        }
-
+        
         public EditMessageViewModel(INavigationService navigationService)
         {
-            NewMessage = new MessageTable();
-
-            // ColorsCollection = new ObservableCollection<NamedColor>();
-            //getColors();
             PopulatedMessages = new ObservableCollection<MessageTable>();
             _navigationService = navigationService;
             Time = _defaultTime;
-            getMessageToEdit();
+            MessageToDisplay = string.Empty;
+            IsRepeatEnabled = false;
+            ReceivedMessageToEdit();
         }
-
-        public bool IsMessageToEdit { get; set; }
-
-        private MessageTable getMessageToEdit()
+        
+        private void ReceivedMessageToEdit()
         {
             Messenger.Default.Register<MessageTable>(
             this,
@@ -198,9 +139,8 @@ namespace Main.ViewModels
             {
                 MessageToDisplay = message.MessageText;
                 Time = message.DisplayTime;
-                NewMessage = message;
+                CurrentMessage = message;
             });
-            return NewMessage;
         }
     }
 } //TODO: bind buttons enabled/disabled when deleting, edititing without selection, moving last item down or first item up.

@@ -1,7 +1,5 @@
 ﻿using Main.Models;
 using System;
-using System.Collections.Generic;
-
 namespace Main.ViewModels
 {
     public interface IProgramPlayer
