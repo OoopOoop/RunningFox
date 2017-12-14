@@ -95,6 +95,7 @@ namespace Main.ViewModels
         private void SaveNewMessage()
         {
             ConfirmNewMessage(CreateNewMessage());
+            CurrentMessage = null;
         }
 
         private MessageTable CreateNewMessage()
