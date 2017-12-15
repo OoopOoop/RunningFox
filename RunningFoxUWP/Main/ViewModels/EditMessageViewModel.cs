@@ -1,83 +1,125 @@
 ﻿using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Views;
 using Main.Models;
 using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Main.ViewModels
 {
     public class EditMessageViewModel : ViewModelBase
     {
-        private readonly TimeSpan _defaultTime=new TimeSpan(00, 05, 00);
-        private readonly string _defaultMessage=string.Empty;
         private string _confirmMessage;
-        private string _messageToDisplay;
+        private string _messageToDisplay=string.Empty;
         private bool _isRepeatEnabled;
         private RelayCommand _saveSingleMessageCommand;
         private RelayCommand _duplicatePreviousMessageCommand;
         private RelayCommand<object> _removeMessageFromList;
         private RelayCommand _saveMessageCommand;
-        private TimeSpan _time;
-        private MessageTable CurrentMessage { get; set; }
+        private TimeSpan _time= new TimeSpan(00, 05, 00);
+        private IMessageTableCollection _messageCollection;
+        private MessageTable _selectedMessage;
+        
+        public MessageTable SelectedMessage
+        {
+            get => _selectedMessage;
+            set
+            {
+                if (_selectedMessage != value)
+                {
+                    _selectedMessage = value;
+                    if (_selectedMessage != null)
+                    {
+                        MessageToDisplay = _selectedMessage.MessageText;
+                        Time = _selectedMessage.DisplayTime;
+                    }
+                    OnPropertyChanged();
+                }
+            }
+        }
         
         public bool IsRepeatEnabled
         {
             get => _isRepeatEnabled;
             set { _isRepeatEnabled = value; OnPropertyChanged();}
         }
-        
+
+        public string ConfirmMessage
+        {
+            get => _confirmMessage;
+            private set { _confirmMessage = value; OnPropertyChanged(); }
+        }
+
+        public string MessageToDisplay
+        {
+            get => _messageToDisplay;
+            set { _messageToDisplay = value; OnPropertyChanged(); }
+        }
+
+        public TimeSpan Time
+        {
+            get => _time;
+            set { _time = value; OnPropertyChanged(); }
+        }
+
+        public IMessageTableCollection MessageCollection
+        {
+            get => _messageCollection;
+            set { _messageCollection = value; OnPropertyChanged(); }
+        }
+
         public RelayCommand SaveSingleMessageCommand => _saveSingleMessageCommand ?? (_saveSingleMessageCommand = new RelayCommand(SaveProgram));
         
         public RelayCommand DuplicatePreviousMessagesCommand => _duplicatePreviousMessageCommand ?? (_duplicatePreviousMessageCommand = new RelayCommand(DuplicatePreviousMessage));
         
         public RelayCommand<object> RemoveMessageFromList => _removeMessageFromList ?? (_removeMessageFromList = new RelayCommand<object>(DeleteMessage));
         
-        public RelayCommand SaveMessageCommand => _saveMessageCommand ?? (_saveMessageCommand = new RelayCommand(SaveNewMessage));
-
-        public ObservableCollection<MessageTable> PopulatedMessages { get; private set; }
-        
-        public string ConfirmMessage
+        public RelayCommand SaveMessageCommand => _saveMessageCommand ?? (_saveMessageCommand = new RelayCommand(SaveSingleMessage));
+     
+        public EditMessageViewModel(
+            INavigationService navigationService,
+            IMessageTableCollection messageCollection)
         {
-            get => _confirmMessage;
-            private set { _confirmMessage = value; OnPropertyChanged(); }
+            _navigationService = navigationService;
+            MessageCollection = messageCollection;
+            
+            CheckIfEdit();
+            IsRepeatEnabled = true;
         }
         
-        public string MessageToDisplay
+        private void CheckIfEdit()
         {
-            get => _messageToDisplay;
-            set { _messageToDisplay = value; OnPropertyChanged(); }
-        }
-        
-        public TimeSpan Time
-        {
-            get => _time;
-            set { _time = value; OnPropertyChanged(); }
-        }
-        
-        private void DuplicatePreviousMessage()
-        {
-            var messageToCopy= new MessageTable();
-
-            if (PopulatedMessages.Count != 0)
+            if (_messageCollection.SelectedMessage == null)
             {
-                messageToCopy.DisplayTime = PopulatedMessages[PopulatedMessages.Count - 1].DisplayTime;
-                messageToCopy.GuidID = Guid.NewGuid();
-                messageToCopy.MessageText = PopulatedMessages[PopulatedMessages.Count - 1].MessageText;
-                PopulatedMessages.Add(messageToCopy);
                 return;
             }
 
-            ConfirmNewMessage(CreateNewMessage());
+            SelectedMessage = _messageCollection.SelectedMessage;
+            Time = _messageCollection.SelectedMessage.DisplayTime;
+            MessageToDisplay = _messageCollection.SelectedMessage.MessageText;
         }
 
-        private void ConfirmNewMessage(MessageTable message)
+        private void DuplicatePreviousMessage()
         {
-            PopulatedMessages.Add(message);
-            Time = _defaultTime;
-            MessageToDisplay = _defaultMessage;
-            ConfirmMessage = $"Message:  {message.MessageText} was added, duration: { message.DisplayTimeText}";
+            if (MessageCollection.Messages.Count == 0)
+            {
+                return;
+            }
+            var duplicatemessage = new MessageTable
+            {
+                DisplayTime = MessageCollection.Messages[MessageCollection.Messages.Count - 1].DisplayTime,
+                GuidId = Guid.NewGuid(),
+                MessageText = MessageCollection.Messages[MessageCollection.Messages.Count - 1].MessageText
+            };
+
+            MessageCollection.Messages.Add(duplicatemessage);
+            SendConfirmMessage(duplicatemessage.DisplayTimeText, duplicatemessage.MessageText);
+            MessageToDisplay = string.Empty;
+            Time = new TimeSpan();
+        }
+
+        private void SendConfirmMessage(string time, string message)
+        {
+            ConfirmMessage = $"Message:  {message} was added, duration: { time}";
         }
         
         private void DeleteMessage(object message)
@@ -85,63 +127,52 @@ namespace Main.ViewModels
             var messageTable = (MessageTable)message;
             if (messageTable != null)
             {
-                PopulatedMessages.Remove(PopulatedMessages.FirstOrDefault(i => i.GuidID == messageTable.GuidID));
+                MessageCollection.Messages.Remove(MessageCollection.Messages.FirstOrDefault(i => i.GuidId == messageTable.GuidId));
             }
 
-            IsRepeatEnabled = PopulatedMessages.Count > 0;
+            IsRepeatEnabled = MessageCollection.Messages.Count > 0;
             ConfirmMessage = $"Message:  {messageTable?.MessageText} was removed, duration: { messageTable?.DisplayTimeText}";
         }
 
-        private void SaveNewMessage()
+        private void SaveSingleMessage()
         {
-            ConfirmNewMessage(CreateNewMessage());
-            CurrentMessage = null;
-        }
-
-        private MessageTable CreateNewMessage()
-        {
-            if (CurrentMessage == null)
+            if (SelectedMessage != null)
             {
-                CurrentMessage = new MessageTable { GuidID = Guid.NewGuid() };
+                ModifyMessage(SelectedMessage);
             }
 
-            CurrentMessage.DisplayTime = Time;
-            CurrentMessage.MessageText = string.IsNullOrEmpty(this.MessageToDisplay) ? "test" : MessageToDisplay;
-            IsRepeatEnabled = true;
-            return CurrentMessage;
+            else
+            {
+                var newMessage = CreateSingleMessage();
+                MessageCollection.Messages.Add(newMessage);
+                SendConfirmMessage(newMessage.DisplayTimeText, newMessage.MessageText);
+            }
+
+            MessageToDisplay = string.Empty;
+            Time = new TimeSpan();
+            SelectedMessage = null;
+        }
+
+        private void ModifyMessage(MessageTable message)
+        {
+            int index = MessageCollection.Messages.IndexOf(message);
+            MessageCollection.Messages[index].MessageText = MessageToDisplay;
+            MessageCollection.Messages[index].DisplayTime = Time;
+        }
+
+        private MessageTable CreateSingleMessage()
+        {
+            return new MessageTable
+            {
+                DisplayTime = Time,
+                MessageText = string.IsNullOrEmpty(this.MessageToDisplay) ? "run for" : MessageToDisplay,
+                GuidId = _messageCollection.SelectedMessage?.GuidId ?? Guid.NewGuid()
+            };
         }
 
         private void SaveProgram()
         {
-            if (PopulatedMessages.Count == 0 || Time != _defaultTime || MessageToDisplay != _defaultMessage)
-            {
-                PopulatedMessages.Add(CreateNewMessage());
-            }
-            
             _navigationService.NavigateTo("EditSet");
-            Messenger.Default.Send(PopulatedMessages);
-        }
-        
-        public EditMessageViewModel(INavigationService navigationService)
-        {
-            PopulatedMessages = new ObservableCollection<MessageTable>();
-            _navigationService = navigationService;
-            Time = _defaultTime;
-            MessageToDisplay = string.Empty;
-            IsRepeatEnabled = false;
-            ReceivedMessageToEdit();
-        }
-        
-        private void ReceivedMessageToEdit()
-        {
-            Messenger.Default.Register<MessageTable>(
-            this,
-            message =>
-            {
-                MessageToDisplay = message.MessageText;
-                Time = message.DisplayTime;
-                CurrentMessage = message;
-            });
         }
     }
-} //TODO: bind buttons enabled/disabled when deleting, edititing without selection, moving last item down or first item up.
+} 

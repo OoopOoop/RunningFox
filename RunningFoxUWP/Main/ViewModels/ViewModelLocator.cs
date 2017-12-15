@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Views;
 using Main.Views;
 using System;
+using Main.Models;
 
 namespace Main.ViewModels
 {
@@ -9,13 +10,15 @@ namespace Main.ViewModels
     {
         public ViewModelLocator()
         {
-            var navigationService = this.createNavigationService();
+            var navigationService = this.CreateNavigationService();
             SimpleIoc.Default.Register<INavigationService>(() => navigationService);
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<EditSetMessageViewModel>();
             SimpleIoc.Default.Register<EditMessageViewModel>();
             SimpleIoc.Default.Register<PlayPageViewModel>();
-            SimpleIoc.Default.Register<IProgramPlayer,ProgramPlayer>();
+            SimpleIoc.Default.Register<IMessageSetTable, MessageSetTable>();
+            SimpleIoc.Default.Register<IMessageTableCollection, MessageTableCollection>();
+            SimpleIoc.Default.Register<MessageTable>();
         }
 
         public MainViewModel MainViewModel => SimpleIoc.Default.GetInstance<MainViewModel>();
@@ -26,7 +29,7 @@ namespace Main.ViewModels
         
         public PlayPageViewModel PlayPageViewModel => SimpleIoc.Default.GetInstance<PlayPageViewModel>();
 
-        private INavigationService createNavigationService()
+        private INavigationService CreateNavigationService()
         {
             var navigationService = new NavigationService();
             navigationService.Configure("MainPage", typeof(MainPage));

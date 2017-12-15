@@ -1,43 +1,42 @@
-﻿using Main.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml.Media;
+﻿using System;
+using Main.Shared;
 
 namespace Main.Models
 {
     public class MessageTable : NotifyService
     {
-
-        #region ColorPicker
-        //private SolidColorBrush _colorForeground;
-        //private SolidColorBrush _colorBackground;
-        //   public SolidColorBrush ColorForeground { get; set; }
-        //{
-        //    get { return _colorForeground; }
-        //    set { _colorForeground = value; OnPropertyChanged(); }
-        //}
-
-        //   public SolidColorBrush ColorBackground { get; set; }
-        //{
-        //    get { return _colorForeground; }
-        //    set { _colorForeground = value; OnPropertyChanged(); }
-        //}
-#endregion
-
-
-        public Guid GuidID { get; set; }
+        public Guid GuidId { get; set; }
      
         public int SortOrder { get; set; }
-      
-        public TimeSpan DisplayTime { get; set; }
-  
-        public string DisplayTimeText => _formatText();
 
-        public string MessageText { get; set; }
+        private string _displayTimeText;
 
-        private string _formatText() => DisplayTime.Hours == 0 ? $"{DisplayTime.Minutes} {"minutes"}" : $"{DisplayTime.Hours} {"hour"} {DisplayTime.Minutes} {"minutes"}";
+        public string DisplayTimeText
+        {
+            get { return _displayTimeText; }
+            set { _displayTimeText = value; OnPropertyChanged(); }
+        }
+
+        private TimeSpan _displayTime;
+        public TimeSpan DisplayTime
+        {
+            get => _displayTime;
+            set { _displayTime = value;
+                DisplayTimeText = _formatTime();
+                OnPropertyChanged();
+            }
+        }
+        
+        private string _messageText;
+        public string MessageText
+        {
+            get => _messageText;
+            set {
+                _messageText = value;
+                OnPropertyChanged();
+            }
+        }
+        
+        private string _formatTime() => DisplayTime.Hours == 0 ? $"{DisplayTime.Minutes} minutes" : $"{DisplayTime.Hours} {"hour"} {DisplayTime.Minutes} {"minutes"}";
     }
 }

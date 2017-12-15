@@ -37,7 +37,6 @@ namespace Main.ViewModels
         {
             base._navigationService = navigationService;
             MessageSetCollection = new ObservableCollection<MessageSetTable>();
-            getMessageSets();
         }
 
         private RelayCommand<MessageSetTable> _editProgramCommand;
@@ -67,13 +66,13 @@ namespace Main.ViewModels
         }
 
         
-        private void getMessageSets()
+        private void GetMessageSets()
         {
            Messenger.Default.Register<MessageSetTable>(
            this,
            messageSet =>
            {
-               var collection = MessageSetCollection.Where(x => x.SetID == messageSet.SetID).FirstOrDefault();
+               var collection = MessageSetCollection.FirstOrDefault(x => x.SetId == messageSet.SetId);
                if(collection!=null)
                {
                    int indexOfCollection = MessageSetCollection.IndexOf(collection);

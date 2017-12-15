@@ -29,6 +29,7 @@
 
         <TextBlock Grid.Row="1"
                    Grid.Column="0"
+                   
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Text="Message:" />
@@ -37,6 +38,7 @@
                  Margin="20,50"
                  Background="{Binding BackgroundColor}"
                  FontSize="20"
+                 PlaceholderText="Enter message"
                  Foreground="{Binding ForegroundColor}"
                  Text="{Binding MessageToDisplay,
                                 Mode=TwoWay}"
@@ -48,8 +50,8 @@
                   Grid.RowSpan="2"
                   Grid.Column="2"
                   Margin="20"
-                  ItemsSource="{Binding PopulatedMessages}"
-                  SelectionMode="None">
+                  SelectedItem="{Binding SelectedMessage, Mode=TwoWay}"
+                  ItemsSource="{Binding MessageCollection.Messages}">
 
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">

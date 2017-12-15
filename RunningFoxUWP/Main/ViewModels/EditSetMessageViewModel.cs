@@ -7,9 +7,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Main.ViewModels
-{
+{   
     public class EditSetMessageViewModel : ViewModelBase
     {
+        private Guid TableSetGuidId;
+
         private bool _isSetToRepeat;
         public bool IsSetToRepeat
         {
@@ -18,110 +20,129 @@ namespace Main.ViewModels
         }
 
 
-        private int _messageListSelectdIndex=0;
+        private int _messageListSelectdIndex;
         public int MessageListSelectdIndex
         {
             get { return _messageListSelectdIndex; }
             set { _messageListSelectdIndex = value;OnPropertyChanged(); }
         }
         
-        private ObservableCollection<MessageTable> _messageTableCollection;
-        public ObservableCollection<MessageTable> MessageTableCollection
-        {
-            get { return _messageTableCollection; }
-            set { _messageTableCollection = value; OnPropertyChanged(); }
-        }
+        //private ObservableCollection<MessageTable> MessageCollection;
+        //public ObservableCollection<MessageTable> MessageTableCollection
+        //{
+        //    get { return MessageCollection; }
+        //    set { MessageCollection = value; OnPropertyChanged(); }
+        //}
 
         private bool _isRepeating;
         public bool IsRepeating
         {
-            get { return _isRepeating; }
+            get => _isRepeating;
             set { _isRepeating = value; OnPropertyChanged(); }
         }
 
-        public EditSetMessageViewModel(INavigationService navigationService)
+
+        private IMessageTableCollection _messageCollection;
+        public IMessageTableCollection MessageCollection
         {
+            get => _messageCollection;
+            set { _messageCollection = value; OnPropertyChanged(); }
+        }
+        
+        private readonly IMessageSetTable _messageSetTable;
+
+        private RelayCommand<MessageTable> _moveUpMessageTableCommand;
+        public RelayCommand<MessageTable> MoveUpMessageTableCommand => _moveUpMessageTableCommand ?? (_moveUpMessageTableCommand = new RelayCommand<MessageTable>(MoveMessageUp, CanMoveMessageUp));
+
+
+
+        public EditSetMessageViewModel(
+            INavigationService navigationService, 
+            IMessageTableCollection messageCollection,
+            IMessageSetTable messageSetTable)
+        {
+          
             base._navigationService = navigationService;
-            MessageTableCollection = new ObservableCollection<MessageTable>();
-           
-            getMessages();
-            getMessageSet();          
+            _messageSetTable = messageSetTable;
+            MessageCollection = messageCollection;
+  
+           // GetMessages();
+           // getMessageSet();
         }
 
 
         private string _programDescription;
         public string ProgramDescription
         {
-            get { return _programDescription; }
+            get => _programDescription;
             set { _programDescription = value; OnPropertyChanged(); }
         }
-
         
         private RelayCommand _saveNewProgramCommand;
-        public RelayCommand SaveNewProgramCommand => _saveNewProgramCommand ?? (_saveNewProgramCommand = new RelayCommand(saveNewSet));
-        
-        
-        private Guid TableSetGuidId;
-        
-        private void saveNewSet()
+        public RelayCommand SaveNewProgramCommand => _saveNewProgramCommand ?? (_saveNewProgramCommand = new RelayCommand(SaveNewMessageSet));
+
+        private RelayCommand<MessageTable> _moveDownMessageTableCommand;
+        public RelayCommand<MessageTable> MoveDownMessageTableCommand => _moveDownMessageTableCommand ?? (_moveDownMessageTableCommand = new RelayCommand<MessageTable>(MoveMessageDown, CanMoveMessageDown));
+    
+        private void SaveNewMessageSet()
         {
             SetMessagesSortOrder();
 
-                var messageSet = new MessageSetTable()
+                var messageSet = new MessageSetTable
                 {
                     Description = ProgramDescription,
-                    MessageCollection = MessageTableCollection,
-                    SetID = TableSetGuidId == Guid.Empty?Guid.NewGuid(): TableSetGuidId,
+                    MessageCollection = MessageCollection.Messages,
+                    SetId = TableSetGuidId == Guid.Empty?Guid.NewGuid(): TableSetGuidId,
                     SetToRepeat = IsRepeating,  
-                    MessagesTotalCount = MessageTableCollection.Count,
-                    ProgramTotalTime = MessageTableCollection.Sum(x => x.DisplayTime.Minutes),
+                    MessagesTotalCount = MessageCollection.Messages.Count,
+                    ProgramTotalTime = MessageCollection.Messages.Sum(x => x.DisplayTime.Minutes),
                 };
 
-            Messenger.Default.Send(messageSet);
-            
-          //  MessageTableCollection.Clear();
+       
+           // MessageTableCollection.Clear();
 
-            _navigationService.NavigateTo("MainPage");
+            _navigationService.NavigateTo("MainPage", messageSet);
+            
+            //Messenger.Default.Send(messageSet);
             ProgramDescription = string.Empty;
             TableSetGuidId = Guid.Empty;
-
         }
 
         private void SetMessagesSortOrder()
         {
-            MessageTableCollection.All(x => { x.SortOrder = MessageTableCollection.IndexOf(x)+1; return true; });
+            MessageCollection.Messages.All(x => { x.SortOrder = MessageCollection.Messages.IndexOf(x)+1; return true; });
         }
 
         private RelayCommand<MessageTable> _editMessageTableCommand;
-        public RelayCommand<MessageTable> EditMessageTableCommand => _editMessageTableCommand ?? (_editMessageTableCommand = new RelayCommand<MessageTable>(EditMessageTable, canRemoveMessageTable));
+        public RelayCommand<MessageTable> EditMessageTableCommand => _editMessageTableCommand ?? (_editMessageTableCommand = new RelayCommand<MessageTable>(EditMessageTable, CanRemoveMessageTable));
         
       
         private void EditMessageTable(MessageTable messageToEdit)
         {
+            _messageCollection.SelectedMessage = messageToEdit;
             _navigationService.NavigateTo("EditMessage");
-            Messenger.Default.Send(messageToEdit);
         }
 
 
         private RelayCommand<MessageTable> _removeSelectedMessageTable;
-        public RelayCommand<MessageTable> RemoveSelectedMessageTable => _removeSelectedMessageTable ?? (_removeSelectedMessageTable = new RelayCommand<MessageTable>(removeMessageTable,canRemoveMessageTable));
+        public RelayCommand<MessageTable> RemoveSelectedMessageTable => _removeSelectedMessageTable ?? (_removeSelectedMessageTable = new RelayCommand<MessageTable>(RemoveMessageTable,CanRemoveMessageTable));
 
-        private bool canRemoveMessageTable(MessageTable messageToRemove) => MessageTableCollection.Count != 0;
+        private bool CanRemoveMessageTable(MessageTable messageToRemove) => MessageCollection.Messages.Count != 0;
 
 
-        private void removeMessageTable(MessageTable messageToRemove)
+        private void RemoveMessageTable(MessageTable messageToRemove)
         {
            if(messageToRemove!=null)
             {
-                int removeAtIndex = MessageTableCollection.IndexOf(messageToRemove);
-                MessageTableCollection.Remove(messageToRemove);
+                int removeAtIndex = MessageCollection.Messages.IndexOf(messageToRemove);
+                MessageCollection.Messages.Remove(messageToRemove);
                 if(removeAtIndex!=0)
                 {
                     MessageListSelectdIndex = removeAtIndex - 1;
                 }
                 else
                 {
-                    if(MessageTableCollection.Count!=0)
+                    if(MessageCollection.Messages.Count!=0)
                     {
                         MessageListSelectdIndex = 0;
                     }
@@ -129,47 +150,40 @@ namespace Main.ViewModels
             }
         }
 
-        private RelayCommand<MessageTable> _moveUpMessageTableCommand;
-        public RelayCommand<MessageTable> MoveUpMessageTableCommand => _moveUpMessageTableCommand ?? (_moveUpMessageTableCommand = new RelayCommand<MessageTable>(MoveMessageUp, CanMoveMessageUp));
-        
-
-        private bool CanMoveMessageUp(MessageTable messagetoMove) => MessageTableCollection.IndexOf(messagetoMove) != 0&&MessageTableCollection.Count!=0;
+   
+        private bool CanMoveMessageUp(MessageTable messagetoMove) => MessageCollection.Messages.IndexOf(messagetoMove) != 0 && MessageCollection.Messages.Count!=0;
 
         private void MoveMessageUp(MessageTable messageToMove)
         {
             if (messageToMove != null)
             {
-                int index = MessageTableCollection.IndexOf(messageToMove);
+                int index = MessageCollection.Messages.IndexOf(messageToMove);
 
                 if(index!=0)
                 {
-                    var previousMessage = MessageTableCollection[index - 1];
-                    MessageTableCollection[index - 1] = messageToMove;
-                    MessageTableCollection[index] = previousMessage;
-                    MessageListSelectdIndex = MessageTableCollection.IndexOf(messageToMove);
+                    var previousMessage = MessageCollection.Messages[index - 1];
+                    MessageCollection.Messages[index - 1] = messageToMove;
+                    MessageCollection.Messages[index] = previousMessage;
+                    MessageListSelectdIndex = MessageCollection.Messages.IndexOf(messageToMove);
                 }
             }
         }
         
-        //TODO: make all methods and properties uppercases
+     
+        private bool CanMoveMessageDown(MessageTable messageToMove) => MessageCollection.Messages.IndexOf(messageToMove) != MessageCollection.Messages.Count - 1;
 
-        private RelayCommand<MessageTable> _moveDownMessageTableCommand;
-        public RelayCommand<MessageTable> MoveDownMessageTableCommand => _moveDownMessageTableCommand ?? (_moveDownMessageTableCommand = new RelayCommand<MessageTable>(moveMessageDown, canMoveMessageDown));
-
-        private bool canMoveMessageDown(MessageTable messageToMove) => MessageTableCollection.IndexOf(messageToMove) != MessageTableCollection.Count - 1;
-
-        private void moveMessageDown(MessageTable messageToMove)
+        private void MoveMessageDown(MessageTable messageToMove)
         {
             if (messageToMove != null)
             {
-                int index = MessageTableCollection.IndexOf(messageToMove);
+                int index = MessageCollection.Messages.IndexOf(messageToMove);
                
-                if (index != MessageTableCollection.Count-1)
+                if (index != MessageCollection.Messages.Count-1)
                 {
-                    var previousMessage = MessageTableCollection[index + 1];
-                    MessageTableCollection[index + 1] = messageToMove;
-                    MessageTableCollection[index] = previousMessage;
-                    MessageListSelectdIndex = MessageTableCollection.IndexOf(messageToMove);
+                    var previousMessage = MessageCollection.Messages[index + 1];
+                    MessageCollection.Messages[index + 1] = messageToMove;
+                    MessageCollection.Messages[index] = previousMessage;
+                    MessageListSelectdIndex = MessageCollection.Messages.IndexOf(messageToMove);
                 }
             }
         }
@@ -178,7 +192,7 @@ namespace Main.ViewModels
         /// <summary>
         /// Receive collection of messages, if MessageTableCollection collection already contains any of messages, update the message, if not- add it to the collection.
         /// </summary>
-        private void getMessages()
+        private void GetMessages()
         {
             Messenger.Default.Register<ObservableCollection<MessageTable>>(
             this,
@@ -186,7 +200,7 @@ namespace Main.ViewModels
             {
                 foreach (MessageTable message in messageCollection)
                 {
-                    var savedMessage = MessageTableCollection.Where(x => x.GuidID == message.GuidID).FirstOrDefault();
+                    var savedMessage = MessageCollection.Messages.FirstOrDefault(x => x.GuidId == message.GuidId);
 
                     if (savedMessage != null)
                     {
@@ -195,7 +209,7 @@ namespace Main.ViewModels
                     }
                     else
                     {
-                        MessageTableCollection.Add(message);
+                        MessageCollection.Messages.Add(message);
                     }
                 }
             });
@@ -212,7 +226,7 @@ namespace Main.ViewModels
                  {
                      ProgramDescription = messageSet.Description;
                     // ProgramDifficulty =Convert.ToInt32(messageSet.ProgramDifficulty);
-                     TableSetGuidId = messageSet.SetID;
+                     TableSetGuidId = messageSet.SetId;
                  }
              });
         }

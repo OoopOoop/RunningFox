@@ -122,7 +122,7 @@
 
 
 
-        <ListView x:Name="messagesListView"
+        <ListView x:Name="MessagesListView"
                   Grid.Row="3"
                   Grid.RowSpan="2"
                   Grid.Column="2"
@@ -131,9 +131,9 @@
                   CanDragItems="True"
                   CanReorderItems="True"
                   DragItemsStarting="SourceListView_DragItemsStarting"
-                  ItemsSource="{Binding MessageTableCollection}"
+                  ItemsSource="{Binding MessageCollection.Messages}"
                   SelectionMode="Single"
-                  SelectedIndex="{Binding MessageListSelectdIndex,Mode=TwoWay}" Margin="27,5,101,55">
+                  SelectedIndex="{Binding MessageListSelectdIndex, Mode=TwoWay}" Margin="27,5,101,55">
 
             <!--<interactivity:Interaction.Behaviors>
                 <core:EventTriggerBehavior EventName="SelectionChanged">
@@ -184,17 +184,17 @@
             </StackPanel.Resources>
 
             <Button Command="{Binding MoveUpMessageTableCommand}"
-                    CommandParameter="{Binding ElementName=messagesListView,
+                    CommandParameter="{Binding ElementName=MessagesListView,
                                                Path=SelectedItem}"
                     Content=""
                     FontFamily="Segoe UI Symbol" />
             <Button Command="{Binding MoveDownMessageTableCommand}"
-                    CommandParameter="{Binding ElementName=messagesListView,
+                    CommandParameter="{Binding ElementName=MessagesListView,
                                                Path=SelectedItem}"
                     Content=""
                     FontFamily="Segoe UI Symbol" />
             <Button Command="{Binding RemoveSelectedMessageTable}"
-                    CommandParameter="{Binding SelectedItem, ElementName=messagesListView}"
+                    CommandParameter="{Binding SelectedItem, ElementName=MessagesListView}"
                     Content="&#xE107;"
                     FontFamily="Segoe UI Symbol" />
 
@@ -202,7 +202,7 @@
             <Button Command="{Binding EditMessageTableCommand}"
                    HorizontalAlignment="Stretch"
                     CommandParameter="{Binding Path=SelectedItem,
-                                               ElementName=messagesListView}"
+                                               ElementName=MessagesListView}"
                     Content="✎"
                     FontFamily="Segoe UI Symbol" />
 
