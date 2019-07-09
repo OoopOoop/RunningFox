@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Main.ViewModels
 {
+    //TODO this doesnt compile on my unix
     public class ViewModelLocator
     {
         public ViewModelLocator()
