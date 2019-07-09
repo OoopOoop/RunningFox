@@ -7,7 +7,7 @@ namespace Main.ViewModels
 {
     public class ViewModelLocator
     {
-        //well now look, another changes
+       
         public ViewModelLocator()
         {
             var navigationService = this.createNavigationService();
@@ -21,20 +21,19 @@ namespace Main.ViewModels
 
     //Another commit is ready
    
-
-        //commit 4
+       
         public MainViewModel MainViewModel => SimpleIoc.Default.GetInstance<MainViewModel>();
         
-        //test commit 3
+        
         public EditSetMessageViewModel EditSetMessageViewModel => SimpleIoc.Default.GetInstance<EditSetMessageViewModel>();
-        //test commit 3
+        
         public EditMessageViewModel EditMessageViewModel => SimpleIoc.Default.GetInstance<EditMessageViewModel>(Guid.NewGuid().ToString());
         
-        //test comment 1
+      
         public PlayPageViewModel PlayPageViewModel => SimpleIoc.Default.GetInstance<PlayPageViewModel>();
 
 
-        //test comment
+      
         private INavigationService createNavigationService()
         {
             var navigationService = new NavigationService();
