@@ -15,13 +15,6 @@ namespace Main.Models
 
 
 
-        //private string _name;
-        //public string Name
-        //{
-        //    get { return _name; }
-        //    set { _name = value; }
-        //}
-
 
 
         public Guid SetID
