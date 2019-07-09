@@ -7,6 +7,7 @@ namespace Main.ViewModels
 {
     public class ViewModelLocator
     {
+        //well now look, another changes
         public ViewModelLocator()
         {
             var navigationService = this.createNavigationService();
