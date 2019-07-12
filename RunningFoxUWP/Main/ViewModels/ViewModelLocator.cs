@@ -17,6 +17,7 @@ namespace Main.ViewModels
             SimpleIoc.Default.Register<EditSetMessageViewModel>();
             SimpleIoc.Default.Register<EditMessageViewModel>();
             SimpleIoc.Default.Register<PlayPageViewModel>();
+            //example commit change 2
         }
 
 
