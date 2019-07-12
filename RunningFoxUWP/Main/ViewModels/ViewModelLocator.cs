@@ -28,7 +28,7 @@ namespace Main.ViewModels
         
         //remote commit change 3
         public EditSetMessageViewModel EditSetMessageViewModel => SimpleIoc.Default.GetInstance<EditSetMessageViewModel>();
-        
+        //rempove commit change 5
         public EditMessageViewModel EditMessageViewModel => SimpleIoc.Default.GetInstance<EditMessageViewModel>(Guid.NewGuid().ToString());
         
         // remote commit change 4
