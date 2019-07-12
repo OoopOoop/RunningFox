@@ -26,12 +26,12 @@ namespace Main.ViewModels
        
         public MainViewModel MainViewModel => SimpleIoc.Default.GetInstance<MainViewModel>();
         
-        
+        //remote commit change 3
         public EditSetMessageViewModel EditSetMessageViewModel => SimpleIoc.Default.GetInstance<EditSetMessageViewModel>();
         
         public EditMessageViewModel EditMessageViewModel => SimpleIoc.Default.GetInstance<EditMessageViewModel>(Guid.NewGuid().ToString());
         
-      
+        // remote commit change 4
         public PlayPageViewModel PlayPageViewModel => SimpleIoc.Default.GetInstance<PlayPageViewModel>();
 
 
