@@ -10,6 +10,7 @@ namespace Main.ViewModels
        
         public ViewModelLocator()
         {
+            //example commit change
             var navigationService = this.createNavigationService();
             SimpleIoc.Default.Register<INavigationService>(() => navigationService);
             SimpleIoc.Default.Register<MainViewModel>();
