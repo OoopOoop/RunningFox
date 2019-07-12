@@ -7,23 +7,23 @@ namespace Main.ViewModels
 {
     public class ViewModelLocator
     {
-       
-        public ViewModelLocator()
-        {
-            //example commit change
-            var navigationService = this.createNavigationService();
-            SimpleIoc.Default.Register<INavigationService>(() => navigationService);
-            SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<EditSetMessageViewModel>();
-            SimpleIoc.Default.Register<EditMessageViewModel>();
-            SimpleIoc.Default.Register<PlayPageViewModel>();
-            //example commit change 2
-        }
+        // commit
+        //public ViewModelLocator()
+        //{
+        //example commit change
+        //    var navigationService = this.createNavigationService();
+        //    SimpleIoc.Default.Register<INavigationService>(() => navigationService);
+        //    SimpleIoc.Default.Register<MainViewModel>();
+        //    SimpleIoc.Default.Register<EditSetMessageViewModel>();
+        //    SimpleIoc.Default.Register<EditMessageViewModel>();
+        //    SimpleIoc.Default.Register<PlayPageViewModel>();
+        //example commit change 2
+        //}
 
 
-    //Another commit is ready
-   
-       
+        //Another commit is ready
+
+
         public MainViewModel MainViewModel => SimpleIoc.Default.GetInstance<MainViewModel>();
         
         //remote commit change 3
